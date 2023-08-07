@@ -1,8 +1,9 @@
 import Experience from "../Experience.js";
 import Environment from "./Environment.js";
-// import Floor from "./Floor.js";
-// import Fox from "./Fox.js";
+import GameTrack from "./TrackPath.js";
 import Player from "./Player.js";
+import Movement from "./Movement.js";
+import EndBlock from "./EndBlock.js";
 
 export default class World {
   constructor() {
@@ -13,14 +14,16 @@ export default class World {
     // Wait for resources
     this.resources.on("ready", () => {
       // Setup
-      //   this.floor = new Floor();
-      //   this.fox = new Fox();
-      this.player = new Player();
       this.environment = new Environment();
+      const trackLength = 2;
+      this.track = new GameTrack(trackLength);
+      this.player = new Player();
+      this.controls = new Movement();
+      this.endBlock = new EndBlock(-trackLength * 20 + trackLength);
     });
   }
 
   update() {
-    if (this.fox) this.fox.update();
+    if (this.controls) this.controls.update();
   }
 }

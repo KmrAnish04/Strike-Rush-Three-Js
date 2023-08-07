@@ -21,4 +21,14 @@ export default [
     type: "texture",
     path: "textures/dirt/normal.jpg",
   },
+  {
+    name: "trackTexture",
+    type: "texture",
+    path: "textures/TrackTexture/WoodenTrack.jpg",
+  },
+  {
+    name: "Wings",
+    type: "gltfModel",
+    path: "models/Wings.glb",
+  },
 ];
