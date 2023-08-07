@@ -23,13 +23,28 @@ export default [
         path: 'textures/dirt/normal.jpg'
     },
     {
-        name: 'foxModel',
-        type: 'gltfModel',
-        path: 'models/Fox/glTF/Fox.gltf'
-    },
-    {
         name: 'trackTexture',
         type: 'texture',
         path: 'textures/TrackTexture/WoodenTrack.jpg'
+    },
+    {
+        name: 'ObstacleArmLiverHammer',
+        type: 'fbxModel',
+        path: 'models/Obstacle/ArmLiverHammer.fbx'
+    },
+    {
+        name: 'ObstacleLegLiverHammer',
+        type: 'fbxModel',
+        path: 'models/Obstacle/LegLiverHammer.fbx'
+    },
+    {
+        name: 'ObstacleLiverAxe',
+        type: 'fbxModel',
+        path: 'models/Obstacle/LiverKnife.fbx'
+    },
+    {
+        name: 'ObstacleBowlingPin',
+        type: 'fbxModel',
+        path: 'models/Obstacle/BowlingPin.FBX'
     }
 ]

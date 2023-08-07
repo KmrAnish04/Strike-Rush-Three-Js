@@ -2,20 +2,20 @@ import { BoxGeometry, MeshStandardMaterial, Mesh, SRGBColorSpace, RepeatWrapping
 import Experience from '../Experience.js'
 
 export default class GameTrack {
-    constructor() {
+    constructor(trackLenght = 5) {
         this.experience = new Experience()
         this.scene = this.experience.scene
         this.resources = this.experience.resources
 
-        console.log("Settting Track!");
-        this.setGeometry()
+        console.log("SetttingUp Track!");
         this.setTextures();
         this.setMaterial()
-        this.setMesh()
+        this.setUpTrack(trackLenght)
     }
 
     setGeometry() {
-        this.geometry = new BoxGeometry(10, 100, 0.5);
+        let geometry = new BoxGeometry(10, 20, 1);
+        return geometry;
     }
 
     setTextures() {
@@ -41,10 +41,25 @@ export default class GameTrack {
         })
     }
 
-    setMesh() {
-        this.mesh = new Mesh(this.geometry, this.material)
-        this.mesh.rotation.x = - Math.PI * 0.5
+    setMesh(geometry) {
+        let mesh = new Mesh(geometry, this.material)
+        mesh.rotation.x = - Math.PI * 0.5
+        mesh.position.y = mesh.position.y - 0.5;
         // this.mesh.receiveShadow = true
-        this.scene.add(this.mesh)
+        this.scene.add(mesh)
+        return mesh;
+    }
+
+    setUpTrack(noOfTiles) {
+        this.trackTiles = [];
+        let tile = this.setMesh(this.setGeometry());
+        this.trackTiles.push(tile);
+        noOfTiles--;
+        for (let tileNum = 0; tileNum < noOfTiles; tileNum++) {
+            let tile = this.setMesh(this.setGeometry());
+            let lastTilePos = this.trackTiles[this.trackTiles.length - 1].position.z
+            tile.position.z = lastTilePos - 20;
+            this.trackTiles.push(tile);
+        }
     }
 }
