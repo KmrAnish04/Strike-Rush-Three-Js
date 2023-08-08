@@ -13,6 +13,7 @@ export default class GameTrack {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
+    this.setTextures();
     this.setMaterial();
     this.setUpTrack(trackLength);
   }
@@ -34,6 +35,7 @@ export default class GameTrack {
   setMaterial() {
     this.material = new MeshStandardMaterial({
       color: 0x666666,
+      normalMap: this.textures.normal
     });
   }
 

@@ -7,6 +7,7 @@ import Player from "./Player.js";
 import Movement from "./Movement.js";
 import EndBlock from "./EndBlock.js";
 import BallPinsObstacle from "./Obstacles/BallPinsObstacle.js";
+import Ramps from "./Obstacles/Ramps.js";
 
 export default class World {
   constructor() {
@@ -50,6 +51,7 @@ export default class World {
       this.player = new Player();
       // this.controls = new Movement();
       this.endBlock = new EndBlock(-trackLength * 20 + trackLength);
+      this.ramp = new Ramps(this.resources.items.Ramp1, new Vector3(0, 0, 0), new Vector3(0.03, 0.03, 0.03), -1 * trackLength)
     });
   }
 

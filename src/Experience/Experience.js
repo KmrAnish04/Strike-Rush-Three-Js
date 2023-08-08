@@ -35,7 +35,12 @@ export default class Experience {
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.world = new World();
+
     this.physicsWorld = new Physics.World();
+    this.physicsWorld.gravity.set(0, -0.5, 0);
+    this.physicsWorld.allowSleep = true;
+    this.physicsWorld.broadphase = new Physics.NaiveBroadphase();
+
     this.cannonDebugger = new CannonDebugger(this.scene, this.physicsWorld);
     // Resize event
     this.sizes.on("resize", () => {
@@ -56,6 +61,8 @@ export default class Experience {
   update() {
     this.camera.update();
     this.world.update();
+    const deltaTime = this.time.delta;
+    this.physicsWorld.step(1 / 60, deltaTime, 3)
     this.cannonDebugger.update();
     this.renderer.update();
   }

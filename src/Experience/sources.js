@@ -47,4 +47,19 @@ export default [
         type: 'fbxModel',
         path: 'models/Obstacle/BowlingPin.FBX'
     }
+    , {
+        name: 'Ramp1',
+        type: 'fbxModel',
+        path: 'models/Ramps/Ramp1.fbx'
+    },
+    {
+        name: 'Ramp2',
+        type: 'fbxModel',
+        path: 'models/Ramps/Ramp2.fbx'
+    },
+    {
+        name: 'Ramp3',
+        type: 'fbxModel',
+        path: 'models/Ramps/Ramp3.fbx'
+    }
 ]
