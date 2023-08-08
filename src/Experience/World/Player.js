@@ -8,7 +8,7 @@ export default class Player {
   }
   setPlayer() {
     this.player = new Mesh(
-      new SphereGeometry(1, 32, 32),
+      new SphereGeometry(0.4, 32, 32),
       new MeshBasicMaterial({ color: 0x0086ff })
     );
     this.player.position.set(0, 1, 0);

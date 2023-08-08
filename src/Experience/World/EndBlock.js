@@ -7,6 +7,7 @@ import {
 } from "three";
 import Experience from "../Experience";
 import * as Physics from "cannon-es";
+import { Vec3 } from "cannon-es";
 
 export default class EndBlock {
   constructor(positionZ) {
@@ -43,43 +44,85 @@ export default class EndBlock {
   }
 
   contructLastBlock() {
-    const endWall = this.constructEndWall();
+    this.physicsMaterial = new Physics.Material("Default");
+    this.physicsContactMaterial = new Physics.ContactMaterial(
+      this.physicsMaterial,
+      this.physicsMaterial,
+      { friction: 0.1, restitution: 0.7 }
+    );
+    this.physicsWorld.addContactMaterial(this.physicsContactMaterial);
+    const endWall = this.constructEndWall(10);
     const walls = this.constructWalls();
-    const circularHit = this.constructCircularHit();
+    const circularHit = this.constructCircularHit(16, -(Math.PI / 180) * 90);
 
-    this.createPhysicsWorldEndWall();
+    // this.createPhysicsWorldEndWall();
     // this.physicsWorld.addBody(physicsEndWall);
     // const wings = this.constructWings();
     this.endBlockGroup.add(endWall, walls, circularHit);
   }
-  createPhysicsWorldEndWall() {
-    const defaultMaterial = new Physics.Material("Default");
-    const defaultContactMaterial = new Physics.ContactMaterial(
-      defaultMaterial,
-      defaultMaterial,
-      { friction: 0.1, restitution: 0.7 }
-    );
-    this.physicsWorld.addContactMaterial(defaultContactMaterial);
-    const endWallShape = new Physics.Box(new Physics.Vec3(5, 11.5, 0.5));
-    const endWallBody = new Physics.Body({ shape: endWallShape });
-    this.physicsWorld.addBody(endWallBody);
-  }
-  constructEndWall() {
+
+  // createPhysicsWorldEndWall() {
+  //   const defaultMaterial = new Physics.Material("Default");
+  //   const defaultContactMaterial = new Physics.ContactMaterial(
+  //     defaultMaterial,
+  //     defaultMaterial,
+  //     { friction: 0.1, restitution: 0.7 }
+  //   );
+  //   this.physicsWorld.addContactMaterial(defaultContactMaterial);
+  //   const endWallShape = new Physics.Box(new Physics.Vec3(5, 11.5, 0.5));
+  //   const endWallBody = new Physics.Body({ shape: endWallShape });
+  //   this.physicsWorld.addBody(endWallBody);
+  // }
+
+  constructEndWall(positionY) {
+    const width = 10;
+    const height = 23;
+    const depth = 1;
     const endWall = new Mesh(
-      new BoxGeometry(10, 23, 1),
-      new MeshBasicMaterial({ color: 0xe47dd2 })
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xffff00 })
     );
-    endWall.position.y = 10;
+    endWall.position.y = positionY;
+
+    const physicsEndWallShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const physicsEndWallBody = new Physics.Body({
+      shape: physicsEndWallShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    physicsEndWallBody.position.copy(endWall.position);
+    this.physicsWorld.addBody(physicsEndWallBody);
     return endWall;
   }
 
-  constructCircularHit() {
+  constructCircularHit(positionY, rotationX) {
+    const radiusTop = 1.2;
+    const radiusBottom = 1.2;
+    const height = 4;
+    const numberOfSegments = 64;
     const circularHit = new Mesh(
-      new CylinderGeometry(1.2, 1.2, 4, 64),
+      new CylinderGeometry(radiusTop, radiusBottom, height, numberOfSegments),
       new MeshBasicMaterial({ color: 0xe201c9 })
     );
-    circularHit.rotation.x = -(Math.PI / 180) * 90;
-    circularHit.position.y = 16;
+    circularHit.rotation.x = rotationX;
+    circularHit.position.y = positionY;
+
+    const physicsCircularHitShape = new Physics.Cylinder(
+      radiusTop,
+      radiusBottom,
+      height,
+      numberOfSegments
+    );
+    const physicsCircularHitBody = new Physics.Body({
+      shape: physicsCircularHitShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    physicsCircularHitBody.position.copy(circularHit.position);
     return circularHit;
   }
 
