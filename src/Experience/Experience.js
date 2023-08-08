@@ -36,7 +36,16 @@ export default class Experience {
     this.renderer = new Renderer();
     this.world = new World();
     this.physicsWorld = new Physics.World();
+    this.physicsWorld.gravity.set(0, 9.8, 0);
     this.cannonDebugger = new CannonDebugger(this.scene, this.physicsWorld);
+    this.physicsWorld.addEventListener("collide", (event) => {
+      const bodyA = event.bodyA; // The first body in the collision
+      const bodyB = event.bodyB; // The second body in the collision
+
+      // Do something when a collision occurs
+      console.log("Collision detected between:", bodyA, "and", bodyB);
+    });
+
     // Resize event
     this.sizes.on("resize", () => {
       this.resize();
@@ -54,7 +63,9 @@ export default class Experience {
   }
 
   update() {
+    // const deltaTime = this.time.delta;
     this.camera.update();
+    // this.physicsWorld.step(1 / 60, deltaTime, 3);
     this.world.update();
     this.cannonDebugger.update();
     this.renderer.update();

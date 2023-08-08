@@ -17,18 +17,10 @@ export default class EndBlock {
     this.endBlockGroup = new Group();
     this.physicsWorld = this.experience.physicsWorld;
     this.physicsObjects = [];
-
-    // this.wings = this.resources.items.Wings.scene;
-    // this.wings.traverse((child) => {
-    //   if (child instanceof Mesh) {
-    //     child.material.tranparent = false;
-    //     child.material.depthWrite = true;
-    //     child.material.alphaTest = 0.8;
-    //   }
-    // });
-    // console.log(this.wings);
+    this.winBox = this.resources.items.WinBox;
+    this.winBox.scene.scale.set(0.005, 0.015, 0.013);
+    this.constructWinBox(positionZ);
     this.contructLastBlock(positionZ);
-    // this.endBlockGroup.position.z = positionZ;
     this.scene.add(this.endBlockGroup);
   }
 
@@ -44,7 +36,19 @@ export default class EndBlock {
     wingsGroup.add(rightWing);
     return wingsGroup;
   }
-
+  constructWinBox(positionZ) {
+    const newBox1 = this.winBox.scene.clone();
+    newBox1.position.x = 2.5;
+    newBox1.position.y = 0.5;
+    newBox1.position.z = positionZ + 4;
+    newBox1.rotation.y = (Math.PI / 180) * 90;
+    const newBox2 = this.winBox.scene.clone();
+    newBox2.position.x = -2.5;
+    newBox2.position.y = 0.5;
+    newBox2.position.z = positionZ + 4;
+    newBox2.rotation.y = (Math.PI / 180) * 90;
+    this.scene.add(newBox1, newBox2);
+  }
   contructLastBlock(positionZ) {
     this.physicsMaterial = new Physics.Material("Default");
     this.physicsContactMaterial = new Physics.ContactMaterial(
@@ -60,10 +64,6 @@ export default class EndBlock {
       positionZ,
       -(Math.PI / 180) * 90
     );
-
-    // this.createPhysicsWorldEndWall();
-    // this.physicsWorld.addBody(physicsEndWall);
-    // const wings = this.constructWings();
     this.endBlockGroup.add(endWall, walls, circularHit);
   }
 

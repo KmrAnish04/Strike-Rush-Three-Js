@@ -13,12 +13,16 @@ export default class GameTrack {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
+    this.physicsWorld = this.experience.physicsWorld;
     this.setMaterial();
     this.setUpTrack(trackLength);
   }
 
   setGeometry() {
-    let geometry = new BoxGeometry(10, 20, 1);
+    this.width = 10;
+    this.height = 20;
+    this.depth = 1;
+    let geometry = new BoxGeometry(this.width, this.height, this.depth);
     return geometry;
   }
 
@@ -39,9 +43,14 @@ export default class GameTrack {
 
   setMesh(geometry) {
     let mesh = new Mesh(geometry, this.material);
+    this.scene.add(mesh);
     mesh.rotation.x = -Math.PI * 0.5;
     mesh.position.y = mesh.position.y - 0.5;
-    this.scene.add(mesh);
+    // const shape = new Physics.Box(
+    //   new Physics.Vec3(this.width / 2, this.height / 2, this.depth / 2)
+    // );
+    // const body = new Physics.Body({ shape: shape, mass: 0 });
+    // this.physicsWorld.addBody(body);
     return mesh;
   }
 
