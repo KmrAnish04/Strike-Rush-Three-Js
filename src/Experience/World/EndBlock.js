@@ -16,6 +16,8 @@ export default class EndBlock {
     this.scene = this.experience.scene;
     this.endBlockGroup = new Group();
     this.physicsWorld = this.experience.physicsWorld;
+    this.physicsObjects = [];
+
     // this.wings = this.resources.items.Wings.scene;
     // this.wings.traverse((child) => {
     //   if (child instanceof Mesh) {
@@ -25,8 +27,8 @@ export default class EndBlock {
     //   }
     // });
     // console.log(this.wings);
-    this.contructLastBlock();
-    this.endBlockGroup.position.z = positionZ;
+    this.contructLastBlock(positionZ);
+    // this.endBlockGroup.position.z = positionZ;
     this.scene.add(this.endBlockGroup);
   }
 
@@ -43,7 +45,7 @@ export default class EndBlock {
     return wingsGroup;
   }
 
-  contructLastBlock() {
+  contructLastBlock(positionZ) {
     this.physicsMaterial = new Physics.Material("Default");
     this.physicsContactMaterial = new Physics.ContactMaterial(
       this.physicsMaterial,
@@ -51,9 +53,13 @@ export default class EndBlock {
       { friction: 0.1, restitution: 0.7 }
     );
     this.physicsWorld.addContactMaterial(this.physicsContactMaterial);
-    const endWall = this.constructEndWall(10);
-    const walls = this.constructWalls();
-    const circularHit = this.constructCircularHit(16, -(Math.PI / 180) * 90);
+    const endWall = this.constructEndWall(10, positionZ);
+    const walls = this.constructWalls(positionZ);
+    const circularHit = this.constructCircularHit(
+      16,
+      positionZ,
+      -(Math.PI / 180) * 90
+    );
 
     // this.createPhysicsWorldEndWall();
     // this.physicsWorld.addBody(physicsEndWall);
@@ -61,20 +67,7 @@ export default class EndBlock {
     this.endBlockGroup.add(endWall, walls, circularHit);
   }
 
-  // createPhysicsWorldEndWall() {
-  //   const defaultMaterial = new Physics.Material("Default");
-  //   const defaultContactMaterial = new Physics.ContactMaterial(
-  //     defaultMaterial,
-  //     defaultMaterial,
-  //     { friction: 0.1, restitution: 0.7 }
-  //   );
-  //   this.physicsWorld.addContactMaterial(defaultContactMaterial);
-  //   const endWallShape = new Physics.Box(new Physics.Vec3(5, 11.5, 0.5));
-  //   const endWallBody = new Physics.Body({ shape: endWallShape });
-  //   this.physicsWorld.addBody(endWallBody);
-  // }
-
-  constructEndWall(positionY) {
+  constructEndWall(positionY, positionZ) {
     const width = 10;
     const height = 23;
     const depth = 1;
@@ -82,8 +75,7 @@ export default class EndBlock {
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xffff00 })
     );
-    endWall.position.y = positionY;
-
+    //Physics Wall
     const physicsEndWallShape = new Physics.Box(
       new Vec3(width / 2, height / 2, depth / 2)
     );
@@ -93,12 +85,14 @@ export default class EndBlock {
       allowSleep: false,
       material: this.physicsMaterial,
     });
-    physicsEndWallBody.position.copy(endWall.position);
+    physicsEndWallBody.position.y = positionY;
+    physicsEndWallBody.position.z = positionZ;
+    endWall.position.copy(physicsEndWallBody.position);
     this.physicsWorld.addBody(physicsEndWallBody);
     return endWall;
   }
 
-  constructCircularHit(positionY, rotationX) {
+  constructCircularHit(positionY, positionZ, rotationX) {
     const radiusTop = 1.2;
     const radiusBottom = 1.2;
     const height = 4;
@@ -107,9 +101,6 @@ export default class EndBlock {
       new CylinderGeometry(radiusTop, radiusBottom, height, numberOfSegments),
       new MeshBasicMaterial({ color: 0xe201c9 })
     );
-    circularHit.rotation.x = rotationX;
-    circularHit.position.y = positionY;
-
     const physicsCircularHitShape = new Physics.Cylinder(
       radiusTop,
       radiusBottom,
@@ -122,61 +113,27 @@ export default class EndBlock {
       allowSleep: false,
       material: this.physicsMaterial,
     });
-    physicsCircularHitBody.position.copy(circularHit.position);
+    physicsCircularHitBody.quaternion.setFromAxisAngle(
+      new Vec3(-1, 0, 0),
+      Math.PI * 0.5
+    );
+    physicsCircularHitBody.position.y = positionY;
+    physicsCircularHitBody.position.z = positionZ;
+    circularHit.position.copy(physicsCircularHitBody.position);
+    circularHit.quaternion.copy(physicsCircularHitBody.quaternion);
+    this.physicsWorld.addBody(physicsCircularHitBody);
     return circularHit;
   }
 
-  constructWalls() {
+  constructWalls(positionZ) {
     const wallsGroup = new Group();
-    const leftWall = new Mesh(
-      new BoxGeometry(1, 23, 4),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
-    );
-    leftWall.position.x = -5.5;
-    leftWall.position.y = 10;
-    leftWall.position.z = 1.5;
-
-    const rightWall = new Mesh(
-      new BoxGeometry(1, 23, 4),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
-    );
-    rightWall.position.x = 5.5;
-    rightWall.position.y = 10;
-    rightWall.position.z = 1.5;
-
-    const bottomWall = new Mesh(
-      new BoxGeometry(12, 1, 4),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
-    );
-    bottomWall.position.y = -0.4;
-    bottomWall.position.z = 1.5;
-
-    const leftDiagonalWall1 = new Mesh(
-      new BoxGeometry(4, 1, 4),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
-    );
-    leftDiagonalWall1.rotation.z = (Math.PI / 180) * 45;
-    leftDiagonalWall1.position.set(-4, 11.3, 1.5);
-    const leftDiagonalWall2 = new Mesh(
-      new BoxGeometry(4, 1, 4),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
-    );
-    leftDiagonalWall2.rotation.z = -(Math.PI / 180) * 45;
-    leftDiagonalWall2.position.set(-4, 13.5, 1.5);
-
-    const rightDiagonalWall1 = new Mesh(
-      new BoxGeometry(4, 1, 4),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
-    );
-    rightDiagonalWall1.rotation.z = -(Math.PI / 180) * 45;
-    rightDiagonalWall1.position.set(4, 11.3, 1.5);
-    const rightDiagonalWall2 = new Mesh(
-      new BoxGeometry(4, 1, 4),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
-    );
-    rightDiagonalWall2.rotation.z = (Math.PI / 180) * 45;
-    rightDiagonalWall2.position.set(4, 13.5, 1.5);
-
+    const leftWall = this.createLeftWall(positionZ);
+    const rightWall = this.createRightWall(positionZ);
+    const bottomWall = this.createBottomWall(positionZ);
+    const leftDiagonalWall1 = this.createLeftDiagonalWall1(positionZ);
+    const leftDiagonalWall2 = this.createLeftDiagonalWall2(positionZ);
+    const rightDiagonalWall1 = this.createRightDiagonalWall1(positionZ);
+    const rightDiagonalWall2 = this.createRightDiagonalWall2(positionZ);
     wallsGroup.add(
       leftWall,
       rightWall,
@@ -186,7 +143,199 @@ export default class EndBlock {
       rightDiagonalWall1,
       rightDiagonalWall2
     );
-
     return wallsGroup;
+  }
+
+  createLeftWall(positionZ) {
+    const width = 1;
+    const height = 23;
+    const depth = 4;
+    const leftWall = new Mesh(
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xe8e8e7 })
+    );
+    //Physics
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    rigidBody.position.x = -5.5;
+    rigidBody.position.y = 10;
+    rigidBody.position.z = 1.5 + positionZ;
+    leftWall.position.copy(rigidBody.position);
+    this.physicsWorld.addBody(rigidBody);
+    return leftWall;
+  }
+
+  createRightWall(positionZ) {
+    const width = 1;
+    const height = 23;
+    const depth = 4;
+    const rightWall = new Mesh(
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xe8e8e7 })
+    );
+    //Physics
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    rigidBody.position.x = 5.5;
+    rigidBody.position.y = 10;
+    rigidBody.position.z = 1.5 + positionZ;
+    rightWall.position.copy(rigidBody.position);
+    this.physicsWorld.addBody(rigidBody);
+    return rightWall;
+  }
+
+  createBottomWall(positionZ) {
+    const width = 12;
+    const height = 1;
+    const depth = 4;
+    const bottomWall = new Mesh(
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xe8e8e7 })
+    );
+    //Physics
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    rigidBody.position.y = -0.4;
+    rigidBody.position.z = 1.5 + positionZ;
+    bottomWall.position.copy(rigidBody.position);
+    this.physicsWorld.addBody(rigidBody);
+    return bottomWall;
+  }
+
+  createLeftDiagonalWall1(positionZ) {
+    const width = 4;
+    const height = 1;
+    const depth = 4;
+    const leftDiagonalWall1 = new Mesh(
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xe8e8e7 })
+    );
+    //Physics
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    rigidBody.quaternion.setFromAxisAngle(
+      new Physics.Vec3(0, 0, 1),
+      Math.PI * 0.25
+    );
+    rigidBody.position.set(-4, 11.3, 1.5 + positionZ);
+    leftDiagonalWall1.position.copy(rigidBody.position);
+    leftDiagonalWall1.quaternion.copy(rigidBody.quaternion);
+    this.physicsWorld.addBody(rigidBody);
+    return leftDiagonalWall1;
+  }
+
+  createLeftDiagonalWall2(positionZ) {
+    const width = 4;
+    const height = 1;
+    const depth = 4;
+    const leftDiagonalWall2 = new Mesh(
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xe8e8e7 })
+    );
+    //Physics
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    rigidBody.quaternion.setFromAxisAngle(
+      new Physics.Vec3(0, 0, 1),
+      Math.PI * 0.75
+    );
+    rigidBody.position.set(-4, 13.5, 1.5 + positionZ);
+    leftDiagonalWall2.position.copy(rigidBody.position);
+    leftDiagonalWall2.quaternion.copy(rigidBody.quaternion);
+    this.physicsWorld.addBody(rigidBody);
+    return leftDiagonalWall2;
+  }
+
+  createRightDiagonalWall1(positionZ) {
+    const width = 4;
+    const height = 1;
+    const depth = 4;
+    const rightDiagonalWall1 = new Mesh(
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xe8e8e7 })
+    );
+    //Physics
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    rigidBody.quaternion.setFromAxisAngle(
+      new Physics.Vec3(0, 0, 1),
+      Math.PI * 0.25
+    );
+    rigidBody.position.set(4, 13.5, 1.5 + positionZ);
+    rightDiagonalWall1.position.copy(rigidBody.position);
+    rightDiagonalWall1.quaternion.copy(rigidBody.quaternion);
+    this.physicsWorld.addBody(rigidBody);
+    return rightDiagonalWall1;
+  }
+
+  createRightDiagonalWall2(positionZ) {
+    const width = 4;
+    const height = 1;
+    const depth = 4;
+    const rightDiagonalWall2 = new Mesh(
+      new BoxGeometry(width, height, depth),
+      new MeshBasicMaterial({ color: 0xe8e8e7 })
+    );
+    //Physics
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(width / 2, height / 2, depth / 2)
+    );
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: this.physicsMaterial,
+    });
+    rigidBody.quaternion.setFromAxisAngle(
+      new Physics.Vec3(0, 0, 1),
+      Math.PI * 0.75
+    );
+    rigidBody.position.set(4, 11.3, 1.5 + positionZ);
+    rightDiagonalWall2.position.copy(rigidBody.position);
+    rightDiagonalWall2.quaternion.copy(rigidBody.quaternion);
+    this.physicsWorld.addBody(rigidBody);
+    return rightDiagonalWall2;
   }
 }

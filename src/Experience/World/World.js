@@ -28,27 +28,27 @@ export default class World {
       ); // Position, Scaling
       this.obstacle2 = new Obstacle(
         this.resources.items.ObstacleArmLiverHammer,
-        new Vector3(-4.5, 0, -3 * 20),
+        new Vector3(-4.5, 0, -6 * 20),
         new Vector3(0.009, 0.009, 0.009)
       );
       this.obstacle3 = new Obstacle(
         this.resources.items.ObstacleLegLiverHammer,
-        new Vector3(0, 0, -5 * 20),
+        new Vector3(0, 0, -10 * 20),
         new Vector3(0.009, 0.009, 0.009)
       );
       this.obstacle4 = new Obstacle(
         this.resources.items.ObstacleLiverAxe,
-        new Vector3(0, 0, -7 * 20),
+        new Vector3(0, 0, -14 * 20),
         new Vector3(0.009, 0.009, 0.009)
       );
       this.obstacles.push(this.obstacle3);
       this.obstacles.push(this.obstacle4);
       this.obstacles.push(this.obstacle2);
       this.obstacles.push(this.obstacle1);
-      const trackLength = 20;
+      const trackLength = 13;
       this.track = new GameTrack(trackLength);
       this.player = new Player();
-      this.controls = new Movement();
+      // this.controls = new Movement();
       this.endBlock = new EndBlock(-trackLength * 20 + trackLength);
     });
   }
@@ -56,7 +56,9 @@ export default class World {
   update() {
     if (this.controls) this.controls.update();
     for (const obstacle in this.obstacles) {
-      if (this.obstacles[obstacle]) this.obstacles[obstacle].update();
+      if (this.obstacles[obstacle]) {
+        this.obstacles[obstacle].update();
+      }
     }
   }
 }
