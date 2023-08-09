@@ -8,7 +8,7 @@ import Movement from "./Movement.js";
 import EndBlock from "./EndBlock.js";
 import BallPinsObstacle from "./Obstacles/BallPinsObstacle.js";
 import { ContactMaterial, Material } from "cannon-es";
-
+import Ramps from "./Obstacles/Ramps.js";
 export default class World {
   constructor() {
     this.experience = new Experience();
@@ -60,6 +60,12 @@ export default class World {
       this.player = new Player(
         this.playerMaterial,
         this.playerContactPathMaterial
+      );
+      this.ramp = new Ramps(
+        this.resources.items.Ramp1,
+        new Vector3(0, 0, 0),
+        new Vector3(0.03, 0.03, 0.03),
+        -1 * trackLength
       );
       this.controls = new Movement();
       this.endBlock = new EndBlock(
