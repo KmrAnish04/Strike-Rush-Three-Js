@@ -7,6 +7,8 @@ import {
 } from "three";
 import Experience from "../Experience.js";
 import * as Physics from "cannon-es";
+import { Vec3 } from "cannon-es";
+
 
 export default class GameTrack {
   constructor(trackLength = 5) {
@@ -15,13 +17,14 @@ export default class GameTrack {
     this.resources = this.experience.resources;
     this.physicsWorld = this.experience.physicsWorld;
     // this.setMaterial();
+
     this.setUpTrack(trackLength);
   }
 
   setGeometry() {
     this.width = 10;
-    this.height = 20;
-    this.depth = 1;
+    this.height = 1;
+    this.depth = 20;
     let geometry = new BoxGeometry(this.width, this.height, this.depth);
     return geometry;
   }
@@ -45,26 +48,48 @@ export default class GameTrack {
   setMesh(geometry) {
     let mesh = new Mesh(geometry, this.material);
     this.scene.add(mesh);
-    mesh.rotation.x = -Math.PI * 0.5;
-    mesh.position.y = mesh.position.y - 0.5;
-    // const shape = new Physics.Box(
-    //   new Physics.Vec3(this.width / 2, this.height / 2, this.depth / 2)
-    // );
-    // const body = new Physics.Body({ shape: shape, mass: 0 });
-    // this.physicsWorld.addBody(body);
     return mesh;
   }
 
   setUpTrack(noOfTiles) {
     this.trackTiles = [];
-    let tile = this.setMesh(this.setGeometry());
-    this.trackTiles.push(tile);
+    let tileGeometry = this.setGeometry();
+    let tileMesh = this.setMesh(tileGeometry);
+    let tileRigidBody = this.addPhysicsProperties(tileGeometry);
+    tileRigidBody.position.set(0, 0 - 0.5, 0);
+    tileMesh.position.copy(tileRigidBody.position)
+    this.trackTiles.push(tileRigidBody);
     noOfTiles--;
+
+
     for (let tileNum = 0; tileNum < noOfTiles; tileNum++) {
-      let tile = this.setMesh(this.setGeometry());
-      let lastTilePos = this.trackTiles[this.trackTiles.length - 1].position.z;
-      tile.position.z = lastTilePos - 20;
-      this.trackTiles.push(tile);
+      tileGeometry = this.setGeometry();
+      tileMesh = this.setMesh(tileGeometry);
+      tileRigidBody = this.addPhysicsProperties(tileGeometry);
+
+      let lastTilePos = this.trackTiles[this.trackTiles.length - 1];
+      console.log(lastTilePos);
+      tileRigidBody.position.set(0, 0 - 0.5, lastTilePos.position.z - 20);
+      tileMesh.position.copy(tileRigidBody.position)
+      this.trackTiles.push(tileRigidBody);
     }
   }
+
+  addPhysicsProperties(trackGeometry) {
+
+    //Physics
+    const physicsMaterial = new Physics.Material("trackMaterial");
+    const rigidBodyShape = new Physics.Box(new Vec3(this.width / 2, this.height / 2, this.depth / 2));
+    const rigidBody = new Physics.Body({
+      shape: rigidBodyShape,
+      mass: 0,
+      allowSleep: false,
+      material: physicsMaterial,
+    });
+
+    this.physicsWorld.addBody(rigidBody);
+    return rigidBody;
+  }
+
+
 }

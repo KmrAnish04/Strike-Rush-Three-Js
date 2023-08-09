@@ -32,12 +32,12 @@ export default class Ramps {
 
     addPhysicsProperties(lampModel, positionZ) {
         const lampObject = new Mesh(
-            new BoxGeometry(6, 1, 7),
+            new BoxGeometry(6, 3, 7),
             new MeshBasicMaterial({ color: 0xffff00 })
         );
         const physicsMaterial = new Physics.Material("Default");
         //Physics
-        const rigidBodyShape = new Physics.Box(new Vec3(3, 0.5, 3.5));
+        const rigidBodyShape = new Physics.Box(new Vec3(3, 1.5, 3.5));
         const rigidBody = new Physics.Body({
             shape: rigidBodyShape,
             mass: 0,
@@ -45,13 +45,13 @@ export default class Ramps {
             material: physicsMaterial,
         });
 
-        rigidBody.velocity.x = 100;
+        // rigidBody.velocity.x = 100;
         // ballPinRigids.push(rigidBody);
         // lampObject.position.set(10, 10, 10)
         // rigidBody.position.x = lampModel.position.x;
         // rigidBody.position.y = lampModel.position.y;
         // rigidBody.position.z = lampModel.position.z;
-        rigidBody.position.set(lampModel.position.x, lampModel.position.y + 0.91, lampModel.position.z - 3 + positionZ)
+        rigidBody.position.set(lampModel.position.x, lampModel.position.y + 0.1, lampModel.position.z - 3.5 + positionZ)
         lampObject.position.copy(rigidBody.position)
         this.scene.add(lampObject)
         rigidBody.quaternion.setFromAxisAngle(

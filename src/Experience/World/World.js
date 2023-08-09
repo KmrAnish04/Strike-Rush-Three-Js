@@ -55,7 +55,7 @@ export default class World {
       this.obstacles.push(this.obstacle4);
       this.obstacles.push(this.obstacle2);
       this.obstacles.push(this.obstacle1);
-      const trackLength = 1;
+      const trackLength = 12;
       this.track = new GameTrack(trackLength);
       this.player = new Player(
         this.playerMaterial,
