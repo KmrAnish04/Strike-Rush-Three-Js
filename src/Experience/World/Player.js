@@ -21,15 +21,8 @@ export default class Player {
     if (this.tail[0]) {
       console.log("Working");
       this.tail[0].addEventListener("collide", (collide) => {
-        console.log(collide);
-        const bodyA = collide.bodyA;
-        const bodyB = collide.bodyB;
-        console.log(
-          "Collision Detected of BodyA: ",
-          bodyA,
-          " with BodyB: ",
-          bodyB
-        );
+        const bodyType = collide.body.material.name;
+        console.log(bodyType);
       });
     }
   }
@@ -61,8 +54,8 @@ export default class Player {
   moveDirection(e) {
     for (let i = 0; i < this.tail.length; i++) {
       this.tail[i].position.x = e.x * 4;
-      this.player.children[i].position.copy(this.tail[i].position);
-      this.tail[i].position.y = 1;
+      this.tail[i].velocity.z = -1;
+      // this.tail[i].position.y = 1;
     }
   }
 
@@ -94,16 +87,16 @@ export default class Player {
     for (let i = 0; i < this.tail.length; i++) {
       this.tail[i].position.z -= 0.05 * deltaTime;
     }
-    // this.camera.position.z -= 0.05 * deltaTime;
+    this.camera.position.z -= 0.05 * deltaTime;
     for (let i = 0; i < this.tail.length; i++) {
       this.player.children[i].position.copy(this.tail[i].position);
       this.tail[i].position.y = 1;
       this.player.children[i].position.y = 0;
     }
-    // this.camera.lookAt(
-    //   0,
-    //   this.player.children[0].position.y,
-    //   this.player.children[0].position.z
-    // );
+    this.camera.lookAt(
+      0,
+      this.player.children[0].position.y,
+      this.player.children[0].position.z
+    );
   }
 }

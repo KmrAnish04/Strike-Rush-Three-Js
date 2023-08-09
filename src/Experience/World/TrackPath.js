@@ -10,15 +10,13 @@ import Experience from "../Experience.js";
 import * as Physics from "cannon-es";
 import { Vec3 } from "cannon-es";
 
-
 export default class GameTrack {
-  constructor(trackLength = 5) {
+  constructor(trackLength = 5, pathMaterial) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
     this.physicsWorld = this.experience.physicsWorld;
-    // this.setMaterial();
-
+    this.pathMaterial = pathMaterial;
     this.setUpTrack(trackLength);
   }
 
@@ -41,8 +39,8 @@ export default class GameTrack {
 
   setMaterial() {
     this.material = new MeshStandardMaterial({
-      color: 0x333333,
-      normalMap: this.textures.normal
+      color: 0x666666,
+      normalMap: this.textures.normal,
     });
   }
 
@@ -58,10 +56,9 @@ export default class GameTrack {
     let tileMesh = this.setMesh(tileGeometry);
     let tileRigidBody = this.addPhysicsProperties(tileGeometry);
     tileRigidBody.position.set(0, 0 - 0.5, 0);
-    tileMesh.position.copy(tileRigidBody.position)
+    tileMesh.position.copy(tileRigidBody.position);
     this.trackTiles.push(tileRigidBody);
     noOfTiles--;
-
 
     for (let tileNum = 0; tileNum < noOfTiles; tileNum++) {
       tileGeometry = this.setGeometry();
@@ -73,26 +70,24 @@ export default class GameTrack {
       let lastTilePos = this.trackTiles[this.trackTiles.length - 1];
       console.log(lastTilePos);
       tileRigidBody.position.set(0, 0 - 0.5, lastTilePos.position.z - 20);
-      tileMesh.position.copy(tileRigidBody.position)
+      tileMesh.position.copy(tileRigidBody.position);
       this.trackTiles.push(tileRigidBody);
     }
   }
 
   addPhysicsProperties(trackGeometry) {
-
     //Physics
-    const physicsMaterial = new Physics.Material("trackMaterial");
-    const rigidBodyShape = new Physics.Box(new Vec3(this.width / 2, this.height / 2, this.depth / 2));
+    const rigidBodyShape = new Physics.Box(
+      new Vec3(this.width / 2, this.height / 2, this.depth / 2)
+    );
     const rigidBody = new Physics.Body({
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: physicsMaterial,
+      material: this.pathMaterial,
     });
 
     this.physicsWorld.addBody(rigidBody);
     return rigidBody;
   }
-
-
 }
