@@ -80,5 +80,10 @@ export default [
     name: "HealthBall",
     type: "fbxModel",
     path: "models/Ball.FBX",
-  }
+  },
+  {
+    name: "groundTexture",
+    type: "texture",
+    path: "textures/ground.png",
+  },
 ];

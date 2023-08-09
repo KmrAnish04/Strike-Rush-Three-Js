@@ -17,6 +17,8 @@ export default class GameTrack {
     this.resources = this.experience.resources;
     this.physicsWorld = this.experience.physicsWorld;
     this.pathMaterial = pathMaterial;
+    this.setTextures();
+    this.setMaterial();
     this.setUpTrack(trackLength);
   }
 
@@ -30,17 +32,17 @@ export default class GameTrack {
 
   setTextures() {
     this.textures = {};
-    this.woodTexture = this.resources.items.trackTexture;
+    this.woodTexture = this.resources.items.groundTexture;
     this.woodTexture.colorSpace = SRGBColorSpace;
-    this.woodTexture.repeat.set(1.5, 1.5);
     this.woodTexture.wrapS = RepeatWrapping;
     this.woodTexture.wrapT = RepeatWrapping;
   }
 
   setMaterial() {
     this.material = new MeshStandardMaterial({
-      color: 0x666666,
-      normalMap: this.textures.normal,
+      map: this.woodTexture,
+      // color: 0x666666,
+      // normalMap: this.textures.normal,
     });
   }
 

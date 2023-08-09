@@ -7,6 +7,8 @@ import {
   Material,
   Vec3,
 } from "cannon-es";
+import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
+import { ShapeType } from "three-to-cannon";
 export default class Obstacle {
   constructor(obstacleType, modelPostition, modelScaling, obstacleMaterial) {
     this.experience = new Experience();
@@ -18,18 +20,28 @@ export default class Obstacle {
     this.obstacleMaterial = obstacleMaterial;
     // Resource
     this.resource = obstacleType.clone();
-    console.log(modelPostition);
+    this.rigidBodiesArray = [];
+    this.meshesArray = [];
     this.setModel(modelPostition, modelScaling);
   }
 
   setModel(modelPosition, modelScaling) {
-    this.model = this.resource;
+    this.model = this.resource  ;
     this.model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z);
     this.model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
     this.scene.add(this.model);
     this.model.traverse((child) => {
       if (child instanceof THREE.Mesh) {
         child.castShadow = true;
+        // this.meshesArray.push(child);
+        // const rigidBody = getPhysicsBody(
+        //   child,
+        //   ShapeType.HULL,
+        //   this.obstacleMaterial,
+        //   0
+        // );
+        // this.rigidBodiesArray.push(rigidBody);
+        // this.physicsWorld.addBody(rigidBody);
       }
     });
     this.playAnimation();
@@ -43,5 +55,9 @@ export default class Obstacle {
 
   update() {
     this.mixer.update(this.time.delta * 0.001);
+    // for (let i = 0; i < this.rigidBodiesArray.length; i++) {
+    //   this.meshesArray[i].position.copy(this.rigidBodiesArray[i].position);
+    //   this.meshesArray[i].quaternion.copy(this.rigidBodiesArray[i].quaternion);
+    // }
   }
 }

@@ -28,6 +28,7 @@ export default class World {
       this.playerMaterial = new Material("player");
       this.pathMaterial = new Material("path");
       this.wallMaterial = new Material("wall");
+      this.rampMaterial = new Material("ramp");
       this.obstacleMaterial = new Material("obstacle");
       this.scoreX1Material = new Material("score1");
       this.scoreX5Material = new Material("score5");
@@ -37,11 +38,11 @@ export default class World {
         { friction: 0.3, restitution: 0.1 }
       );
       this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
-      this.obstacle1 = new BallPinsObstacle(
-        new Vector3(-5, 1.8, -7 * 20),
-        new Vector3(0.009, 0.009, 0.009),
-        this.obstacleMaterial
-      ); // Position, Scaling
+      // this.obstacle1 = new BallPinsObstacle(
+      //   new Vector3(-5, 1.8, -7 * 20),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial
+      // );
       this.obstacle2 = new Obstacle(
         this.resources.items.ObstacleArmLiverHammer,
         new Vector3(-4.5, 0, -6 * 20),
@@ -64,7 +65,7 @@ export default class World {
       this.obstacles.push(this.obstacle4);
       this.obstacles.push(this.obstacle2);
       this.obstacles.push(this.obstacle1);
-      const trackLength = 15;
+      const trackLength = 10;
       this.sideWall = new SideWalls(-trackLength * 20, this.wallMaterial);
       this.track = new GameTrack(trackLength, this.pathMaterial);
       this.player = new Player(
@@ -73,9 +74,10 @@ export default class World {
       );
       this.ramp = new Ramps(
         this.resources.items.Ramp1,
-        new Vector3(0, 0, 0),
+        new Vector3(0, 0, -3),
         new Vector3(0.03, 0.03, 0.03),
-        -1 * trackLength
+        -15 * 10,
+        this.rampMaterial
       );
 
       this.gemBlk = new GemsBlock();

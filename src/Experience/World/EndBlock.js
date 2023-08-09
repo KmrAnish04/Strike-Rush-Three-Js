@@ -8,6 +8,8 @@ import {
 import Experience from "../Experience";
 import * as Physics from "cannon-es";
 import { Body, Box, Vec3 } from "cannon-es";
+import { getPhysicsBody } from "../Utils/PhycisBodyHelper";
+import { ShapeType } from "three-to-cannon";
 
 export default class EndBlock {
   constructor(positionZ, wallMaterial, scoreX1Material, scoreX5Material) {
@@ -73,17 +75,11 @@ export default class EndBlock {
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xffff00 })
     );
-
-    //Physics Wall
-    const physicsEndWallShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const physicsEndWallBody = getPhysicsBody(
+      endWall,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const physicsEndWallBody = new Physics.Body({
-      shape: physicsEndWallShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     physicsEndWallBody.position.y = positionY;
     physicsEndWallBody.position.z = positionZ;
     endWall.position.copy(physicsEndWallBody.position);
@@ -100,18 +96,11 @@ export default class EndBlock {
       new CylinderGeometry(radiusTop, radiusBottom, height, numberOfSegments),
       new MeshBasicMaterial({ color: 0xe201c9 })
     );
-    const physicsCircularHitShape = new Physics.Cylinder(
-      radiusTop,
-      radiusBottom,
-      height,
-      numberOfSegments
+    const physicsCircularHitBody = getPhysicsBody(
+      circularHit,
+      ShapeType.CYLINDER,
+      this.wallMaterial
     );
-    const physicsCircularHitBody = new Physics.Body({
-      shape: physicsCircularHitShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     physicsCircularHitBody.quaternion.setFromAxisAngle(
       new Vec3(-1, 0, 0),
       Math.PI * 0.5
@@ -154,15 +143,11 @@ export default class EndBlock {
       new MeshBasicMaterial({ color: 0xe8e8e7 })
     );
     //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const rigidBody = getPhysicsBody(
+      leftWall,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     rigidBody.position.x = -5.5;
     rigidBody.position.y = 10;
     rigidBody.position.z = 1.5 + positionZ;
@@ -179,16 +164,11 @@ export default class EndBlock {
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
     );
-    //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const rigidBody = getPhysicsBody(
+      rightWall,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     rigidBody.position.x = 5.5;
     rigidBody.position.y = 10;
     rigidBody.position.z = 1.5 + positionZ;
@@ -205,16 +185,11 @@ export default class EndBlock {
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
     );
-    //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const rigidBody = getPhysicsBody(
+      bottomWall,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     rigidBody.position.y = -0.4;
     rigidBody.position.z = 1.5 + positionZ;
     bottomWall.position.copy(rigidBody.position);
@@ -231,15 +206,11 @@ export default class EndBlock {
       new MeshBasicMaterial({ color: 0xe8e8e7 })
     );
     //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const rigidBody = getPhysicsBody(
+      leftDiagonalWall1,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),
       Math.PI * 0.25
@@ -259,16 +230,11 @@ export default class EndBlock {
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
     );
-    //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const rigidBody = getPhysicsBody(
+      leftDiagonalWall2,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),
       Math.PI * 0.75
@@ -289,15 +255,11 @@ export default class EndBlock {
       new MeshBasicMaterial({ color: 0xe8e8e7 })
     );
     //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const rigidBody = getPhysicsBody(
+      rightDiagonalWall1,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),
       Math.PI * 0.25
@@ -318,15 +280,11 @@ export default class EndBlock {
       new MeshBasicMaterial({ color: 0xe8e8e7 })
     );
     //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(width / 2, height / 2, depth / 2)
+    const rigidBody = getPhysicsBody(
+      rightDiagonalWall2,
+      ShapeType.BOX,
+      this.wallMaterial
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.wallMaterial,
-    });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),
       Math.PI * 0.75
