@@ -7,21 +7,31 @@ import Player from "./Player.js";
 import Movement from "./Movement.js";
 import EndBlock from "./EndBlock.js";
 import BallPinsObstacle from "./Obstacles/BallPinsObstacle.js";
+import { ContactMaterial, Material } from "cannon-es";
 
 export default class World {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
+    this.physicsWorld = this.experience.physicsWorld;
     this.obstacles = [];
     // Wait for resources
     this.resources.on("ready", () => {
       // Setup
       this.environment = new Environment();
-      // this.track = new GameTrack(10);
-      // this.obs = new ArmLiverHammer(new Vector3(-5, 1.8, 0), new Vector3(0.009, 0.009, 0.009)); // Position, Scaling
-      // this.obs = new LegLiverHammer(new Vector3(-5, 1.8, 0), new Vector3(0.009, 0.009, 0.009)); // Position, Scaling
-      // this.obs = new LegLiverKnife(new Vector3(-5, 1.8, 0), new Vector3(0.009, 0.009, 0.009)); // Position, Scaling
+      this.playerMaterial = new Material("player");
+      this.pathMaterial = new Material("path");
+      this.wallMaterial = new Material("wall");
+      this.obstacleMaterial = new Material("obstacle");
+      this.scoreX1Material = new Material("score1");
+      this.scoreX5Material = new Material("score5");
+      this.playerContactPathMaterial = new ContactMaterial(
+        this.playerMaterial,
+        this.pathMaterial,
+        { friction: 0.3, restitution: 0.8 }
+      );
+      this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
       this.obstacle1 = new BallPinsObstacle(
         new Vector3(-5, 1.8, -7 * 20),
         new Vector3(0.009, 0.009, 0.009)
@@ -45,11 +55,19 @@ export default class World {
       this.obstacles.push(this.obstacle4);
       this.obstacles.push(this.obstacle2);
       this.obstacles.push(this.obstacle1);
-      const trackLength = 2;
+      const trackLength = 1;
       this.track = new GameTrack(trackLength);
-      this.player = new Player();
+      this.player = new Player(
+        this.playerMaterial,
+        this.playerContactPathMaterial
+      );
       this.controls = new Movement();
-      this.endBlock = new EndBlock(-trackLength * 20 + trackLength);
+      this.endBlock = new EndBlock(
+        -trackLength * 20 + trackLength,
+        this.wallMaterial,
+        this.scoreX1Material,
+        this.scoreX5Material
+      );
     });
   }
 

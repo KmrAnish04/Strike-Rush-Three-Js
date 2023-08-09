@@ -7,10 +7,10 @@ import {
 } from "three";
 import Experience from "../Experience";
 import * as Physics from "cannon-es";
-import { Vec3 } from "cannon-es";
+import { Body, Box, Vec3 } from "cannon-es";
 
 export default class EndBlock {
-  constructor(positionZ) {
+  constructor(positionZ, pathMaterial, scoreX1Material, scoreX5Material) {
     this.experience = new Experience();
     this.resources = this.experience.resources;
     this.scene = this.experience.scene;
@@ -20,7 +20,12 @@ export default class EndBlock {
     this.winBox = this.resources.items.WinBox;
     this.winBox.scene.scale.set(0.005, 0.015, 0.013);
     this.constructWinBox(positionZ);
-    this.contructLastBlock(positionZ);
+    this.contructLastBlock(
+      positionZ,
+      pathMaterial,
+      scoreX1Material,
+      scoreX5Material
+    );
     this.scene.add(this.endBlockGroup);
   }
 
@@ -36,34 +41,45 @@ export default class EndBlock {
     wingsGroup.add(rightWing);
     return wingsGroup;
   }
+
   constructWinBox(positionZ) {
+    const box = new Box(new Vec3(2.35, 1.5, 1.5));
+    const score1Body = new Body({
+      shape: box,
+      mass: 0,
+      material: this.scoreX1Material,
+    });
+    const score5Body = new Body({
+      shape: box,
+      mass: 0,
+      material: this.scoreX5Material,
+    });
+
+    this.physicsWorld.addBody(score1Body);
+    this.physicsWorld.addBody(score5Body);
     const newBox1 = this.winBox.scene.clone();
-    newBox1.position.x = 2.5;
-    newBox1.position.y = 0.5;
-    newBox1.position.z = positionZ + 4;
+    score1Body.position.x = 2.5;
+    score1Body.position.y = 1.6;
+    score1Body.position.z = positionZ + 4;
+    newBox1.position.copy(score1Body.position);
     newBox1.rotation.y = (Math.PI / 180) * 90;
+
     const newBox2 = this.winBox.scene.clone();
-    newBox2.position.x = -2.5;
-    newBox2.position.y = 0.5;
-    newBox2.position.z = positionZ + 4;
+    score5Body.position.x = -2.5;
+    score5Body.position.y = 1.6;
+    score5Body.position.z = positionZ + 4;
+    newBox2.position.copy(score5Body.position);
     newBox2.rotation.y = (Math.PI / 180) * 90;
     this.scene.add(newBox1, newBox2);
   }
-  contructLastBlock(positionZ) {
-    this.physicsMaterial = new Physics.Material("Default");
-    this.physicsContactMaterial = new Physics.ContactMaterial(
-      this.physicsMaterial,
-      this.physicsMaterial,
-      { friction: 0.1, restitution: 0.7 }
-    );
-    this.physicsWorld.addContactMaterial(this.physicsContactMaterial);
+
+  contructLastBlock(positionZ, pathMaterial, scoreX1Material, scoreX5Material) {
+    this.wallMaterial = pathMaterial;
+    this.scoreX1Material = scoreX1Material;
+    this.scoreX5Material = scoreX5Material;
     const endWall = this.constructEndWall(10, positionZ);
     const walls = this.constructWalls(positionZ);
-    const circularHit = this.constructCircularHit(
-      16,
-      positionZ,
-      -(Math.PI / 180) * 90
-    );
+    const circularHit = this.constructCircularHit(16, positionZ);
     this.endBlockGroup.add(endWall, walls, circularHit);
   }
 
@@ -75,6 +91,7 @@ export default class EndBlock {
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xffff00 })
     );
+
     //Physics Wall
     const physicsEndWallShape = new Physics.Box(
       new Vec3(width / 2, height / 2, depth / 2)
@@ -83,7 +100,7 @@ export default class EndBlock {
       shape: physicsEndWallShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     physicsEndWallBody.position.y = positionY;
     physicsEndWallBody.position.z = positionZ;
@@ -92,7 +109,7 @@ export default class EndBlock {
     return endWall;
   }
 
-  constructCircularHit(positionY, positionZ, rotationX) {
+  constructCircularHit(positionY, positionZ) {
     const radiusTop = 1.2;
     const radiusBottom = 1.2;
     const height = 4;
@@ -111,7 +128,7 @@ export default class EndBlock {
       shape: physicsCircularHitShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     physicsCircularHitBody.quaternion.setFromAxisAngle(
       new Vec3(-1, 0, 0),
@@ -162,7 +179,7 @@ export default class EndBlock {
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     rigidBody.position.x = -5.5;
     rigidBody.position.y = 10;
@@ -188,7 +205,7 @@ export default class EndBlock {
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     rigidBody.position.x = 5.5;
     rigidBody.position.y = 10;
@@ -214,7 +231,7 @@ export default class EndBlock {
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     rigidBody.position.y = -0.4;
     rigidBody.position.z = 1.5 + positionZ;
@@ -239,7 +256,7 @@ export default class EndBlock {
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),
@@ -268,7 +285,7 @@ export default class EndBlock {
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),
@@ -297,7 +314,7 @@ export default class EndBlock {
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),
@@ -326,7 +343,7 @@ export default class EndBlock {
       shape: rigidBodyShape,
       mass: 0,
       allowSleep: false,
-      material: this.physicsMaterial,
+      material: this.wallMaterial,
     });
     rigidBody.quaternion.setFromAxisAngle(
       new Physics.Vec3(0, 0, 1),

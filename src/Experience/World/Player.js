@@ -2,21 +2,16 @@ import { Body, Box, ContactMaterial, Material, Sphere, Vec3 } from "cannon-es";
 import Experience from "../Experience";
 import { SphereGeometry, MeshBasicMaterial, Mesh, Group } from "three";
 export default class Player {
-  constructor() {
+  constructor(playerMaterial, playerContactPathMaterial) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.time = this.experience.time;
-    this.physicsMaterial = new Material("Player");
-    this.defaultMaterial = new Material("Default");
-    this.physicsContactMaterial = new ContactMaterial(
-      this.physicsMaterial,
-      this.defaultMaterial,
-      { friction: 0.1, restitution: 0.7 }
-    );
+    this.playerMaterial = playerMaterial;
+    this.playerContactPathMaterial = playerContactPathMaterial;
     this.added = false;
     this.camera = this.experience.camera.instance;
     this.physicsWorld = this.experience.physicsWorld;
-    this.physicsWorld.addContactMaterial(this.physicsContactMaterial);
+    this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
     this.tail = [];
     this.setPlayer();
     this.checkCollision();
@@ -27,6 +22,14 @@ export default class Player {
       console.log("Working");
       this.tail[0].addEventListener("collide", (collide) => {
         console.log(collide);
+        const bodyA = collide.bodyA;
+        const bodyB = collide.bodyB;
+        console.log(
+          "Collision Detected of BodyA: ",
+          bodyA,
+          " with BodyB: ",
+          bodyB
+        );
       });
     }
   }
@@ -46,7 +49,7 @@ export default class Player {
     this.rigidBody = new Body({
       shape: shape,
       mass: 10,
-      material: this.physicsContactMaterial,
+      material: this.playerContactPathMaterial,
     });
     this.rigidBody.position.set(0, 1, 0);
     this.tail.push(this.rigidBody);
@@ -91,16 +94,16 @@ export default class Player {
     for (let i = 0; i < this.tail.length; i++) {
       this.tail[i].position.z -= 0.05 * deltaTime;
     }
-    this.camera.position.z -= 0.05 * deltaTime;
+    // this.camera.position.z -= 0.05 * deltaTime;
     for (let i = 0; i < this.tail.length; i++) {
       this.player.children[i].position.copy(this.tail[i].position);
       this.tail[i].position.y = 1;
       this.player.children[i].position.y = 0;
     }
-    this.camera.lookAt(
-      0,
-      this.player.children[0].position.y,
-      this.player.children[0].position.z
-    );
+    // this.camera.lookAt(
+    //   0,
+    //   this.player.children[0].position.y,
+    //   this.player.children[0].position.z
+    // );
   }
 }
