@@ -4,6 +4,7 @@ import {
   Mesh,
   SRGBColorSpace,
   RepeatWrapping,
+  Color
 } from "three";
 import Experience from "../Experience.js";
 import * as Physics from "cannon-es";
@@ -40,7 +41,7 @@ export default class GameTrack {
 
   setMaterial() {
     this.material = new MeshStandardMaterial({
-      color: 0x666666,
+      color: 0x333333,
       normalMap: this.textures.normal
     });
   }
@@ -65,6 +66,8 @@ export default class GameTrack {
     for (let tileNum = 0; tileNum < noOfTiles; tileNum++) {
       tileGeometry = this.setGeometry();
       tileMesh = this.setMesh(tileGeometry);
+      if (tileNum % 2 == 0) tileMesh.material.color = new Color(0x888888);
+      // else tileMesh.material.color = new Color(0xffffff)
       tileRigidBody = this.addPhysicsProperties(tileGeometry);
 
       let lastTilePos = this.trackTiles[this.trackTiles.length - 1];

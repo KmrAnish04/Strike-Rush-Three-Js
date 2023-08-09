@@ -66,4 +66,9 @@ export default [
     type: "fbxModel",
     path: "models/Ramps/Ramp3.fbx",
   },
+  {
+    name: "GemBall",
+    type: "fbxModel",
+    path: "models/Gem.FBX",
+  }
 ];
