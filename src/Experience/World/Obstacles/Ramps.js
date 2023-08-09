@@ -2,7 +2,8 @@ import { Mesh, BoxGeometry, MeshBasicMaterial } from "three";
 import Experience from "../../Experience.js";
 import * as Physics from "cannon-es";
 import { Vec3 } from "cannon-es";
-
+import { threeToCannon, ShapeType } from 'three-to-cannon';
+import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
 
 export default class Ramps {
     constructor(rampType, modelPostition, modelScaling, positionZ) {
@@ -35,37 +36,17 @@ export default class Ramps {
             new BoxGeometry(6, 1, 7),
             new MeshBasicMaterial({ color: 0xffff00 })
         );
-        const physicsMaterial = new Physics.Material("Default");
-        //Physics
-        const rigidBodyShape = new Physics.Box(new Vec3(3, 0.5, 3.5));
-        const rigidBody = new Physics.Body({
-            shape: rigidBodyShape,
-            mass: 0,
-            allowSleep: false,
-            material: physicsMaterial,
-        });
-
-        rigidBody.velocity.x = 100;
-        // ballPinRigids.push(rigidBody);
-        // lampObject.position.set(10, 10, 10)
-        // rigidBody.position.x = lampModel.position.x;
-        // rigidBody.position.y = lampModel.position.y;
-        // rigidBody.position.z = lampModel.position.z;
-        rigidBody.position.set(lampModel.position.x, lampModel.position.y + 0.91, lampModel.position.z - 3 + positionZ)
-        lampObject.position.copy(rigidBody.position)
-        this.scene.add(lampObject)
-        rigidBody.quaternion.setFromAxisAngle(
+        lampObject.position.set(lampModel.position.x, lampModel.position.y + 0.91, lampModel.position.z - 3 + positionZ)
+        lampObject.quaternion.setFromAxisAngle(
             new Physics.Vec3(1, 0, 0),
             Math.PI * 1.15
         );
+        this.scene.add(lampObject)
+
         this.model.position.z = -6 + positionZ
-        this.model.quaternion.copy(rigidBody.quaternion)
+        this.model.quaternion.copy(lampObject.quaternion)
         this.model.quaternion.setFromAxisAngle(new Physics.Vec3(0, 1, 0), Math.PI)
-        lampObject.quaternion.copy(rigidBody.quaternion)
-        // rigidBody.position.set(-4, 13.5, 1.5 + positionZ);
-        // leftDiagonalWall2.position.copy(rigidBody.position);
-        // leftDiagonalWall2.quaternion.copy(rigidBody.quaternion);
-        this.physicsWorld.addBody(rigidBody);
+        this.physicsWorld.addBody(getPhysicsBody(lampObject, ShapeType.BOX));
     }
 }
 
