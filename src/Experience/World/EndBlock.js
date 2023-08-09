@@ -10,36 +10,20 @@ import * as Physics from "cannon-es";
 import { Body, Box, Vec3 } from "cannon-es";
 
 export default class EndBlock {
-  constructor(positionZ, pathMaterial, scoreX1Material, scoreX5Material) {
+  constructor(positionZ, wallMaterial, scoreX1Material, scoreX5Material) {
     this.experience = new Experience();
     this.resources = this.experience.resources;
     this.scene = this.experience.scene;
     this.endBlockGroup = new Group();
     this.physicsWorld = this.experience.physicsWorld;
+    this.scoreX1Material = scoreX1Material;
+    this.scoreX5Material = scoreX5Material;
     this.physicsObjects = [];
     this.winBox = this.resources.items.WinBox;
     this.winBox.scene.scale.set(0.005, 0.015, 0.013);
+    this.contructLastBlock(positionZ, wallMaterial);
     this.constructWinBox(positionZ);
-    this.contructLastBlock(
-      positionZ,
-      pathMaterial,
-      scoreX1Material,
-      scoreX5Material
-    );
     this.scene.add(this.endBlockGroup);
-  }
-
-  constructWings() {
-    const wingsGroup = new Group();
-    const leftWing = this.wings.clone();
-    const rightWing = this.wings.clone();
-    leftWing.position.x = -2;
-    rightWing.position.x = 2;
-    leftWing.position.z = 4;
-    leftWing.position.y = 4;
-    wingsGroup.add(leftWing);
-    wingsGroup.add(rightWing);
-    return wingsGroup;
   }
 
   constructWinBox(positionZ) {
@@ -73,10 +57,8 @@ export default class EndBlock {
     this.scene.add(newBox1, newBox2);
   }
 
-  contructLastBlock(positionZ, pathMaterial, scoreX1Material, scoreX5Material) {
-    this.wallMaterial = pathMaterial;
-    this.scoreX1Material = scoreX1Material;
-    this.scoreX5Material = scoreX5Material;
+  contructLastBlock(positionZ, wallMaterial) {
+    this.wallMaterial = wallMaterial;
     const endWall = this.constructEndWall(10, positionZ);
     const walls = this.constructWalls(positionZ);
     const circularHit = this.constructCircularHit(16, positionZ);

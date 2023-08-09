@@ -14,7 +14,7 @@ export default class SideWalls {
 
   constructSideWalls() {
     const width = 1;
-    const height = 5;
+    const height = 3;
     const depth = this.trackLength;
     const pathWidth = 10;
     const leftWallMesh = this.constructWallMesh(width, height, depth);
