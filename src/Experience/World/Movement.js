@@ -19,6 +19,7 @@ export default class Movement {
     window.addEventListener("click", () => {
       if (!this.startGame) {
         this.startGame = true;
+        this.player.giveVelocity()
       }
     });
   }

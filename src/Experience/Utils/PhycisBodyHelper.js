@@ -1,33 +1,27 @@
 import * as Physics from "cannon-es";
-import { threeToCannon, ShapeType } from 'three-to-cannon';
+import { threeToCannon, ShapeType } from "three-to-cannon";
 
-export function getPhysicsBody(lampObject, shapeType) {
+export function getPhysicsBody(object, shapeType, material, mass = 0) {
+  const physicsMaterial = material;
 
-    const physicsMaterial = new Physics.Material("Default");
+  const quaternion1 = object.quaternion.clone();
+  object.quaternion.set(0, 0, 0, 1);
+  let result;
+  if (shapeType) result = threeToCannon(object, { type: shapeType });
+  else result = threeToCannon(object);
 
-    const quaternion1 = lampObject.quaternion.clone();
-    lampObject.quaternion.set(0, 0, 0, 1);
-    let result;
-    if (shapeType)
-        result = threeToCannon(lampObject, { type: shapeType });
-    else
-        result = threeToCannon(lampObject);
+  const { shape, offset, quaternion } = result;
 
-    const { shape, offset, quaternion } = result;
+  const physicsBody = new Physics.Body({
+    mass: mass,
+    allowSleep: false,
+    material: physicsMaterial,
+  });
+  physicsBody.addShape(shape, offset, quaternion);
 
-    const physicsBody = new Physics.Body({
-        mass: 0,
-        allowSleep: false,
-        material: physicsMaterial,
-    });
-    physicsBody.addShape(shape, offset, quaternion)
-    physicsBody.velocity.x = 100;
+  object.quaternion.copy(quaternion1);
+  physicsBody.position.copy(object.position);
+  physicsBody.quaternion.copy(object.quaternion);
 
-    lampObject.quaternion.copy(quaternion1);
-    physicsBody.position.copy(lampObject.position)
-    physicsBody.quaternion.copy(lampObject.quaternion)
-
-    return physicsBody;
+  return physicsBody;
 }
-
-

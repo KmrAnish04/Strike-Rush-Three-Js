@@ -66,4 +66,9 @@ export default [
     type: "fbxModel",
     path: "models/Ramps/Ramp3.fbx",
   },
+  {
+    name: "groundTexture",
+    type: "texture",
+    path: "textures/ground.png",
+  },
 ];
