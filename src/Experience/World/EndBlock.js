@@ -60,14 +60,14 @@ export default class EndBlock {
     const newBox1 = this.winBox.scene.clone();
     score1Body.position.x = 2.5;
     score1Body.position.y = 1.6;
-    score1Body.position.z = positionZ + 4;
+    score1Body.position.z = positionZ + 2.3;
     newBox1.position.copy(score1Body.position);
     newBox1.rotation.y = (Math.PI / 180) * 90;
 
     const newBox2 = this.winBox.scene.clone();
     score5Body.position.x = -2.5;
     score5Body.position.y = 1.6;
-    score5Body.position.z = positionZ + 4;
+    score5Body.position.z = positionZ + 2.3;
     newBox2.position.copy(score5Body.position);
     newBox2.rotation.y = (Math.PI / 180) * 90;
     this.scene.add(newBox1, newBox2);

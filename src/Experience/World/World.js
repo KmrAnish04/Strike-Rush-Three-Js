@@ -9,6 +9,7 @@ import EndBlock from "./EndBlock.js";
 import BallPinsObstacle from "./Obstacles/BallPinsObstacle.js";
 import { ContactMaterial, Material } from "cannon-es";
 import Ramps from "./Obstacles/Ramps.js";
+import SideWalls from "./SideWalls.js";
 export default class World {
   constructor() {
     this.experience = new Experience();
@@ -56,6 +57,7 @@ export default class World {
       this.obstacles.push(this.obstacle2);
       this.obstacles.push(this.obstacle1);
       const trackLength = 1;
+      this.sideWall = new SideWalls(-trackLength * 20, this.wallMaterial);
       this.track = new GameTrack(trackLength);
       this.player = new Player(
         this.playerMaterial,
@@ -69,7 +71,7 @@ export default class World {
       );
       this.controls = new Movement();
       this.endBlock = new EndBlock(
-        -trackLength * 20 + trackLength,
+        -trackLength * 20 + 7,
         this.wallMaterial,
         this.scoreX1Material,
         this.scoreX5Material

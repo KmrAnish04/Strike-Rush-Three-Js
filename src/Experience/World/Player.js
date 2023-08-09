@@ -61,7 +61,8 @@ export default class Player {
   moveDirection(e) {
     for (let i = 0; i < this.tail.length; i++) {
       this.tail[i].position.x = e.x * 4;
-      this.player.children[i].position.copy(this.tail[i].position);
+      this.tail[i].velocity.z = -1;
+      // this.player.children[i].position.copy(this.tail[i].position);
       this.tail[i].position.y = 1;
     }
   }
