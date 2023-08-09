@@ -38,33 +38,33 @@ export default class World {
         { friction: 0.3, restitution: 0.1 }
       );
       this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
-      // this.obstacle1 = new BallPinsObstacle(
-      //   new Vector3(-5, 1.8, -7 * 20),
-      //   new Vector3(0.009, 0.009, 0.009),
-      //   this.obstacleMaterial
-      // );
-      this.obstacle2 = new Obstacle(
-        this.resources.items.ObstacleArmLiverHammer,
-        new Vector3(-4.5, 0, -6 * 20),
+      this.obstacle1 = new BallPinsObstacle(
+        new Vector3(-5, 1.8, -7 * 20),
         new Vector3(0.009, 0.009, 0.009),
         this.obstacleMaterial
       );
+      // this.obstacle2 = new Obstacle(
+      //   this.resources.items.ObstacleArmLiverHammer,
+      //   new Vector3(-4.5, 0, -6 * 20),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial
+      // );
       this.obstacle3 = new Obstacle(
         this.resources.items.ObstacleLegLiverHammer,
         new Vector3(0, 0, -10 * 20),
         new Vector3(0.009, 0.009, 0.009),
         this.obstacleMaterial
       );
-      this.obstacle4 = new Obstacle(
-        this.resources.items.ObstacleLiverAxe,
-        new Vector3(0, 0, -14 * 20),
-        new Vector3(0.009, 0.009, 0.009),
-        this.obstacleMaterial
-      );
+      // this.obstacle4 = new Obstacle(
+      //   this.resources.items.ObstacleLiverAxe,
+      //   new Vector3(0, 0, -14 * 20),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial
+      // );
       this.obstacles.push(this.obstacle3);
-      this.obstacles.push(this.obstacle4);
-      this.obstacles.push(this.obstacle2);
-      this.obstacles.push(this.obstacle1);
+      // this.obstacles.push(this.obstacle4);
+      // this.obstacles.push(this.obstacle2);
+      // this.obstacles.push(this.obstacle1);
       const trackLength = 10;
       this.sideWall = new SideWalls(-trackLength * 20, this.wallMaterial);
       this.track = new GameTrack(trackLength, this.pathMaterial);

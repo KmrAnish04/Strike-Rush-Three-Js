@@ -34,7 +34,7 @@ export default [
   {
     name: "ObstacleLegLiverHammer",
     type: "fbxModel",
-    path: "models/Obstacle/LegLiverHammer.fbx",
+    path: "models/Obstacle/HammerBothSide.fbx",
   },
   {
     name: "ObstacleLiverAxe",
