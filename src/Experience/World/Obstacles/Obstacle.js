@@ -27,7 +27,7 @@ export default class Obstacle {
 
   setModel(modelPosition, modelScaling) {
     this.model = this.resource  ;
-    this.model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z);
+    // this.model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z);
     this.model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
     this.scene.add(this.model);
     this.model.traverse((child) => {

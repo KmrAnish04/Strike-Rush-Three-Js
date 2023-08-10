@@ -29,17 +29,17 @@ export default [
   {
     name: "ObstacleArmLiverHammer",
     type: "fbxModel",
-    path: "models/Obstacle/ArmLiverHammer.fbx",
+    path: "models/Obstacle/HammerOneSideAnimation.fbx",
   },
   {
     name: "ObstacleLegLiverHammer",
     type: "fbxModel",
-    path: "models/Obstacle/LegLiverHammer.fbx",
+    path: "models/Obstacle/HammerBothSideAnimation.fbx",
   },
   {
     name: "ObstacleLiverAxe",
     type: "fbxModel",
-    path: "models/Obstacle/LiverKnife.fbx",
+    path: "models/Obstacle/KnifeOneSideAnimation.fbx",
   },
   {
     name: "ObstacleBowlingPin",
