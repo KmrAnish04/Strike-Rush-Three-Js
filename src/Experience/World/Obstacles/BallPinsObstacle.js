@@ -6,7 +6,7 @@ import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
 export default class BallPinsObstacle {
-  constructor(modelPostition, modelScaling, obstacleMaterial) {
+  constructor(modelPostition, modelScaling, obstacleMaterial, positionZ) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
@@ -14,6 +14,7 @@ export default class BallPinsObstacle {
     this.debug = this.experience.debug;
     this.physicsWorld = this.experience.physicsWorld;
     this.obstacleMaterial = obstacleMaterial;
+    this.positionZ = positionZ;
     this.resource = this.resources.items.ObstacleBowlingPin;
     this.setUpBallPinsObstacle(modelPostition, modelScaling);
   }
@@ -57,7 +58,7 @@ export default class BallPinsObstacle {
         const pin = this.rigids[idx];
         const x = -(startX + 1 + col * spacingX) * 2 + 1;
         const z = (startZ + row * spacingZ) * 2 - 1;
-        pin.position.set(x, 0.71, z);
+        pin.position.set(x, 0.71, z + this.positionZ);
         this.ballPins[idx].position.copy(pin.position);
         this.ballPins[idx].position.y = 0;
         idx--;

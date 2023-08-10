@@ -35,7 +35,7 @@ export default class Experience {
     this.resources = new Resources(sources);
     this.camera = new Camera();
     this.renderer = new Renderer();
-    this.physicsWorld = new Physics.World({ gravity: new Vec3(0, -0.1, 0) });
+    this.physicsWorld = new Physics.World({ gravity: new Vec3(0, -9.8, 0) });
     this.world = new World();
     this.cannonDebugger = new CannonDebugger(this.scene, this.physicsWorld);
 
