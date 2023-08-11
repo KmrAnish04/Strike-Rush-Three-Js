@@ -25,49 +25,17 @@ export default class Player {
   checkCollision() {
     if (this.rigidBodies[0]) {
       this.rigidBodies[0].addEventListener("collide", (collide) => {
-        const bodyType = collide.body.material.name;
+        // const bodyType = collide.body.material.name;
+        const bodyType = 'd';
+
         if (bodyType === "health") {
           this.updateTail();
         }
         if (bodyType === "gem") {
-          // console.log("gem collided:", collide.body);
-          // let myGem = this.gemModel.clone();
-          // myGem.children.pop();
-
-          // let newPos = collide.body.position;
-          // console.log("jjj: ", this.rigidBodies[0])
-          // // myGem.position.set(new Vec3(newPos.x, newPos.y + 4, newPos.z))
-          // myGem.position.x = newPos.x;
-          // myGem.position.y = newPos.y + 5;
-          // myGem.position.z = newPos.z;
-          // myGem.rotation.set(-Math.PI / 2, 0, 0)
-
-          // myGem.scale.set(0.007, 0.007, 0.007);
 
           // this.scene.add(myGem)
           console.log("bodytype: ", collide.body)
           collide.body.position.y += 4
-          // collide.body.scale.set(3, 3, 3)
-          // collide.body.quaternion.setFromAxisAngle(new Vec3(1, 0, 0), -Math.PI * 5);
-
-          // const animationDuration = 1; // Animation duration in seconds
-          // gsap.to(collide.body.scale, {
-          //   x: 2, // Scale factor along the x-axis
-          //   y: 2, // Scale factor along the y-axis
-          //   z: 2, // Scale factor along the z-axis
-          //   duration: animationDuration,
-          //   onUpdate: () => {
-          //     renderer.render(scene, camera);
-          //   },
-          //   onComplete: () => {
-          //     // Animation complete callback
-          //   },
-          // });
-          // this.scene.remove(this.rigidBodies[0])
-          // this.physicsWorld.removeBody(this.rigidBodies[0])
-          // this.physicsWorld.removeBody(collide.body)
-          // this.physicsWorld.removeBody(collide.body);
-          // this.physicsWorld.removeBody(collide.contact.bj);
         }
         console.log(bodyType);
       });

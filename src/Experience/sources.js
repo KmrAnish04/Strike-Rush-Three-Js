@@ -44,7 +44,7 @@ export default [
   {
     name: "ObstacleBowlingPin",
     type: "fbxModel",
-    path: "models/Obstacle/BowlingPin.FBX",
+    path: "BowlingPin.FBX",
   },
   {
     name: "WinBox",
@@ -69,21 +69,26 @@ export default [
   {
     name: "Gem",
     type: "fbxModel",
-    path: "models/Gem.FBX",
+    path: "models/newAdded/Gem.fbx",
   },
   {
     name: "GemBall",
     type: "fbxModel",
-    path: "models/Gem.FBX",
+    path: "models/newAdded/Gem.fbx",
   },
   {
     name: "HealthBall",
     type: "fbxModel",
-    path: "models/Ball.FBX",
+    path: "models/newAdded/Ball.fbx",
   },
   {
     name: "groundTexture",
     type: "texture",
     path: "textures/ground.png",
+  },
+  {
+    name: "SpinnerObstacle",
+    type: "fbxModel",
+    path: "models/Obstacle/spinnerObs.fbx",
   },
 ];

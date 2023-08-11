@@ -1,141 +1,240 @@
-import { Mesh, SphereGeometry, MeshBasicMaterial } from "three";
+import {
+    Mesh,
+    SphereGeometry,
+    MeshBasicMaterial
+} from "three";
+import * as THREE from 'three'
 import Experience from "../Experience.js";
 
-import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
-import { ShapeType } from "three-to-cannon";
-import { Vec3, HingeConstraint, PointToPointConstraint, LockConstraint, Material } from "cannon-es";
+
+import {
+    getPhysicsBody
+} from "../Utils/PhycisBodyHelper.js";
+import {
+    ShapeType
+} from "three-to-cannon";
+import {
+    Vec3,
+    HingeConstraint,
+    PointToPointConstraint,
+    LockConstraint,
+    Material,
+    DistanceConstraint
+} from "cannon-es";
+// import CANNON from "cannon";
+import { gsap } from "gsap";
+
 
 
 
 export default class playerBalls {
-    constructor() {
+    constructor(ballMaterial, playerContactPathMaterial) {
         this.experience = new Experience();
         this.scene = this.experience.scene;
         this.resources = this.experience.resources;
         this.time = this.experience.time;
         this.debug = this.experience.debug;
         this.physicsWorld = this.experience.physicsWorld;
-        this.obstacleMaterial = new Material("base");
-        this.camera = this.experience.camera.instance;
-        ;
-        // this.obstacleMaterial = obstacleMaterial;
-        this.b1 = this.createPlayer();
-        let b2 = this.createPlayer();
-        let b3 = this.createPlayer();
-        let b4 = this.createPlayer();
-
-        this.b1.position.set(1, 5, 4);
-        b2.position.set(1, 5, 3);
-        b3.position.set(1, 5, 2);
-        b4.position.set(1, 5, 1);
-        // b1.velocity.x = 1;
-        // b2.velocity.x = 1;
-
-
-        var localPivotA = new Vec3(0, 0, 0);
-        var localPivotB = new Vec3(0, 0, 0);
-        var constraint1 = new LockConstraint(this.b1, b2);
-        var constraint2 = new LockConstraint(b2, b3);
-        var constraint3 = new LockConstraint(b3, b4);
-        this.physicsWorld.addConstraint(constraint1);
-        this.physicsWorld.addConstraint(constraint2);
-        this.physicsWorld.addConstraint(constraint3);
+        this.playerMaterial = ballMaterial;
+        // this.playerContactPathMaterial = playerContactPathMaterial;
+        // this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
+        this.camera = this.experience.camera.instance;;
 
 
 
-        // var constraint1 = new PointToPointConstraint(this.b1, localPivotA, b2, localPivotB);
-        // var constraint2 = new PointToPointConstraint(b2, localPivotA, b3, localPivotB);
-        // var constraint3 = new PointToPointConstraint(b3, localPivotA, b4, localPivotB);
-        // this.physicsWorld.addConstraint(constraint1);
-        // this.physicsWorld.addConstraint(constraint2);
-        // this.physicsWorld.addConstraint(constraint3);
-        // b1.position.set(0, 0, 0);
-        // this.addConstraintsTT(b1, b2)
-        // this.addConstraintsTT(b2, b3)
-        // this.addConstraintsTT(b3, b4)
-        // this.camera.lookAt(this.b1.position)
+        this.headBody = null;
+        this.sphereRigids = [];
+        this.sphereMeshes = [];
+        this.sphereRadius = 0.3;
+        this.numShere = 20;
 
-        this.registerEvents();
 
+        // Create a Three.js sphere mesh
+        const sphereGeometry = new SphereGeometry(this.sphereRadius, 32, 32);
+        const sphereMaterial = new MeshBasicMaterial({
+            color: 0xff0000
+        });
+        const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
+
+        // Create this.sphereRigids and connect them with hinge constraints
+        for (let i = 0; i < this.numShere; i++) {
+            let newSphere = sphereMesh.clone()
+            const sphereBody = getPhysicsBody(newSphere, ShapeType.SPHERE, this.playerMaterial, i == 0 ? 1 : 1);
+
+            this.sphereRigids.push(sphereBody);
+            this.sphereMeshes.push(newSphere)
+
+            // Add the body to the world
+            this.physicsWorld.addBody(sphereBody);
+
+            // Add the mesh to the scene
+            this.scene.add(newSphere);
+
+
+            // Position the this.sphereRigids
+            sphereBody.position.set(0, 3, (i * 2 * this.sphereRadius));
+
+            // Create hinge constraint for connecting this.sphereRigids
+            if (i > 0) {
+                const prevSphere = this.sphereRigids[i - 1];
+
+                // ******* Hinge Constraint *******
+                const pivotA = new Vec3(0, 0, 0); // Pivot point on the current sphere
+                const pivotB = new Vec3(0, 0, 0); // Pivot point on the previous sphere
+                const axis = new Vec3(0, 0, 0); // Axis of rotation
+
+                const hingeConstraint = new HingeConstraint(sphereBody, prevSphere, {
+                    pivotA,
+                    pivotB,
+                    axis,
+                    collideConnected: true, // Prevent connected bodies from colliding
+                });
+                // hingeConstraint.enableMotor();
+                // hingeConstraint.motorSpeed = 0;
+
+
+                // ******* P2P Constraint *******
+                // const pivotA = new Vec3(0, 0, 0); // Pivot point on the current sphere
+                // const pivotB = new Vec3(0, 0, 0); // Pivot point on the previous sphere
+                // const p2pConstraint = new PointToPointConstraint(sphereBody, pivotA, prevSphere, pivotB);
+
+
+                // ******* Distance Constraint *******
+                // const maxDistance = 2 * this.sphereRadius; // Maximum distance between sphereRigids
+                // const distanceConstraint = new DistanceConstraint(sphereBody, prevSphere, maxDistance);
+
+
+                // --> Add the constraint to the world
+                this.physicsWorld.addConstraint(hingeConstraint);
+                // this.physicsWorld.addConstraint(p2pConstraint);
+                // this.physicsWorld.addConstraint(distanceConstraint);
+            }
+            else { this.headBody = sphereBody }
+
+            // Set initial this.direction
+            this.direction = new THREE.Vector3(0, 0, 0); // Direction of player
+        }
+
+        this.registerEvents(); // Touch and Mouse Events
+        this.checkCollision();
     }
+
 
     registerEvents() {
-        // window.addEventListener("touchmove", (e) => this.mousemove(e));
-        window.addEventListener("mousemove", (e) => this.mousemove(e));
-        // window.addEventListener("click", () => {
-        //     if (!this.startGame) {
-        //         this.startGame = true;
-        //         this.player.giveVelocity()
-        //     }
-        // });
-    }
-
-    mousemove(event) {
-        // if (this.startGame === true) {
-        // this.mouse.x = (event.clientX / window.innerWidth - 0.5) * 2;
-        // this.mouse.y = -(event.clientY / window.innerHeight - 0.5) * 2;
-        // this.b1.velocity.z -= 0.1;
-        this.b1.position.x = (event.clientX / window.innerWidth - 0.5) * 20;
-        // }
-    }
-
-    createPlayer() {
-        const radius = 0.5;
-        const widthSegments = 32;
-        const heightSegments = 32;
-        let ball = new Mesh(
-            new SphereGeometry(radius, widthSegments, heightSegments),
-            new MeshBasicMaterial({ color: 0x0086ff })
-        );
-        // this.meshes.push(firstBall);
-        const rigidBody = getPhysicsBody(ball, ShapeType.SPHERE, this.playerMaterial, 2);
-        // this.rigidBodies.push(rigidBody);
-        // rigidBody.position.set(0, 1, 1);
-        ball.position.copy(rigidBody.position);
-        this.scene.add(ball);
-        this.physicsWorld.addBody(rigidBody);
-
-        return rigidBody;
-    }
-
-    addConstraintsTT(body1, body2) {
-        this.constraintLF = new HingeConstraint(
-            body1,
-            body2,
-            {
-                pivotA: new Vec3(-1, 0, -1),
-                axisA: new Vec3(0, 0, 1),
+        // this.sphereRigids[0].position.y = 5
+        window.addEventListener('mousemove', (event) => {
+            // Calculate mouse position in normalized device coordinates (-1 to 1)
+            const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            // console.log("mouse moving: ")
+            // Update this.direction based on mouse movement
+            // this.sphereRigids[0].velocity.copy(new Vec3(0, 0, -1))
+            this.direction.set(mouseX, mouseY, 0).normalize();
+            if (this.headBody) {
+                this.headBody.velocity.x = this.direction.x * 2;
             }
-        )
-
-        this.physicsWorld.addConstraint(this.constraintLF)
+        });
     }
 
+    checkCollision() {
+
+        if (this.sphereRigids.length > 0) {
+            for (let i = 0; i < this.sphereRigids.length; i++) {
+
+                this.sphereRigids[i].addEventListener("collide", (collide) => {
+                    if (this.sphereRigids[i]) {
+
+                        const bodyType = collide.body.material.name;
+                        // console.log(bodyType);
+
+                        if (bodyType === "health") { } //Add tail
+                        else if (bodyType === "gem") {
+                            // console.log("bodytype: ", collide.body)
+                            // collide.body.position.y += 20
+                            gsap.to(collide.body.position, { duration: 0.3, y: 7 })
+                            console.log(collide.body);
+                            gsap.to(collide.body.position, { delay: 1, duration: 10, x: window.innerWidth - 500, y: window.innerHeight })
+                            // gsap.to(collide.body.position, { duration: 10, y: window.innerHeight })
+                        }
+                        else if (bodyType === "obstacle") {
+                            // console.log("arrays: ", this.sphereRigids, this.sphereMeshes);
+                            // console.log("index: ", this.sphereRigids.length - 1);
+
+                            console.log("LENGHT", this.sphereRigids[0]);
+                            if (this.sphereRigids[0].hasAnyEventListener()) {
+                                this.sphereRigids[0].removeEventListener('collide', (e) => { console.log("XXXXXXXXXX", e); });
+
+                            }
+                            this.physicsWorld.constraints.shift()
+                            this.removeRigidBodyAndMesh(0) // index=0 (Always remove from start)
+                            // console.log("arrays: ", this.sphereRigids, this.sphereMeshes);
+                            // console.log("hellow", this.physicsWorld.constraints.shift())
+                            // let removeTHisBody = this.sphereRigids.pop();
+                            // this.physicsWorld.removeBody(removeTHisBody);
+                            // this.scene.remove(this.sphereMeshes.pop())
+                            // this.numShere--;
+
+                        }
+                    }
+
+                });
+            }
+        }
+    }
+    removeRigidBodyAndMesh(index) {
+        if (index >= 0 && index < this.sphereRigids.length) {
+            const rigidBody = this.sphereRigids[index];
+            const mesh = this.sphereMeshes[index];
+
+            // Remove the mesh from the Three.js scene
+            this.scene.remove(mesh);
+
+            // Remove the rigid body from the Cannon.js physics world
+            // this.physicsWorld.removeBody(rigidBody);
+
+            rigidBody.position.y += 10
+            rigidBody.position.x += 100
+            console.log("rmoved", rigidBody)
 
 
+            // Remove the rigid body and mesh from their respective arrays
+            this.sphereRigids.splice(index, 1);
+            this.sphereMeshes.splice(index, 1);
+
+            // New head
+            this.headBody = this.sphereRigids[0];
+
+            // Dispose of the mesh's geometry and material to free up resources
+            mesh.geometry.dispose();
+            mesh.material.dispose();
+            this.numShere--;
+        }
+    }
     update() {
-        // for (let i = 0; i < this.meshes.length; i++) {
-        //     this.meshes[i].position.copy(this.rigidBodies[i].position);
-        // }
-        // if (this.camera.position.z > -350) {
-        //     this.camera.lookAt(
-        //         0,
-        //         this.meshes[0].position.y,
-        //         this.meshes[0].position.z
-        //     );
-        //     window.removeEventListener("mousemove", (e) => {
-        //         console.log(e);
-        //     });
-        //     // this.cameraControls.target.set(this.meshes[0].position);
-        //     // this.camera.position.z -= 0.25;
-        // }
-        // this.giveVelocity();
-        // this.b1.position.x -= 5;
-        this.b1.velocity.z -= 2;
-        console.log("update")
-        this.camera.lookAt(0, this.b1.position.y, this.b1.position.z);
-        this.camera.position.set(0, this.b1.position.y + 50, this.b1.position.z + 50)
-        // console.log("hiiiii")
-    }
-}
 
+        if (this.sphereRigids.length) {
+            this.headBody.velocity.z = -4;
+            this.headBody.velocity.y = 0;
+
+            // Update snake's head position based on this.direction
+            // const headBody = this.sphereRigids[0];
+
+            // Update Three.js sphere positions based on physics simulation
+            // console.log("updating!!!")
+            for (let i = 0; i < this.numShere; i++) {
+                const sphereBody = this.sphereRigids[i];
+                const sphereMesh = this.sphereMeshes[i];
+
+
+                // if(i!=0)sphereBody.position.z = headBody.position.z;
+                sphereMesh.position.copy(sphereBody.position);
+                sphereMesh.quaternion.copy(sphereBody.quaternion);
+            }
+
+            this.camera.position.set(0, 30, this.headBody.position.z + 50)
+            this.camera.lookAt(0, this.headBody.position.x, this.headBody.position.z)
+        }
+    }
+
+
+}
