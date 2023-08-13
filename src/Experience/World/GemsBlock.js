@@ -4,7 +4,7 @@ import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 import Experience from "../Experience.js";
 
 export default class GemsBlock {
-  constructor(gemMaterial, positionZ) {
+  constructor(gemMaterial, positionZ, options) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
@@ -16,7 +16,9 @@ export default class GemsBlock {
     this.positionZ = positionZ;
     this.diamondsMeshes = [];
     this.diamondsBodies = [];
+    this.options = options;
     this.createGemBlock(5, new Vec3(0, 0.25, 0));
+    console.log("**Filete: ", options.filterGroup, options.filterMask);
   }
 
   createGemBalls(modelPosition) {
@@ -26,6 +28,9 @@ export default class GemsBlock {
     model.scale.set(0.007, 0.007, 0.007);
     model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
     let rigidBody = getPhysicsBody(model, ShapeType.HULL, this.gemMaterial, 0);
+    // rigidBody.collisionFilterGroup = this.options.filterGroup;
+    // rigidBody.collisionFilterMask = this.options.filterMask;
+    rigidBody.collisionResponse = 0;
     rigidBody.quaternion.setFromAxisAngle(new Vec3(1, 0, 0), -Math.PI * 0.5);
     model.quaternion.copy(rigidBody.quaternion);
     rigidBody.quaternion.copy(model.quaternion);

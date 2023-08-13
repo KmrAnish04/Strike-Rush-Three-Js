@@ -13,6 +13,13 @@ import SideWalls from "./SideWalls.js";
 import GemsBlock from "./GemsBlock.js";
 import HealthBallsBlock from "./HealthBallsBlock.js";
 import playerBalls from "./playerBalls.js";
+import Player2 from "./Player2.js";
+
+
+const COLLISION_GROUPS = {
+  'PLAYER_GROUP': 1,
+  'GEMS_GROUP': 2,
+}
 
 export default class World {
   constructor() {
@@ -49,12 +56,12 @@ export default class World {
       );
       this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
       this.physicsWorld.addContactMaterial(this.playerContactObstacleMaterial);
-      this.obstacle1 = new BallPinsObstacle(0,
-        new Vector3(-5, 1.8, -7 * 20),
-        new Vector3(0.009, 0.009, 0.009),
-        this.obstacleMaterial,
-        -trackLength * 4
-      );
+      // this.obstacle1 = new BallPinsObstacle(0,
+      //   new Vector3(-5, 1.8, -7 * 20),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial,
+      //   -trackLength * 4
+      // );
       // this.obstacle2 = new Obstacle(
       //   this.resources.items.ObstacleArmLiverHammer,
       //   new Vector3(-4.5, 0, -6 * 20),
@@ -99,14 +106,15 @@ export default class World {
         this.rampMaterial
       );
 
-      this.gemsBlock = new GemsBlock(this.gemMaterial, -trackLength * 2);
+      this.gemsBlock = new GemsBlock(this.gemMaterial, -trackLength * 2, {filterGroup: COLLISION_GROUPS.GEMS_GROUP, filterMask: COLLISION_GROUPS.PLAYER_GROUP});
       this.objectsToUpdate.push(this.gemsBlock);
       this.healthBlock = new HealthBallsBlock(
         this.healthMaterial,
         -trackLength * 7
       );
       // this.controls = new Movement();
-      this.constr = new playerBalls(this.playerMaterial, this.playerContactPathMaterial)
+      // this.PlayerObj = new playerBalls(this.playerMaterial, this.playerContactPathMaterial);
+      this.PlayerObj = new Player2(this.playerMaterial, {filterGroup: COLLISION_GROUPS.PLAYER_GROUP, filterMask: COLLISION_GROUPS.GEMS_GROUP});
       this.endBlock = new EndBlock(
         -trackLength * 20 + 7,
         this.wallMaterial,
@@ -118,7 +126,7 @@ export default class World {
 
   update() {
     if (this.controls) this.controls.update();
-    if (this.constr) this.constr.update();
+    if (this.PlayerObj) this.PlayerObj.update();
     for (const obstacle in this.objectsToUpdate) {
       if (this.objectsToUpdate[obstacle]) {
         this.objectsToUpdate[obstacle].update();
