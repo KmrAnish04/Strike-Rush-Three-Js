@@ -39,13 +39,13 @@ export default class BallPinsObstacle {
   }
 
   makePyramidPattern() {
-    let rows = 1;
-    let cols = 1;
+    let rows = 4;
+    let cols = 4;
     let gapX = 0.5;
     let gapY = 0.5;
 
     let StartX = 0;
-    let StartY = this.positionZ + 60;
+    let StartY = this.positionZ - 100;
 
     let firstColGap = 0.25;
     let idx = this.ballPinRigids.length - 1;

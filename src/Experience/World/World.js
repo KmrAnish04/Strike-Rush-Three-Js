@@ -15,11 +15,10 @@ import HealthBallsBlock from "./HealthBallsBlock.js";
 import playerBalls from "./playerBalls.js";
 import Player2 from "./Player2.js";
 
-
 const COLLISION_GROUPS = {
-  'PLAYER_GROUP': 1,
-  'GEMS_GROUP': 2,
-}
+  PLAYER_GROUP: 1,
+  GEMS_GROUP: 2,
+};
 
 export default class World {
   constructor() {
@@ -41,7 +40,7 @@ export default class World {
       this.obstacleMaterial = new Material("obstacle");
       this.scoreX1Material = new Material("score1");
       this.scoreX5Material = new Material("score5");
-
+      this.scoreBoxMaterial = new Material("scoreBox");
 
       const trackLength = 20;
       this.playerContactPathMaterial = new ContactMaterial(
@@ -60,6 +59,17 @@ export default class World {
         this.pathMaterial,
         { friction: 1, restitution: 0 }
       );
+      this.playerContactRampMaterial = new ContactMaterial(
+        this.playerMaterial,
+        this.rampMaterial,
+        { friction: 0, restitution: 0 }
+      );
+      this.endWallPlayerContact = new ContactMaterial(
+        this.playerMaterial,
+        this.wallMaterial,
+        { restitution: 0 }
+      );
+
 
       this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
       this.physicsWorld.addContactMaterial(this.playerContactObstacleMaterial);
@@ -93,13 +103,13 @@ export default class World {
 
       this.obstacle4 = new Obstacle(
         this.resources.items.ObstacleLiverAxe,
-        new Vector3(-3.5, 2 , -4 * 20),
+        new Vector3(-3.5, 2, -4 * 20),
         new Vector3(0.001, 0.001, 0.001),
         this.obstacleMaterial
       );
       // this.objectsToUpdate.push(this.obstacle3);
       this.objectsToUpdate.push(this.obstacle4);
-      this.objectsToUpdate.push(this.obstacle5)
+      this.objectsToUpdate.push(this.obstacle5);
       // this.objectsToUpdate.push(this.obstacle2);
       this.objectsToUpdate.push(this.obstacle1);
       this.sideWall = new SideWalls(-trackLength * 20, this.wallMaterial);
@@ -111,12 +121,15 @@ export default class World {
       this.ramp = new Ramps(
         this.resources.items.Ramp1,
         new Vector3(0, 0, -3),
-        new Vector3(0.03, 0.03, 0.03),
-        -19 * trackLength,
+        new Vector3(0.05, 0.05, 0.05),
+        -16 * trackLength,
         this.rampMaterial
       );
 
-      this.gemsBlock = new GemsBlock(this.gemMaterial, -trackLength * 2, { filterGroup: COLLISION_GROUPS.GEMS_GROUP, filterMask: COLLISION_GROUPS.PLAYER_GROUP });
+      this.gemsBlock = new GemsBlock(this.gemMaterial, -trackLength * 2, {
+        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+      });
       this.objectsToUpdate.push(this.gemsBlock);
       this.healthBlock = new HealthBallsBlock(
         this.healthMaterial,
@@ -128,8 +141,7 @@ export default class World {
       this.endBlock = new EndBlock(
         -trackLength * 20 + 7,
         this.wallMaterial,
-        this.scoreX1Material,
-        this.scoreX5Material
+        this.scoreBoxMaterial
       );
     });
   }

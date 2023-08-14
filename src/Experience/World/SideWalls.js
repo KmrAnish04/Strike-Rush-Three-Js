@@ -14,7 +14,7 @@ export default class SideWalls {
   }
 
   constructSideWalls() {
-    const width = 1;
+    const width = 0.5;
     const height = 3;
     const depth = this.trackLength;
     const pathWidth = 10;
@@ -50,7 +50,7 @@ export default class SideWalls {
   constructWallMesh(width, height, depth) {
     const wall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xffffff, side: DoubleSide })
+      new MeshBasicMaterial({ color: '#E459D2', side: DoubleSide })
     );
     return wall;
   }

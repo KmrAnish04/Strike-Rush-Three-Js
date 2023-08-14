@@ -2,6 +2,7 @@ import { TextureLoader, CubeTextureLoader } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 import EventEmitter from "./EventEmitter.js";
+import { FontLoader } from "three/examples/jsm/loaders/FontLoader.js";
 
 export default class Resources extends EventEmitter {
   constructor(sources) {
@@ -23,6 +24,7 @@ export default class Resources extends EventEmitter {
     this.loaders.fbxLoader = new FBXLoader();
     this.loaders.textureLoader = new TextureLoader();
     this.loaders.cubeTextureLoader = new CubeTextureLoader();
+    this.loaders.fontLoader = new FontLoader();
   }
 
   startLoading() {
@@ -42,6 +44,10 @@ export default class Resources extends EventEmitter {
         });
       } else if (source.type === "cubeTexture") {
         this.loaders.cubeTextureLoader.load(source.path, (file) => {
+          this.sourceLoaded(source, file);
+        });
+      } else if (source.type === "font") {
+        this.loaders.fontLoader.load(source.path, (file) => {
           this.sourceLoaded(source, file);
         });
       }
