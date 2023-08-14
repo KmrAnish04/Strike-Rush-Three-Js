@@ -24,6 +24,7 @@ export default class Player2 {
         this.experience = new Experience();
         this.scene = this.experience.scene;
         this.resources = this.experience.resources;
+        this.resource = this.resources.items.HealthBall;
         this.time = this.experience.time;
         this.debug = this.experience.debug;
         this.physicsWorld = this.experience.physicsWorld;
@@ -48,12 +49,16 @@ export default class Player2 {
         const sphereMaterial = new MeshBasicMaterial({
             color: 0xff0000
         });
-        const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
-
+        // const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
+        const sphereMesh = this.resource;
 
         // Create this.RigidBodiesArr and connect them with hinge constraints
         for (let i = 0; i < n; i++) {
             let spMsh = sphereMesh.clone()
+            spMsh = spMsh.children.shift();
+            spMsh.scale.set(0.007, 0.007, 0.007);
+            spMsh.material.map = null;
+            spMsh.material.color = new THREE.Color('#52159F');
             const sphereBody = getPhysicsBody(spMsh, ShapeType.SPHERE, this.obstacleMaterial, this.mass);
 
             // sphereBody.collisionFilterGroup = options.filterGroup;
@@ -64,28 +69,28 @@ export default class Player2 {
             sphereBody.angularDamping = 0;
             // sphereBody.collisionResponse = 0;
             // sphereBody.angularVelocity = 0;
-            
-            sphereBody.position.set(0, 2, -((n - i) * (size * 2 + 2 * space) + size * 2 + space)+1)
+
+            sphereBody.position.set(0, 2, -((n - i) * (size * 2 + 2 * space) + size * 2 + space) + 1)
             console.log("space: ", -(n - i) * (size * 2 + 2 * space) + size * 2 + space)
 
             this.bodyMeshesArr.push(spMsh);
             this.RigidBodiesArr.push(sphereBody);
-            
+
             // Visulaize the bodies
             this.scene.add(spMsh);
             this.physicsWorld.addBody(sphereBody);
 
         }
-        
+
         // Set initial this.direction
         this.direction = new THREE.Vector3(0, 0, 0);
         this.headBody = this.RigidBodiesArr[0];
         this.registerEvents();
         this.checkCollision();
-    
+
     }
-    
-    
+
+
     registerEvents() {
 
         window.addEventListener('mousemove', (event) => {
@@ -97,10 +102,10 @@ export default class Player2 {
 
             // Update this.direction based on mouse movement
             // this.RigidBodiesArr[0].velocity.copy(new Vec3(0, 0, -1))
-            this.headBody.position.x = mouseX*3;
-            this.RigidBodiesArr.forEach((body, index)=>{
-                if(index>0){
-                    gsap.to(this.RigidBodiesArr[index].position, {duration: 0.1, x: this.RigidBodiesArr[index-1].position.x}).then(console.log("hiii", this.RigidBodiesArr[index-1].position, this.RigidBodiesArr[index].position))
+            this.headBody.position.x = mouseX * 3;
+            this.RigidBodiesArr.forEach((body, index) => {
+                if (index > 0) {
+                    gsap.to(this.RigidBodiesArr[index].position, { duration: 0.1, x: this.RigidBodiesArr[index - 1].position.x }).then(console.log("hiii", this.RigidBodiesArr[index - 1].position, this.RigidBodiesArr[index].position))
                 }
             })
             this.direction.set(mouseX, mouseY, 0).normalize();
@@ -108,30 +113,30 @@ export default class Player2 {
     }
 
     checkCollision() {
-        
-        this.RigidBodiesArr.forEach((rigidBody)=>{
-            rigidBody.addEventListener("collide", (collide)=>{
+
+        this.RigidBodiesArr.forEach((rigidBody) => {
+            rigidBody.addEventListener("collide", (collide) => {
                 const bodyType = collide.body.material.name;
                 console.log("collisions**************", bodyType);
                 switch (bodyType) {
-                    case 'health':{
+                    case 'health': {
                         console.log("score added", collide.body)
                         collide.body.collisionFilterMask = 0;
                         this.addPlayerBalls(collide.body.myData.score);
                         break;
                     }
-                    case 'gem':{
+                    case 'gem': {
                         console.log("bodytype: ", collide.body)
                         // Play Gem Collect Animation
                         gsap.to(collide.body.position, { duration: 0.3, y: 7 });
                         gsap.to(collide.body.position, { delay: 1, duration: 10, x: window.innerWidth - 500, y: window.innerHeight })
                         break;
                     }
-                    case 'obstacle':{
-                        if(this.RigidBodiesArr.length){
+                    case 'obstacle': {
+                        if (this.RigidBodiesArr.length) {
                             this.removePlayerBalls() // Subtracting Player's Health by removing the balls
                         }
-                        else {console.log("*********** Game Stopped ************")}
+                        else { console.log("*********** Game Stopped ************") }
                         break;
                     }
                     default:
@@ -139,7 +144,7 @@ export default class Player2 {
                 }
             })
         })
-        
+
     }
 
     // Subtracting Player Health by removing the player balls
@@ -164,29 +169,33 @@ export default class Player2 {
         // Dispose of the mesh's geometry and material to free up resources
         mesh.geometry.dispose();
         mesh.material.dispose();
-        
+
     }
 
-    createBodyMesh(){
+    createBodyMesh() {
         // Create Mesh for rigidbodies
-        const sphereGeometry = new SphereGeometry(0.5, 32, 32);
-        const sphereMaterial = new MeshBasicMaterial({color: 0xff0000});
-        const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
-        return sphereMesh;
+        // const sphereGeometry = new SphereGeometry(0.5, 32, 32);
+        // const sphereMaterial = new MeshBasicMaterial({ color: 0xff0000 });
+
+        let spMsh = this.resource.clone()
+        spMsh = spMsh.children.shift();
+        spMsh.scale.set(0.007, 0.007, 0.007);
+        // const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
+        return spMsh;
     }
-    addPhysicsToBodyMesh(bodyMesh){
+    addPhysicsToBodyMesh(bodyMesh) {
         let spMsh = bodyMesh;
         const sphereBody = getPhysicsBody(spMsh, ShapeType.SPHERE, this.obstacleMaterial, this.mass);
 
         sphereBody.linearDamping = 0;
         sphereBody.angularDamping = 0;
         // sphereBody.angularVelocity = 0;
-        
+
         return sphereBody;
     }
-    addPlayerBalls(noOfBallsToAdd){
-        
-        for(let i=0; i<noOfBallsToAdd; i++){
+    addPlayerBalls(noOfBallsToAdd) {
+
+        for (let i = 0; i < noOfBallsToAdd; i++) {
             let bodyMesh = this.createBodyMesh();
             let rigidBody = this.addPhysicsToBodyMesh(bodyMesh)
 
@@ -195,7 +204,7 @@ export default class Player2 {
 
             this.bodyMeshesArr.push(bodyMesh);
             this.RigidBodiesArr.push(rigidBody);
-            
+
             // Visulaize the bodies
             this.scene.add(bodyMesh);
             this.physicsWorld.addBody(rigidBody);
@@ -206,13 +215,13 @@ export default class Player2 {
 
         // Update snake's head position based on this.direction
         // const headBody = this.RigidBodiesArr[0];
-        if(this.headBody){
+        if (this.headBody) {
             this.headBody.velocity.z = -10;
         }
         // this.headBody.position.y = 2;
-        for(let body=1; body<this.RigidBodiesArr.length; body++){
+        for (let body = 1; body < this.RigidBodiesArr.length; body++) {
             // console.log("***********************************************************")
-            this.RigidBodiesArr[body].position.z = this.RigidBodiesArr[body-1].position.z+2;
+            this.RigidBodiesArr[body].position.z = this.RigidBodiesArr[body - 1].position.z + 2;
             // this.RigidBodiesArr[body].position.y = 2;
             // this.RigidBodiesArr[body].angularVelocity;
             // this.RigidBodiesArr[body].angularDamping = 0;
@@ -220,7 +229,7 @@ export default class Player2 {
             // console.log(this.RigidBodiesArr[body-1].position, this.RigidBodiesArr[body].position);
             // console.log("***********************************************************")
         }
-        
+
 
         // Update Three.js sphere positions based on physics simulation
         for (let i = 0; i < this.RigidBodiesArr.length; i++) {
@@ -230,10 +239,10 @@ export default class Player2 {
             sphereMesh.quaternion.copy(sphereBody.quaternion);
         }
 
-        if(this.RigidBodiesArr.length){
-            this.camera.position.set(0, this.RigidBodiesArr[this.RigidBodiesArr.length-1].position.y+20, this.RigidBodiesArr[this.RigidBodiesArr.length-1].position.z +60)
-            this.camera.lookAt(0, this.RigidBodiesArr[this.RigidBodiesArr.length-1].position.y, this.RigidBodiesArr[this.RigidBodiesArr.length-1].position.z)
-        }
+        // if (this.RigidBodiesArr.length) {
+        //     this.camera.position.set(0, this.RigidBodiesArr[this.RigidBodiesArr.length - 1].position.y + 20, this.RigidBodiesArr[this.RigidBodiesArr.length - 1].position.z + 60)
+        //     this.camera.lookAt(0, this.RigidBodiesArr[this.RigidBodiesArr.length - 1].position.y, this.RigidBodiesArr[this.RigidBodiesArr.length - 1].position.z)
+        // }
 
     }
 
