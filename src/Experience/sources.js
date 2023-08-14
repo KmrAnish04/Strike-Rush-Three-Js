@@ -47,11 +47,6 @@ export default [
     path: "BowlingPin.FBX",
   },
   {
-    name: "WinBox",
-    type: "gltfModel",
-    path: "models/wooden_box.glb",
-  },
-  {
     name: "Ramp1",
     type: "fbxModel",
     path: "models/Ramps/Ramp1.fbx",
@@ -90,5 +85,10 @@ export default [
     name: "SpinnerObstacle",
     type: "fbxModel",
     path: "models/Obstacle/spinnerObs.fbx",
+  },
+  {
+    name: "scoreFont",
+    type: "font",
+    path: "fonts/helvetiker_regular.typeface.json",
   },
 ];
