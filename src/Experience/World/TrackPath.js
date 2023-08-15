@@ -70,7 +70,7 @@ export default class GameTrack {
       tileRigidBody = this.addPhysicsProperties(tileGeometry);
 
       let lastTilePos = this.trackTiles[this.trackTiles.length - 1];
-      console.log(lastTilePos);
+      // console.log(lastTilePos);
       tileRigidBody.position.set(0, 0 - 0.5, lastTilePos.position.z - 20);
       tileMesh.position.copy(tileRigidBody.position);
       this.trackTiles.push(tileRigidBody);

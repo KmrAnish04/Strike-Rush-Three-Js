@@ -27,10 +27,25 @@ export default class EndBlock {
     this.winBox = this.constructWinBox(positionZ, 0x74b72e, 0, "5X");
     this.winBox = this.constructWinBox(positionZ, 0xfff44f, 3.25, "3X");
     this.winBox = this.constructWinBox(positionZ, 0xff0000, 6.5, "1X");
+    this.winBoxWall = this.constructWinBoxBoundry(positionZ, 0x000000,)
+    
     this.contructLastBlock(positionZ, wallMaterial);
     this.scene.add(this.endBlockGroup);
 
     // this.gem = this.resources.items.GemBall;
+  }
+
+  constructWinBoxBoundry(){
+    let boxMesh = new Mesh(new BoxGeometry(17,5,0.5), new MeshBasicMaterial({color: "#e75480"}));
+    let boxRigidBody = getPhysicsBody(boxMesh, ShapeType.BOX, new Physics.Material('default'));
+
+    boxMesh.quaternion.copy(boxRigidBody.quaternion);
+    boxMesh.position.copy(boxRigidBody.position);
+
+    boxRigidBody.position.z = -388.5
+    boxRigidBody.position.y = 1;
+    // this.scene.add(boxMesh);
+    this.physicsWorld.addBody(boxRigidBody)
   }
 
   constructWinBox(positionZ, color, positionX, score) {
@@ -48,7 +63,7 @@ export default class EndBlock {
     const textMesh = new Mesh(
       textGeometry,
       new MeshBasicMaterial({ color: 0x000000 })
-    );
+    );  
     // textGeometry.position.y -= 1;
     const box = getPhysicsBody(boxMesh, ShapeType.BOX, this.scoreBoxMaterial, 0);
     this.scene.add(boxMesh, textMesh);
@@ -185,7 +200,7 @@ export default class EndBlock {
   }
 
   createBottomWall(positionZ) {
-    const width = 12;
+    const width = 18;
     const height = 1;
     const depth = 4;
     const bottomWall = new Mesh(

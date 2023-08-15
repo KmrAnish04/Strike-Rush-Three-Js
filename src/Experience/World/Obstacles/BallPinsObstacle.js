@@ -6,7 +6,7 @@ import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
 export default class BallPinsObstacle {
-  constructor(size, modelPostition, modelScaling, obstacleMaterial, pathObstacleMaterial, positionZ) {
+  constructor(size, modelPostition, modelScaling, obstacleMaterial, pathObstacleMaterial) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
@@ -14,20 +14,23 @@ export default class BallPinsObstacle {
     this.debug = this.experience.debug;
     this.physicsWorld = this.experience.physicsWorld;
     this.obstacleMaterial = obstacleMaterial;
-    this.positionZ = positionZ;
+
+    this.positionX = modelPostition.x;
+    this.positionY = modelPostition.y;
+    this.positionZ = modelPostition.z;
     this.size = size;
     this.pathObstacleMaterial = pathObstacleMaterial;
     this.resource = this.resources.items.ObstacleBowlingPin;
-    this.setUpBallPinsObstacle(modelPostition, modelScaling);
+    this.setUpBallPinsObstacle(modelScaling);
   }
 
-  setUpBallPinsObstacle(modelPosition, modelScaling) {
-    this.ballPinMeshes = this.createBallingPins(10, modelPosition, modelScaling);
+  setUpBallPinsObstacle(modelScaling) {
+    this.ballPinMeshes = this.createBallingPins(10, modelScaling);
     this.ballPinRigids = this.addPhysicsOnBallPins(this.ballPinMeshes);
-    this.makePyramidPattern();
+    this.makePyramidPattern(this.size);
   }
 
-  createBallingPins(noOfBallPins, modelPosition, modelScaling) {
+  createBallingPins(noOfBallPins, modelScaling) {
     let ballPinsArr = [];
     let ballPinModel = this.resource.children[0];
     for (let ballPinCnt = 0; ballPinCnt < noOfBallPins; ballPinCnt++) { ballPinsArr.push(ballPinModel.clone()); }
@@ -38,36 +41,35 @@ export default class BallPinsObstacle {
     return ballPinsArr;
   }
 
-  makePyramidPattern() {
-    let rows = 4;
-    let cols = 4;
-    let gapX = 0.5;
+  makePyramidPattern(size) {
+    let rows = size;
+    let cols = size;
+    let gapX = 1;
     let gapY = 0.5;
 
-    let StartX = 0;
-    let StartY = this.positionZ - 100;
+    let StartX = this.positionX;
+    let StartY = this.positionZ;
 
-    let firstColGap = 0.25;
+    let rowSideGap = 0;
     let idx = this.ballPinRigids.length - 1;
 
     for (let row = 0; row < rows; row++) {
       let tempX = StartX;
-      if (row > 0) {
-        tempX += firstColGap;
-        firstColGap += 0.1 * row;
-      }
+      tempX += rowSideGap;
+
       for (let col = 0; col < cols; col++) {
         let pin = this.ballPinRigids[idx];
-        pin.position.set(tempX, 0.25, StartY);
+        pin.position.set(tempX, this.positionY, StartY);
         this.ballPinMeshes[idx].position.copy(pin.position);
         this.ballPinMeshes[idx].quaternion.copy(pin.quaternion)
         this.scene.add(this.ballPinMeshes[idx]);
         this.physicsWorld.addBody(pin);
-        idx--;
         tempX += gapX;
+        idx--;
       }
-      StartY += gapY;
       cols--;
+      StartY += gapY;
+      rowSideGap += 0.5;
     }
 
   }
@@ -75,7 +77,7 @@ export default class BallPinsObstacle {
   addPhysicsOnBallPins(ballPinArr) {
     let ballPinRigids = [];
     ballPinArr.forEach((ballPin) => {
-      const rigidBody = getPhysicsBody(ballPin, ShapeType.BOX, this.obstacleMaterial, 1);
+      const rigidBody = getPhysicsBody(ballPin, ShapeType.BOX, this.obstacleMaterial, 0.001);
       ballPinRigids.push(rigidBody);
     });
     return ballPinRigids;
