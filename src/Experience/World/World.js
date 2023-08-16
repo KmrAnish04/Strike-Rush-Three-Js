@@ -75,13 +75,13 @@ export default class World {
       this.physicsWorld.addContactMaterial(this.playerContactObstacleMaterial);
       this.physicsWorld.addContactMaterial(this.pathObstacleMaterial);
 
-      this.obstacle1 = new BallPinsObstacle(0,
-        new Vector3(-2, 0, -20),
-        new Vector3(0.009, 0.009, 0.009),
-        this.obstacleMaterial,
-        this.pathObstacleMaterial,
-        -trackLength * 4
-      );
+      // this.obstacle1 = new BallPinsObstacle(0,
+      //   new Vector3(-2, 0, -20),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial,
+      //   this.pathObstacleMaterial,
+      //   -trackLength * 4
+      // );
       // this.obstacle2 = new Obstacle(
       //   this.resources.items.ObstacleArmLiverHammer,
       //   new Vector3(-4.5, 0, -6 * 20),
@@ -111,7 +111,7 @@ export default class World {
       this.objectsToUpdate.push(this.obstacle4);
       this.objectsToUpdate.push(this.obstacle5);
       // this.objectsToUpdate.push(this.obstacle2);
-      this.objectsToUpdate.push(this.obstacle1);
+      // this.objectsToUpdate.push(this.obstacle1);
       this.sideWall = new SideWalls(-trackLength * 20, this.wallMaterial);
       this.track = new GameTrack(trackLength, this.pathMaterial);
       // this.player = new Player(
@@ -131,10 +131,10 @@ export default class World {
         filterMask: COLLISION_GROUPS.PLAYER_GROUP,
       });
       this.objectsToUpdate.push(this.gemsBlock);
-      this.healthBlock = new HealthBallsBlock(
-        this.healthMaterial,
-        -trackLength * 7
-      );
+      // this.healthBlock = new HealthBallsBlock(
+      //   this.healthMaterial,
+      //   -trackLength * 7
+      // );
       // this.controls = new Movement();
       // this.PlayerObj = new playerBalls(this.playerMaterial, this.playerContactPathMaterial);
       this.PlayerObj = new Player2(this.playerMaterial, { filterGroup: COLLISION_GROUPS.PLAYER_GROUP, filterMask: COLLISION_GROUPS.GEMS_GROUP });

@@ -25,7 +25,7 @@ export default class Obstacle {
 
   setModel(modelPosition, modelScaling) {
     this.model = this.resource;
-    this.model.position.set(modelPosition.x, modelPosition.y - 0.5, modelPosition.z);
+    this.model.position.set(modelPosition.x, modelPosition.y - 1.5, modelPosition.z - 70);
     // this.model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z)
 
     console.log("mx: ", this.model)
