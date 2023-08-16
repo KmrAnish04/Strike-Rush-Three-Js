@@ -25,10 +25,8 @@ export default class Obstacle {
 
   setModel(modelPosition, modelScaling) {
     this.model = this.resource;
-    this.model.position.set(modelPosition.x, modelPosition.y - 1.5, modelPosition.z - 70);
-    // this.model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z)
+    this.model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
 
-    console.log("mx: ", this.model)
     this.model.children.forEach(child => {
       child.castShadow = true;
       this.meshesArray.push(child);
@@ -41,8 +39,8 @@ export default class Obstacle {
       this.physicsWorld.addBody(rigidBody);
 
       // Position the physics body based on the mesh's world position
-      rigidBody.position.copy(child.getWorldPosition(new THREE.Vector3()));
-      // rigidBody.scale.copy(child.scale(new THREE))
+      // rigidBody.position.copy(child.getWorldPosition(new THREE.Vector3()));
+      rigidBody.quaternion.copy(child.quaternion)
     });
 
     this.scene.add(this.model);
@@ -53,7 +51,7 @@ export default class Obstacle {
   playAnimation() {
     this.animation = this.model.animations[0];
     this.mixer = new THREE.AnimationMixer(this.model);
-    const action = this.mixer.clipAction(this.animation);
+    let action = this.mixer.clipAction(this.animation);  
     action.play();
   }
 
