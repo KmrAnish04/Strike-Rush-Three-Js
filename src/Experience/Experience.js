@@ -10,7 +10,6 @@ import Resources from "./Utils/Resources.js";
 import sources from "./sources.js";
 import * as Physics from "cannon-es";
 import { Vec3 } from "cannon-es";
-import EndGamePopup from "./World/EndGamePopUp.js";
 
 let instance = null;
 
@@ -29,7 +28,6 @@ export default class Experience {
     this.canvas = _canvas;
 
     // Setup
-    this.endGamePopup = new EndGamePopup(22,2002);
     this.debug = new Debug();
     this.sizes = new Sizes();
     this.time = new Time();
