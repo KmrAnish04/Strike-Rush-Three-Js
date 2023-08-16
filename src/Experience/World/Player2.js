@@ -7,6 +7,7 @@ import Experience from "../Experience.js";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 import { gsap } from "gsap";
+import EndGamePopup from "./EndGamePopUp.js";
 
 export default class Player2 {
   constructor(playerMaterial, options) {
@@ -21,6 +22,7 @@ export default class Player2 {
     this.camera = this.experience.camera.instance;
     this.endAnimation = false;
     this.gemModel = this.resources.items.GemBall;
+    this.gemCollected = 0;
     // this.camera.position.z = -350;
     // this.camera.position.y = 12;
     // this.camera.position.x -= 10
@@ -170,6 +172,8 @@ export default class Player2 {
           }
           case "gem": {
             console.log("Gem Collected: ", collide.body);
+            ++this.gemCollected;
+            console.log("GEM COLLECTED", this.gemCollected);
             // Gem Animation
             // const timeline = gsap.timeline();
             // timeline
@@ -216,11 +220,14 @@ export default class Player2 {
                 y: 6,
                 z: -20 - i * 2,
               });
-            }1
+            }
+            1;
             break;
           }
           case "scoreBox": {
             console.log(collide.target);
+            ++this.gemCollected;
+            console.log("GEM COLLECTED", this.gemCollected);
             collide.target.collisionFilterMask = 0;
 
             let gemCollected = this.gemModel.clone().children.shift();
@@ -252,6 +259,9 @@ export default class Player2 {
                 x: window.innerWidth - 500,
                 y: window.innerHeight,
               });
+            setTimeout(() => {
+              this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
+            }, 5000);
             break;
           }
         }
