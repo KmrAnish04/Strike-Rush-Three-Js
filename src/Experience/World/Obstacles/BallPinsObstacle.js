@@ -6,7 +6,13 @@ import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
 export default class BallPinsObstacle {
-  constructor(size, modelPostition, modelScaling, obstacleMaterial, pathObstacleMaterial) {
+  constructor(
+    size,
+    modelPostition,
+    modelScaling,
+    obstacleMaterial,
+    pathObstacleMaterial
+  ) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
@@ -33,8 +39,11 @@ export default class BallPinsObstacle {
   createBallingPins(noOfBallPins, modelScaling) {
     let ballPinsArr = [];
     let ballPinModel = this.resource.children[0];
-    for (let ballPinCnt = 0; ballPinCnt < noOfBallPins; ballPinCnt++) { ballPinsArr.push(ballPinModel.clone()); }
+    for (let ballPinCnt = 0; ballPinCnt < noOfBallPins; ballPinCnt++) {
+      ballPinsArr.push(ballPinModel.clone());
+    }
     ballPinsArr.forEach((model, index) => {
+      model.material.color = new THREE.Color(0xffff00);
       model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z);
       model.rotation.set(Math.PI / -2, 0, 0);
     });
@@ -61,7 +70,7 @@ export default class BallPinsObstacle {
         let pin = this.ballPinRigids[idx];
         pin.position.set(tempX, this.positionY, StartY);
         this.ballPinMeshes[idx].position.copy(pin.position);
-        this.ballPinMeshes[idx].quaternion.copy(pin.quaternion)
+        this.ballPinMeshes[idx].quaternion.copy(pin.quaternion);
         this.scene.add(this.ballPinMeshes[idx]);
         this.physicsWorld.addBody(pin);
         tempX += gapX;
@@ -71,13 +80,17 @@ export default class BallPinsObstacle {
       StartY += gapY;
       rowSideGap += 0.5;
     }
-
   }
 
   addPhysicsOnBallPins(ballPinArr) {
     let ballPinRigids = [];
     ballPinArr.forEach((ballPin) => {
-      const rigidBody = getPhysicsBody(ballPin, ShapeType.BOX, this.obstacleMaterial, 0.001);
+      const rigidBody = getPhysicsBody(
+        ballPin,
+        ShapeType.BOX,
+        this.obstacleMaterial,
+        0.001
+      );
       ballPinRigids.push(rigidBody);
     });
     return ballPinRigids;
