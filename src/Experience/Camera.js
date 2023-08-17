@@ -1,6 +1,6 @@
 import Experience from "./Experience.js";
 
-import { PerspectiveCamera } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 export default class Camera {
@@ -28,6 +28,7 @@ export default class Camera {
   setControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
     this.controls.enableDamping = true;
+    this.controls.target = new Vector3(0, 5, -388);
   }
 
   resize() {

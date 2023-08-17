@@ -38,6 +38,46 @@ export default class Player {
     );
   }
 
+  createScoreText(score) {
+    // Score Popups
+    const textGeometry = new TextGeometry(score, {
+      font: this.resources.items.scoreFont,
+      size: 0.7,
+      height: 0.1,
+      fontWeight: 200,
+    });
+    textGeometry.center();
+    const textMesh = new Mesh(
+      textGeometry,
+      new MeshBasicMaterial({ color: 0x000000 })
+    );
+
+    textMesh.position.x = this.headBody.position.x;
+    textMesh.position.z = this.headBody.position.z;
+    textMesh.position.y = 0;
+
+    this.scene.add(textMesh);
+    textMesh.material.transparent = true;
+    gsap
+      .to(textMesh.position, {
+        duration: 0.2,
+        y: Math.random() + 5,
+        x: Math.random() * (3.2 - -3.2) + -3.2,
+      })
+      .then(() => {
+        gsap
+          .to(textMesh.material, {
+            duration: 0.4,
+            opacity: 0,
+          })
+          .then(() => {
+            textGeometry.dispose();
+            textMesh.material.dispose();
+            this.scene.remove(textMesh);
+          });
+      });
+  }
+
   createPlayer(noOfBalls) {
     let size = 0.4;
     this.mass = 2; // Ball Mass
@@ -51,7 +91,7 @@ export default class Player {
     for (let i = 0; i < n; i++) {
       let spMsh = sphereMesh.clone();
       spMsh = spMsh.children.shift();
-      spMsh.scale.set(0.007, 0.007, 0.007);
+      spMsh.scale.set(0.012, 0.012, 0.012);
       spMsh.material.map = null;
 
       const sphereBody = getPhysicsBody(
@@ -158,6 +198,7 @@ export default class Player {
             this.scene.remove(collide.body.myData.scoreBlock);
             this.physicsWorld.removeBody(collide.body);
 
+            this.createScoreText(`+${collide.body.myData.score.toString()}`);
             // Update Ball Text
             this.scene.remove(this.playerBallCnt);
             this.playerBallCnt = this.createPlayerCntText(
@@ -166,9 +207,8 @@ export default class Player {
             break;
           }
           case "gem": {
-            console.log("Gem Collected: ", collide.body);
             ++this.gemCollected;
-            console.log("GEM COLLECTED", this.gemCollected);
+            this.createScoreText("+1");
             // Gem Animation
             // const timeline = gsap.timeline();
             // timeline
@@ -209,12 +249,21 @@ export default class Player {
             this.scene.remove(this.playerBallCnt);
 
             for (let i = 0; i < this.RigidBodiesArr.length; i++) {
-              gsap.to(this.RigidBodiesArr[i].velocity, {
-                duration: 1,
-                x: -1 + (0.3 * i) / 2,
-                y: 6,
-                z: -20 - i * 2,
-              });
+              gsap
+                .to(this.RigidBodiesArr[i].velocity, {
+                  duration: 1,
+                  x: -1 + (0.3 * i) / 2,
+                  y: 10,
+                  z: -17 - i * 2,
+                })
+                .then(() => {
+                  gsap.to(this.RigidBodiesArr[i].velocity, {
+                    duration: 1,
+                    x: 0,
+                    y: -4,
+                    z: -10,
+                  });
+                });
             }
             1;
             break;
@@ -255,7 +304,7 @@ export default class Player {
                 y: window.innerHeight,
               });
             setTimeout(() => {
-              this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
+              // this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
             }, 5000);
             break;
           }
@@ -297,7 +346,7 @@ export default class Player {
 
     let spMsh = this.resource.clone();
     spMsh = spMsh.children.shift();
-    spMsh.scale.set(0.007, 0.007, 0.007);
+    spMsh.scale.set(0.012, 0.012, 0.012);
     // const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
     return spMsh;
   }
@@ -354,6 +403,7 @@ export default class Player {
     // Update snake's head position based on this.direction
     if (this.headBody && !this.isReachedDestination) {
       this.headBody.velocity.z = -15;
+      if (this.headBody.velocity.z > -10) this.headBody.velocity.z = -15;
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }

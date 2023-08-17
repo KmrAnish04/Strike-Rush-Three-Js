@@ -11,6 +11,7 @@ export default class EndGamePopup {
     const endPopup = document.createElement("div");
     endPopup.className = "EndGamePopup";
     endPopup.id = "EndGamePopup";
+    endPopup.classList.toggle("active");
     const endGamePopupBody = this.createPopupBody();
     endPopup.appendChild(endGamePopupBody);
     document.body.appendChild(endPopup);
