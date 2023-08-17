@@ -8,8 +8,7 @@ import SceneWorld from "./World/SceneWorld.js";
 import Resources from "./Utils/Resources.js";
 import sources from "./sources.js";
 import { Mesh, Scene } from "three";
-import { World } from "cannon-es";
-import { Vec3 } from "cannon-es";
+import { World, Vec3 } from "cannon-es";
 
 let instance = null;
 

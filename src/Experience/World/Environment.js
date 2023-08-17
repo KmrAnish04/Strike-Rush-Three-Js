@@ -6,6 +6,7 @@ import {
   SRGBColorSpace,
   MeshStandardMaterial,
   Mesh,
+  Color,
 } from "three";
 
 export default class Environment {
@@ -20,7 +21,7 @@ export default class Environment {
     }
 
     this.setSunLight();
-    // this.setEnvironmentMap();
+    this.setEnvironmentMap();
   }
 
   setSunLight() {
@@ -68,9 +69,12 @@ export default class Environment {
 
   setEnvironmentMap() {
     this.environmentMap = {};
-    this.environmentMap.intensity = 0.4;
+    this.environmentMap.intensity = 15;
     this.environmentMap.texture = this.resources.items.environmentMapTexture;
     this.environmentMap.texture.colorSpace = SRGBColorSpace;
+    console.log("THIS IS ENVIORNMENT MAP", this.environmentMap);
+    // this.environmentMap.color = new Color(0xe70fffff);
+    this.environmentMap.emission = 15;
 
     this.scene.environment = this.environmentMap.texture;
 

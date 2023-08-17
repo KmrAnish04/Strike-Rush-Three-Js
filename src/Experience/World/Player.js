@@ -1,14 +1,14 @@
 import Experience from "../Experience.js";
 import EndGamePopup from "./EndGamePopUp.js";
+import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
+import { ShapeType } from "three-to-cannon";
 
 import { Mesh, MeshBasicMaterial, Group } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
-import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
-import { ShapeType } from "three-to-cannon";
 import { gsap } from "gsap";
 
-export default class Player2 {
+export default class Player {
   constructor(playerMaterial) {
     this.experience = new Experience();
     this.scene = this.experience.scene;

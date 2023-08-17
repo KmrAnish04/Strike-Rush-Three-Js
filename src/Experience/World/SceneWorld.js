@@ -10,7 +10,7 @@ import Ramps from "./Obstacles/Ramps.js";
 import SideWalls from "./SideWalls.js";
 import GemsBlock from "./GemsBlock.js";
 import HealthBallsBlock from "./HealthBallsBlock.js";
-import Player2 from "./Player.js";
+import Player from "./Player.js";
 
 const COLLISION_GROUPS = {
   PLAYER_GROUP: 1,
@@ -129,7 +129,7 @@ export default class SceneWorld {
         filterMask: COLLISION_GROUPS.PLAYER_GROUP,
       });
 
-      this.PlayerObj = new Player2(this.playerMaterial, {
+      this.PlayerObj = new Player(this.playerMaterial, {
         filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
         filterMask: COLLISION_GROUPS.GEMS_GROUP,
       });

@@ -31,7 +31,7 @@ body {
 
 .EndGamePopupBody {
   height: 100%;
-  width: 40%;
+  width: 100%;
   display: flex;
   background-image: url("./textures/Background Shadow Purple.png");
   flex-direction: column;
@@ -42,23 +42,29 @@ body {
 .section1 {
   display: flex;
   flex-direction: row;
-  width: 95%;
-  margin-bottom: 20px;
+  width: 90%;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 10px;
 }
+
 .section1 .totalGemsCollectedDiv {
   display: flex;
+  margin-left: 60px;
 }
+
 .section1 .totalGemsCollectedDiv .totalGemsLabel {
-  margin-left: -100px;
-  margin-top: 30px;
+  margin-left: -95px;
+  margin-top: 24px;
   margin-right: 2px;
+  font-family: LilitaOneRegular;
+  color: #ffffff;
+  font-size: 30px;
 }
 .section1 .totalGemsCollectedDiv .Background {
-  width: 130px;
-  height: 55px;
-  margin-top: 20px;
+  width: 120px;
+  height: 45px;
+  margin-top: 23px;
 }
 
 .section1 .homeButtonImage {
@@ -67,25 +73,20 @@ body {
 
 .section1 .homeImage {
   width: 40%;
-  margin-left: -82px;
+  margin-left: -63px;
   margin-bottom: 20px;
 }
 
 .section1 .totalGemsCollected {
   rotate: 30deg;
-  width: 30%;
+  width: 40%;
+  height: 40%;
   margin-top: 22px;
-  height: 30%;
-}
-
-.section1 .totalGemsLabel {
-  font-family: LilitaOneRegular;
-  color: #ffffff;
-  font-size: 30px;
 }
 
 .section2 {
   margin-top: 40px;
+  margin-bottom: 10px;
 }
 
 .section2 .levelCompleted {
@@ -118,7 +119,8 @@ body {
 }
 
 .section3 {
-  margin-top: 100px;
+  margin-bottom: 10px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -137,7 +139,7 @@ body {
 }
 
 .section3 .scoreIncreaserDiv .scoreIncreaserPin {
-  margin-top: -100px;
+  margin-top: -70px;
   width: 10%;
 }
 
@@ -147,6 +149,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-bottom: 10px;
 }
 
 .section4 .doubleGemsDiv {
@@ -162,19 +165,14 @@ body {
 }
 .section4 .doubleGemsDiv .video {
   width: 8%;
-  margin-left: -160px;
+  margin-left: -115px;
 }
 .section4 .doubleGemsDiv .collectedGems {
   font-family: LilitaOneRegular;
   color: #ffffff;
-  font-size: 40px;
+  font-size: 30px;
   margin-left: 10px;
   margin-right: 10px;
-}
-.section4 .doubleGemsDiv .doubleGemsButton {
-  font-family: LilitaOneRegular;
-  color: #ffffff;
-  font-size: 40px;
 }
 
 .section4 .doubleGemsDiv .gem {
@@ -189,6 +187,6 @@ body {
   font-family: LilitaOneRegular;
   background-color: transparent;
   border: 0px;
-  color: #ffffff;
-  font-size: 40px;
+  color: #000000;
+  font-size: 35px;
 }
