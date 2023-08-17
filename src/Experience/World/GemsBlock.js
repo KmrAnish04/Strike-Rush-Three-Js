@@ -1,7 +1,8 @@
-import { Vec3 } from "cannon-es";
-import { threeToCannon, ShapeType } from "three-to-cannon";
-import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 import Experience from "../Experience.js";
+
+import { Vec3 } from "cannon-es";
+import { ShapeType } from "three-to-cannon";
+import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 
 export default class GemsBlock {
   constructor(gemMaterial, positionZ, options) {

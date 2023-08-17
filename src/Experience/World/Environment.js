@@ -1,3 +1,5 @@
+import Experience from "../Experience.js";
+
 import {
   AmbientLight,
   DirectionalLight,
@@ -5,7 +7,6 @@ import {
   MeshStandardMaterial,
   Mesh,
 } from "three";
-import Experience from "../Experience.js";
 
 export default class Environment {
   constructor() {

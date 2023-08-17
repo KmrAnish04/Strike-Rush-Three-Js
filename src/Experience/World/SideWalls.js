@@ -1,7 +1,8 @@
-import { BoxGeometry, DoubleSide, Mesh, MeshBasicMaterial } from "three";
 import Experience from "../Experience";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper";
 import { ShapeType } from "three-to-cannon";
+
+import { BoxGeometry, DoubleSide, Mesh, MeshBasicMaterial } from "three";
 
 export default class SideWalls {
   constructor(tracklength, wallMaterial) {
@@ -50,9 +51,8 @@ export default class SideWalls {
   constructWallMesh(width, height, depth) {
     const wall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: '#E459D2', side: DoubleSide })
+      new MeshBasicMaterial({ color: "#E459D2", side: DoubleSide })
     );
     return wall;
   }
-
 }

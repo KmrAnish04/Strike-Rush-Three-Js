@@ -1,9 +1,9 @@
-import { Mesh, BoxGeometry, MeshBasicMaterial, Color } from "three";
 import Experience from "../../Experience.js";
-import * as Physics from "cannon-es";
-import { Vec3 } from "cannon-es";
-import { threeToCannon, ShapeType } from "three-to-cannon";
+import { ShapeType } from "three-to-cannon";
 import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
+
+import { Vec3 } from "cannon-es";
+import { Color } from "three";
 
 export default class Ramps {
   constructor(rampType, modelPostition, modelScaling, positionZ, rampMaterial) {
@@ -34,7 +34,7 @@ export default class Ramps {
       this.rampMaterial,
       0
     );
-    rigidBody.quaternion.setFromAxisAngle(new Physics.Vec3(0, 1, 0), Math.PI);
+    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 1, 0), Math.PI);
     rigidBody.position.z = positionZ;
     // this.model.children[0].material.color = new Color(0xa6d1e1);
     this.model.children[0].material.color = new Color(0xeffd5f);

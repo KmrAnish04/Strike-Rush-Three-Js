@@ -1,5 +1,6 @@
-import { Vector2 } from "three";
 import Experience from "../Experience";
+
+import { Vector2 } from "three";
 
 export default class Movement {
   constructor() {
@@ -19,7 +20,7 @@ export default class Movement {
     window.addEventListener("click", () => {
       if (!this.startGame) {
         this.startGame = true;
-        this.player.giveVelocity()
+        this.player.giveVelocity();
       }
     });
   }

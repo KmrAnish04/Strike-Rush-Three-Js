@@ -1,3 +1,7 @@
+import Experience from "../Experience";
+import { getPhysicsBody } from "../Utils/PhycisBodyHelper";
+import { ShapeType } from "three-to-cannon";
+
 import {
   BoxGeometry,
   CylinderGeometry,
@@ -6,11 +10,7 @@ import {
   MeshBasicMaterial,
 } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
-import Experience from "../Experience";
-import * as Physics from "cannon-es";
-import { Body, Box, Vec3 } from "cannon-es";
-import { getPhysicsBody } from "../Utils/PhycisBodyHelper";
-import { ShapeType } from "three-to-cannon";
+import { Vec3, Material } from "cannon-es";
 
 export default class EndBlock {
   constructor(positionZ, wallMaterial, scoreBoxMaterial) {
@@ -43,7 +43,7 @@ export default class EndBlock {
     let boxRigidBody = getPhysicsBody(
       boxMesh,
       ShapeType.BOX,
-      new Physics.Material("default")
+      new Material("default")
     );
 
     boxMesh.quaternion.copy(boxRigidBody.quaternion);
@@ -81,7 +81,7 @@ export default class EndBlock {
     this.physicsWorld.addBody(box);
     box.position.x = positionX;
     box.position.y = 2.6;
-    box.position.z = positionZ+1.8;
+    box.position.z = positionZ + 1.8;
     boxMesh.position.copy(box.position);
     boxMesh.quaternion.copy(box.quaternion);
     textMesh.position.copy(boxMesh.position);
@@ -242,10 +242,7 @@ export default class EndBlock {
       ShapeType.BOX,
       this.wallMaterial
     );
-    rigidBody.quaternion.setFromAxisAngle(
-      new Physics.Vec3(0, 0, 1),
-      Math.PI * 0.25
-    );
+    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.25);
     rigidBody.position.set(-7.5, 12.8, 1.5 + positionZ);
     leftDiagonalWall1.position.copy(rigidBody.position);
     leftDiagonalWall1.quaternion.copy(rigidBody.quaternion);
@@ -266,10 +263,7 @@ export default class EndBlock {
       ShapeType.BOX,
       this.wallMaterial
     );
-    rigidBody.quaternion.setFromAxisAngle(
-      new Physics.Vec3(0, 0, 1),
-      Math.PI * 0.75
-    );
+    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.75);
     rigidBody.position.set(-7.5, 15, 1.5 + positionZ);
     leftDiagonalWall2.position.copy(rigidBody.position);
     leftDiagonalWall2.quaternion.copy(rigidBody.quaternion);
@@ -291,10 +285,7 @@ export default class EndBlock {
       ShapeType.BOX,
       this.wallMaterial
     );
-    rigidBody.quaternion.setFromAxisAngle(
-      new Physics.Vec3(0, 0, 1),
-      Math.PI * 0.25
-    );
+    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.25);
     rigidBody.position.set(7.5, 15, 1.5 + positionZ);
     rightDiagonalWall1.position.copy(rigidBody.position);
     rightDiagonalWall1.quaternion.copy(rigidBody.quaternion);
@@ -316,10 +307,7 @@ export default class EndBlock {
       ShapeType.BOX,
       this.wallMaterial
     );
-    rigidBody.quaternion.setFromAxisAngle(
-      new Physics.Vec3(0, 0, 1),
-      Math.PI * 0.75
-    );
+    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.75);
     rigidBody.position.set(7.5, 12.8, 1.5 + positionZ);
     rightDiagonalWall2.position.copy(rigidBody.position);
     rightDiagonalWall2.quaternion.copy(rigidBody.quaternion);

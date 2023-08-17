@@ -1,14 +1,15 @@
+import Experience from "../Experience.js";
+import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
+import { ShapeType } from "three-to-cannon";
+
 import {
   BoxGeometry,
   MeshStandardMaterial,
   Mesh,
   SRGBColorSpace,
   RepeatWrapping,
-  Color
+  Color,
 } from "three";
-import Experience from "../Experience.js";
-import * as Physics from "cannon-es";
-import { Vec3 } from "cannon-es";
 
 export default class GameTrack {
   constructor(trackLength = 5, pathMaterial) {
@@ -32,17 +33,15 @@ export default class GameTrack {
 
   setTextures() {
     this.textures = {};
-    this.woodTexture = this.resources.items.groundTexture;
-    this.woodTexture.colorSpace = SRGBColorSpace;
-    this.woodTexture.wrapS = RepeatWrapping;
-    this.woodTexture.wrapT = RepeatWrapping;
+    this.groundTexture = this.resources.items.groundTexture;
+    this.groundTexture.colorSpace = SRGBColorSpace;
+    this.groundTexture.wrapS = RepeatWrapping;
+    this.groundTexture.wrapT = RepeatWrapping;
   }
 
   setMaterial() {
     this.material = new MeshStandardMaterial({
-      map: this.woodTexture,
-      // color: 0x666666,
-      // normalMap: this.textures.normal,
+      map: this.groundTexture,
     });
   }
 
@@ -56,7 +55,7 @@ export default class GameTrack {
     this.trackTiles = [];
     let tileGeometry = this.setGeometry();
     let tileMesh = this.setMesh(tileGeometry);
-    let tileRigidBody = this.addPhysicsProperties(tileGeometry);
+    let tileRigidBody = this.addPhysicsProperties(tileMesh);
     tileRigidBody.position.set(0, 0 - 0.5, 0);
     tileMesh.position.copy(tileRigidBody.position);
     this.trackTiles.push(tileRigidBody);
@@ -65,9 +64,10 @@ export default class GameTrack {
     for (let tileNum = 0; tileNum < noOfTiles; tileNum++) {
       tileGeometry = this.setGeometry();
       tileMesh = this.setMesh(tileGeometry);
+      console.log(tileMesh);
       if (tileNum % 2 == 0) tileMesh.material.color = new Color(0x888888);
       // else tileMesh.material.color = new Color(0xffffff)
-      tileRigidBody = this.addPhysicsProperties(tileGeometry);
+      tileRigidBody = this.addPhysicsProperties(tileMesh);
 
       let lastTilePos = this.trackTiles[this.trackTiles.length - 1];
       // console.log(lastTilePos);
@@ -77,17 +77,14 @@ export default class GameTrack {
     }
   }
 
-  addPhysicsProperties(trackGeometry) {
+  addPhysicsProperties(object) {
     //Physics
-    const rigidBodyShape = new Physics.Box(
-      new Vec3(this.width / 2, this.height / 2, this.depth / 2)
+    const rigidBody = getPhysicsBody(
+      object,
+      ShapeType.BOX,
+      this.pathMaterial,
+      0
     );
-    const rigidBody = new Physics.Body({
-      shape: rigidBodyShape,
-      mass: 0,
-      allowSleep: false,
-      material: this.pathMaterial,
-    });
 
     this.physicsWorld.addBody(rigidBody);
     return rigidBody;

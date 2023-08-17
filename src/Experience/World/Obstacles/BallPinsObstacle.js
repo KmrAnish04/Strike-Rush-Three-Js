@@ -1,9 +1,8 @@
-import * as THREE from "three";
 import Experience from "../../Experience.js";
-import * as Physics from "cannon-es";
-import { Vec3 } from "cannon-es";
 import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
+
+import { Color } from "three";
 
 export default class BallPinsObstacle {
   constructor(
@@ -43,7 +42,7 @@ export default class BallPinsObstacle {
       ballPinsArr.push(ballPinModel.clone());
     }
     ballPinsArr.forEach((model, index) => {
-      model.material.color = new THREE.Color(0xffff00);
+      model.material.color = new Color(0xffff00);
       model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z);
       model.rotation.set(Math.PI / -2, 0, 0);
     });

@@ -17,7 +17,7 @@ export default [
   {
     name: "ObstacleBowlingPin",
     type: "fbxModel",
-    path: "BowlingPin.FBX",
+    path: "models/Obstacle/BowlingPin.FBX",
   },
   {
     name: "Ramp1",
@@ -27,12 +27,12 @@ export default [
   {
     name: "GemBall",
     type: "fbxModel",
-    path: "models/newAdded/Gem.fbx",
+    path: "models/BallAndGem/Gem.fbx",
   },
   {
     name: "HealthBall",
     type: "fbxModel",
-    path: "models/newAdded/Ball.fbx",
+    path: "models/BallAndGem/Ball.fbx",
   },
   {
     name: "groundTexture",

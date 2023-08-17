@@ -1,10 +1,8 @@
 import Experience from "../Experience.js";
 import Environment from "./Environment.js";
 import GameTrack from "./TrackPath.js";
-import Obstacle from "./Obstacles/Obstacle.js";
+import AnimatedObstacle from "./Obstacles/AnimatedObstacle.js";
 import { Vector3 } from "three";
-import Player from "./Player.js";
-import Movement from "./Movement.js";
 import EndBlock from "./EndBlock.js";
 import BallPinsObstacle from "./Obstacles/BallPinsObstacle.js";
 import { ContactMaterial, Material, Vec3 } from "cannon-es";
@@ -12,15 +10,14 @@ import Ramps from "./Obstacles/Ramps.js";
 import SideWalls from "./SideWalls.js";
 import GemsBlock from "./GemsBlock.js";
 import HealthBallsBlock from "./HealthBallsBlock.js";
-import playerBalls from "./playerBalls.js";
-import Player2 from "./Player2.js";
+import Player2 from "./Player.js";
 
 const COLLISION_GROUPS = {
   PLAYER_GROUP: 1,
   GEMS_GROUP: 2,
 };
 
-export default class World {
+export default class SceneWorld {
   constructor() {
     this.experience = new Experience();
     this.scene = this.experience.scene;
@@ -90,26 +87,26 @@ export default class World {
         this.pathObstacleMaterial
       );
 
-      // this.obstacle2 = new Obstacle(
+      // this.obstacle2 = new AnimatedObstacle(
       //   this.resources.items.ObstacleArmLiverHammer,
       //   new Vector3(-4.5, 0, -6 * 20),
       //   new Vector3(0.009, 0.009, 0.009),
       //   this.obstacleMaterial
       // );
-      // this.obstacle3 = new Obstacle(
+      // this.obstacle3 = new AnimatedObstacle(
       //   this.resources.items.ObstacleLegLiverHammer,
       //   new Vector3(0, 0, -10 * 20),
       //   new Vector3(0.009, 0.009, 0.009),
       //   this.obstacleMaterial
       // );
-      this.obstacle5 = new Obstacle(
+      this.obstacle5 = new AnimatedObstacle(
         this.resources.items.SpinnerObstacle,
         new Vector3(5.2, -0.1, -5 * 20),
         new Vector3(0.009, 0.009, 0.009),
         this.obstacleMaterial
       );
 
-      this.obstacle4 = new Obstacle(
+      this.obstacle4 = new AnimatedObstacle(
         this.resources.items.ObstacleArmLiverHammer,
         new Vector3(-5.1, 0.3, -12 * 20),
         new Vector3(0.001, 0.001, 0.001),

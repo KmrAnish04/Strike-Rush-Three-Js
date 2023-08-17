@@ -1,5 +1,5 @@
-import * as Physics from "cannon-es";
-import { threeToCannon, ShapeType } from "three-to-cannon";
+import { Body } from "cannon-es";
+import { threeToCannon } from "three-to-cannon";
 
 export function getPhysicsBody(object, shapeType, material, mass = 0) {
   const physicsMaterial = material;
@@ -12,7 +12,7 @@ export function getPhysicsBody(object, shapeType, material, mass = 0) {
 
   const { shape, offset, quaternion } = result;
 
-  const physicsBody = new Physics.Body({
+  const physicsBody = new Body({
     mass: mass,
     allowSleep: false,
     material: physicsMaterial,

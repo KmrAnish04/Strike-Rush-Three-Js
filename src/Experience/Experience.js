@@ -1,14 +1,14 @@
-import { Mesh, Scene } from "three";
 import CannonDebugger from "cannon-es-debugger";
 import Debug from "./Utils/Debug.js";
 import Sizes from "./Utils/Sizes.js";
 import Time from "./Utils/Time.js";
 import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
-import World from "./World/World.js";
+import SceneWorld from "./World/SceneWorld.js";
 import Resources from "./Utils/Resources.js";
 import sources from "./sources.js";
-import * as Physics from "cannon-es";
+import { Mesh, Scene } from "three";
+import { World } from "cannon-es";
 import { Vec3 } from "cannon-es";
 
 let instance = null;
@@ -35,8 +35,8 @@ export default class Experience {
     this.resources = new Resources(sources);
     this.camera = new Camera();
     this.renderer = new Renderer();
-    this.physicsWorld = new Physics.World({ gravity: new Vec3(0, -9.8, 0) });
-    this.world = new World();
+    this.physicsWorld = new World({ gravity: new Vec3(0, -9.8, 0) });
+    this.world = new SceneWorld();
     this.cannonDebugger = new CannonDebugger(this.scene, this.physicsWorld);
 
     // Resize event
