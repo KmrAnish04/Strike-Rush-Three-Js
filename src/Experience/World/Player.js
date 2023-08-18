@@ -7,6 +7,7 @@ import { Mesh, MeshBasicMaterial, Group } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { gsap } from "gsap";
+import Constants, { COLLISION_BODIES } from "./Constants.js";
 
 export default class Player {
   constructor(playerMaterial, options) {
@@ -152,7 +153,7 @@ export default class Player {
         const bodyType = collide.body.material.name;
 
         switch (bodyType) {
-          case "health": {
+          case COLLISION_BODIES.HEALTH_BLOCK: {
             console.log("score added", collide.body);
             collide.body.collisionFilterMask = 0; // dont take collision again with already collided body
             this.addPlayerBalls(collide.body.myData.score);
@@ -166,7 +167,7 @@ export default class Player {
             this.playerBallCnt = this.createPlayerCntText(this.RigidBodiesArr.length.toString());
             break;
           }
-          case "gem": {
+          case COLLISION_BODIES.GEM_ITEM: {
             ++this.gemCollected;
             this.createScoreText("+1");
             // Gem Animation
@@ -188,7 +189,7 @@ export default class Player {
 
             break;
           }
-          case "obstacle": {
+          case COLLISION_BODIES.OBSTACLE: {
             console.log("Collided with obstacle");
             collide.body.collisionFilterMask = 0;
             if (this.RigidBodiesArr.length) {
@@ -204,7 +205,7 @@ export default class Player {
 
             break;
           }
-          case "ramp": {
+          case COLLISION_BODIES.RAMP: {
             this.isReachedDestination = true;
             this.scene.remove(this.playerBallCnt);
 
@@ -226,7 +227,7 @@ export default class Player {
             1;
             break;
           }
-          case "scoreBox": {
+          case COLLISION_BODIES.SCORE_BOX: {
             console.log(collide.target);
             ++this.gemCollected;
             console.log("GEM COLLECTED", this.gemCollected);
