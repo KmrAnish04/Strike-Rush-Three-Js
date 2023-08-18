@@ -5,48 +5,79 @@ import { ShapeType } from "three-to-cannon";
 
 import {
   BoxGeometry,
+  Color,
   CylinderGeometry,
   DoubleSide,
   Group,
   Mesh,
   MeshBasicMaterial,
-  PlaneGeometry,
 } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { Vec3, Material } from "cannon-es";
 
 export default class EndBlock {
-  constructor(positionZ, wallMaterial, scoreBoxMaterial) {
+  constructor(positionZ, wallMaterial, scoreBoxMaterial, spinnerMaterial) {
     this.experience = new Experience();
+    this.time = this.experience.time;
     this.resources = this.experience.resources;
     this.scene = this.experience.scene;
     this.endBlockGroup = new Group();
     this.physicsWorld = this.experience.physicsWorld;
     this.scoreBoxMaterial = scoreBoxMaterial;
     this.winBoxArray = WinBoxArr;
-    // this.scoreX5Material = scoreX5Material;
+    this.spinnerMaterial = spinnerMaterial;
     this.physicsObjects = [];
-    // this.winBox = this.constructWinBox(positionZ, 0xff0000, -6.5, "1X");
-    // this.winBox = this.constructWinBox(positionZ, 0xfff44f, -3.25, "3X");
-    // this.winBox = this.constructWinBox(positionZ, 0x74b72e, 0, "5X");
-    // this.winBox = this.constructWinBox(positionZ, 0xfff44f, 3.25, "3X");
-    // this.winBox = this.constructWinBox(positionZ, 0xff0000, 6.5, "1X");
+    this.bodiesToUpdate = [];
+    this.meshesToUpdate = [];
     this.contructLastBlock(positionZ, wallMaterial);
     this.scene.add(this.endBlockGroup);
-
-    // this.gem = this.resources.items.GemBall;
   }
 
   contructLastBlock(positionZ, wallMaterial) {
     this.wallMaterial = wallMaterial;
-    const endWall = this.constructEndWall(15, positionZ);
+    this.endWall = this.constructEndWall(15, positionZ);
     const walls = this.constructWalls(positionZ);
     const circularHit = this.constructCircularHit(25, positionZ);
-    this.endBlockGroup.add(endWall, walls, circularHit);
+    const spinners1 = this.constructSpinners(positionZ, -4.7);
+    const spinners2 = this.constructSpinners(positionZ, 4.7);
+    this.endBlockGroup.add(
+      this.endWall,
+      walls,
+      circularHit,
+      spinners1,
+      spinners2
+    );
     this.constructWinBoxes(positionZ);
     this.constructWinBoxBoundry();
   }
 
+  constructSpinners(positionZ, positionX) {
+    const spinner = this.resources.items.EndSpinner.clone();
+    spinner.traverse((child) => {
+      if (child.isMesh) {
+        const childBody = getPhysicsBody(
+          child,
+          ShapeType.HULL,
+          this.spinnerMaterial,
+          0
+        );
+        child.rotation.x = -Math.PI / 2;
+        child.position.z = positionZ + 1;
+        child.position.x = positionX;
+        child.position.y = 12;
+        child.material.color = new Color(0xe11584);
+        // child.material.emissionIntensity = 15;
+        this.meshesToUpdate.push(child);
+        childBody.position.copy(child.position);
+        childBody.quaternion.copy(child.quaternion);
+        this.physicsWorld.addBody(childBody);
+        this.bodiesToUpdate.push(childBody);
+      }
+    });
+    console.log("OBJECTS TO PUSH ARRAY", this.meshesToUpdate);
+    console.log("OBJECTS TO PUSH ARRAY", this.bodiesToUpdate);
+    return spinner;
+  }
   constructEndWall(positionY, positionZ) {
     const width = 22;
     const height = 35;
@@ -77,7 +108,7 @@ export default class EndBlock {
   }
 
   constructCircularHit(positionY, positionZ) {
-    const radiusTop = 1.3;
+    const radiusTop = 1.4;
     const radiusBottom = 2;
     const height = 4;
     const numberOfSegments = 64;
@@ -88,7 +119,8 @@ export default class EndBlock {
     const physicsCircularHitBody = getPhysicsBody(
       circularHit,
       ShapeType.HULL,
-      this.wallMaterial
+      this.wallMaterial,
+      0
     );
     physicsCircularHitBody.quaternion.setFromAxisAngle(
       new Vec3(-1, 0, 0),
@@ -296,7 +328,7 @@ export default class EndBlock {
       this.constructWinBlocks(
         winBox.isFrontWall,
         positionZ + winBox.positionZ - 0.7,
-        winBox.positionY,
+        winBox.positionY - 0.75,
         winBox.color,
         winBox.positionX,
         winBox.score,
@@ -307,7 +339,7 @@ export default class EndBlock {
   }
   constructWinBoxBoundry() {
     let boxMesh = new Mesh(
-      new BoxGeometry(20, 15, 1),
+      new BoxGeometry(20, 22, 1),
       new MeshBasicMaterial({ color: "#e75480" })
     );
     let boxRigidBody = getPhysicsBody(
@@ -315,12 +347,12 @@ export default class EndBlock {
       ShapeType.BOX,
       new Material("default")
     );
-
+    // boxRigidBody.collisionFilterMask = 0;
     boxMesh.quaternion.copy(boxRigidBody.quaternion);
     boxMesh.position.copy(boxRigidBody.position);
 
-    boxRigidBody.position.z = -388.5;
-    boxRigidBody.position.y = 6.5;
+    boxRigidBody.position.z = -388.8;
+    boxRigidBody.position.y = 15;
     // this.scene.add(boxMesh);
     this.physicsWorld.addBody(boxRigidBody);
   }
@@ -376,5 +408,16 @@ export default class EndBlock {
       this.scene.add(textMesh);
     }
     boxRigidBody.myData = { score: score };
+  }
+  update() {
+    const deltaTime = this.time.delta;
+    if (this.bodiesToUpdate[0]) {
+      this.meshesToUpdate[0].rotation.y -= (Math.PI / 720) * deltaTime * 0.3;
+      this.bodiesToUpdate[0].quaternion.copy(this.meshesToUpdate[0].quaternion);
+    }
+    if (this.bodiesToUpdate[1]) {
+      this.meshesToUpdate[1].rotation.y += (Math.PI / 720) * deltaTime * 0.3;
+      this.bodiesToUpdate[1].quaternion.copy(this.meshesToUpdate[1].quaternion);
+    }
   }
 }

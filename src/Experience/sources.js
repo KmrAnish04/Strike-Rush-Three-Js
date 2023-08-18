@@ -45,8 +45,33 @@ export default [
     path: "models/Obstacle/spinnerObs.fbx",
   },
   {
+    name: "EndSpinner",
+    type: "fbxModel",
+    path: "models/Obstacle/SpinnerEnd.fbx",
+  },
+  {
     name: "scoreFont",
     type: "font",
     path: "fonts/helvetiker_regular.typeface.json",
+  },
+  {
+    name: "Environment",
+    type: "fbxModel",
+    path: "models/Enviornment/SkyBoxCylinder.FBX",
+  },
+  {
+    name: "Buildings",
+    type: "fbxModel",
+    path: "models/Enviornment/St_Building.FBX",
+  },
+  {
+    name: "BuildingsTexture",
+    type: "texture",
+    path: "models/Enviornment/RGB Alpha.png",
+  },
+  {
+    name: "FinishLine",
+    type: "fbxModel",
+    path: "models/Ramps/finishline.fbx",
   },
 ];

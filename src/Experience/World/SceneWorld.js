@@ -32,8 +32,10 @@ export default class SceneWorld {
       this.healthMaterial = new Material("health");
       this.pathMaterial = new Material("path");
       this.wallMaterial = new Material("wall");
+      this.sideWallMaterial = new Material("sidewall");
       this.rampMaterial = new Material("ramp");
       this.gemMaterial = new Material("gem");
+      this.spinnerMaterial = new Material("spinner");
       this.obstacleMaterial = new Material("obstacle");
       this.scoreX1Material = new Material("score1");
       this.scoreX5Material = new Material("score5");
@@ -50,7 +52,14 @@ export default class SceneWorld {
         this.obstacleMaterial,
         { friction: 1, restitution: 0 }
       );
-
+      this.spinnerContactMaterial = new ContactMaterial(
+        this.playerMaterial,
+        this.spinnerMaterial,
+        {
+          restitution: 0.2,
+          friction: 0,
+        }
+      );
       this.pathObstacleMaterial = new ContactMaterial(
         this.obstacleMaterial,
         this.pathMaterial,
@@ -70,6 +79,9 @@ export default class SceneWorld {
       this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
       this.physicsWorld.addContactMaterial(this.playerContactObstacleMaterial);
       this.physicsWorld.addContactMaterial(this.pathObstacleMaterial);
+      this.physicsWorld.addContactMaterial(this.playerContactRampMaterial);
+      this.physicsWorld.addContactMaterial(this.endWallPlayerContact);
+      this.physicsWorld.addContactMaterial(this.spinnerContactMaterial);
 
       this.ballPinObs1 = new BallPinsObstacle(
         3,
@@ -113,7 +125,7 @@ export default class SceneWorld {
         this.obstacleMaterial
       );
 
-      this.sideWall = new SideWalls(-trackLength * 20, this.wallMaterial);
+      this.sideWall = new SideWalls(-trackLength * 20, this.sideWallMaterial);
       this.track = new GameTrack(trackLength, this.pathMaterial);
 
       this.ramp = new Ramps(
@@ -156,7 +168,8 @@ export default class SceneWorld {
       this.endBlock = new EndBlock(
         -trackLength * 20 + 7,
         this.endWallPlayerContact,
-        this.scoreBoxMaterial
+        this.scoreBoxMaterial,
+        this.spinnerMaterial
       );
 
       // Simulate the Physics World
@@ -178,5 +191,6 @@ export default class SceneWorld {
         this.objectsToUpdate[obstacle].update();
       }
     }
+    if (this.endBlock) this.endBlock.update();
   }
 }

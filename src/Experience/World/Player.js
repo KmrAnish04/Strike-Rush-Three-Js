@@ -136,7 +136,7 @@ export default class Player {
       textGeometry,
       new MeshBasicMaterial({ color: 0xffffff })
     );
-    textMesh.position.z = 0.3;
+    textMesh.position.z = 0.6;
     textMesh.position.y = 0.2;
     // textMesh.rotation.y = -Math.PI;
     // textMesh.lookAt(
@@ -168,7 +168,7 @@ export default class Player {
   registerEvents() {
     window.addEventListener("mousemove", (event) => {
       // Calculate mouse position in normalized device coordinates (-1 to 1)
-      const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+      const mouseX = (event.clientX / window.innerWidth) * 2.5 - 1;
       const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
       if (this.headBody && !this.isReachedDestination) {
@@ -191,9 +191,11 @@ export default class Player {
         const bodyType = collide.body.material.name;
 
         switch (bodyType) {
+          case "wall": {
+            collide;
+          }
           case "health": {
             console.log("score added", collide.body);
-            collide.body.collisionFilterMask = 0; // dont take collision again with already collided body
             this.addPlayerBalls(collide.body.myData.score);
             this.scene.remove(collide.body.myData.scoreBlock);
             this.physicsWorld.removeBody(collide.body);
@@ -204,6 +206,7 @@ export default class Player {
             this.playerBallCnt = this.createPlayerCntText(
               this.RigidBodiesArr.length.toString()
             );
+            // collide.body.collisionFilterMask = 0; // dont take collision again with already collided body
             break;
           }
           case "gem": {
@@ -249,19 +252,23 @@ export default class Player {
             this.scene.remove(this.playerBallCnt);
 
             for (let i = 0; i < this.RigidBodiesArr.length; i++) {
+              gsap.to(this.camera.rotation, {
+                duration: 1.5,
+                x: this.camera.rotation.y + Math.PI / 180,
+              });
               gsap
                 .to(this.RigidBodiesArr[i].velocity, {
-                  duration: 1,
+                  duration: 0.6,
                   x: -1 + (0.3 * i) / 2,
-                  y: 10,
-                  z: -17 - i * 2,
+                  y: 8.5,
+                  z: -18 - i * 2,
                 })
                 .then(() => {
                   gsap.to(this.RigidBodiesArr[i].velocity, {
-                    duration: 1,
+                    duration: 2,
                     x: 0,
-                    y: -4,
-                    z: -10,
+                    y: -0.5,
+                    z: 0,
                   });
                 });
             }
@@ -269,20 +276,20 @@ export default class Player {
             break;
           }
           case "scoreBox": {
-            console.log(collide.target);
+            console.log("COLLIDED TARGET",collide.target);
             ++this.gemCollected;
-            console.log("GEM COLLECTED", this.gemCollected);
-            collide.target.collisionFilterMask = 0;
-
+            collide.body.collisionFilterMask = 0;
+            // collide.target.position.y = 200;
+            collide.target.velocity.x = 0;
+            collide.target.velocity.y = 0;
+            collide.target.velocity.z = 0;
             let gemCollected = this.gemModel.clone().children.shift();
             gemCollected.position.set(
               Math.random() * (6.2 - -6.2) + -6.2,
               collide.body.position.y + 5,
               collide.body.position.z
             );
-            console.log("END SCORE ADDED");
             this.scene.add(gemCollected);
-
             // Gem Animation
             const timeline = gsap.timeline();
             timeline

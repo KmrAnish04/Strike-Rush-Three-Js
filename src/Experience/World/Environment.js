@@ -7,6 +7,8 @@ import {
   MeshStandardMaterial,
   Mesh,
   Color,
+  DoubleSide,
+  MeshBasicMaterial,
 } from "three";
 
 export default class Environment {
@@ -21,6 +23,7 @@ export default class Environment {
     }
 
     this.setSunLight();
+    // this.setEnvironment();
     // this.setEnvironmentMap();
   }
 
@@ -102,5 +105,30 @@ export default class Environment {
         .step(0.001)
         .onChange(this.environmentMap.updateMaterials);
     }
+  }
+
+  setEnvironment() {
+    this.environmentModel = this.resources.items.Environment;
+    this.environmentModel.traverse((child) => {
+      if (child.isMesh) {
+        child.material.color = new Color(0xe70fffff);
+      }
+    });
+    this.environmentModel.rotation.x = Math.PI / 2;
+    this.environmentModel.position.z = -200;
+    this.scene.add(this.environmentModel);
+
+    this.buildings = this.resources.items.Buildings;
+    console.log("BUILDINGS :", this.buildings);
+    this.buildings.traverse((child) => {
+      if (child.isMesh) {
+        child.material = new MeshBasicMaterial({});
+        child.material.map = this.resources.items.BuildingsTexture;
+        child.material.color = new Color(0xe70ffffff);
+      }
+    });
+    this.buildings.rotation.x = -Math.PI / 2;
+    this.buildings.position.z = -200;
+    this.scene.add(this.buildings);
   }
 }
