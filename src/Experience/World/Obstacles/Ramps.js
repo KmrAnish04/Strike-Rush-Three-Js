@@ -25,7 +25,9 @@ export default class Ramps {
       modelScaling.y - 0.02,
       modelScaling.z
     );
-
+    this.model.traverse((child) => {
+      if (child.isMesh) child.material.map.flipY = false;
+    });
     const rigidBody = getPhysicsBody(
       this.model.children[0],
       ShapeType.HULL,
@@ -34,7 +36,8 @@ export default class Ramps {
     );
     rigidBody.quaternion.setFromAxisAngle(new Physics.Vec3(0, 1, 0), Math.PI);
     rigidBody.position.z = positionZ;
-    this.model.children[0].material.color = new Color(0xa6d1e1);
+    // this.model.children[0].material.color = new Color(0xa6d1e1);
+    this.model.children[0].material.color = new Color(0xeffd5f);
     this.model.children[0].position.copy(rigidBody.position);
     this.model.children[0].quaternion.copy(rigidBody.quaternion);
 

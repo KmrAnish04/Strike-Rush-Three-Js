@@ -20,12 +20,13 @@ export default class Camera {
       0.1,
       1000
     );
-    this.instance.position.set(0, 25, 50);
+    this.instance.position.set(0, 25, -350);
     this.scene.add(this.instance);
   }
 
   setControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
+    this.controls.target.set(0, 25, -350)
     this.controls.enableDamping = true;
   }
 
@@ -35,6 +36,6 @@ export default class Camera {
   }
 
   update() {
-    // this.controls.update();
+    this.controls.update();
   }
 }

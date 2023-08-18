@@ -27,31 +27,38 @@ export default class EndBlock {
     this.winBox = this.constructWinBox(positionZ, 0x74b72e, 0, "5X");
     this.winBox = this.constructWinBox(positionZ, 0xfff44f, 3.25, "3X");
     this.winBox = this.constructWinBox(positionZ, 0xff0000, 6.5, "1X");
-    this.winBoxWall = this.constructWinBoxBoundry(positionZ, 0x000000,)
-    
+    this.winBoxWall = this.constructWinBoxBoundry(positionZ, 0x000000);
+
     this.contructLastBlock(positionZ, wallMaterial);
     this.scene.add(this.endBlockGroup);
 
     // this.gem = this.resources.items.GemBall;
   }
 
-  constructWinBoxBoundry(){
-    let boxMesh = new Mesh(new BoxGeometry(17,5,0.5), new MeshBasicMaterial({color: "#e75480"}));
-    let boxRigidBody = getPhysicsBody(boxMesh, ShapeType.BOX, new Physics.Material('default'));
+  constructWinBoxBoundry() {
+    let boxMesh = new Mesh(
+      new BoxGeometry(17, 15, 1),
+      new MeshBasicMaterial({ color: "#e75480" })
+    );
+    let boxRigidBody = getPhysicsBody(
+      boxMesh,
+      ShapeType.BOX,
+      new Physics.Material("default")
+    );
 
     boxMesh.quaternion.copy(boxRigidBody.quaternion);
     boxMesh.position.copy(boxRigidBody.position);
 
-    boxRigidBody.position.z = -388.5
-    boxRigidBody.position.y = 1;
+    boxRigidBody.position.z = -388;
+    boxRigidBody.position.y = 6.5;
     // this.scene.add(boxMesh);
-    this.physicsWorld.addBody(boxRigidBody)
+    this.physicsWorld.addBody(boxRigidBody);
   }
 
   constructWinBox(positionZ, color, positionX, score) {
     console.log("SCORE", score);
     const boxMesh = new Mesh(
-      new BoxGeometry(3, 3, 4),
+      new BoxGeometry(3, 5, 5),
       new MeshBasicMaterial({ color: color })
     );
     const textGeometry = new TextGeometry(score, {
@@ -63,35 +70,37 @@ export default class EndBlock {
     const textMesh = new Mesh(
       textGeometry,
       new MeshBasicMaterial({ color: 0x000000 })
-    );  
-    // textGeometry.position.y -= 1;
-    const box = getPhysicsBody(boxMesh, ShapeType.BOX, this.scoreBoxMaterial, 0);
+    );
+    const box = getPhysicsBody(
+      boxMesh,
+      ShapeType.Mesh,
+      this.scoreBoxMaterial,
+      0
+    );
     this.scene.add(boxMesh, textMesh);
     this.physicsWorld.addBody(box);
     box.position.x = positionX;
-    box.position.y = 2.6;
-    box.position.z = positionZ + 2.3;
+    box.position.y = 2;
+    box.position.z = positionZ + 1.8;
     boxMesh.position.copy(box.position);
     boxMesh.quaternion.copy(box.quaternion);
     textMesh.position.copy(boxMesh.position);
-    textMesh.position.z += 2.1;
-    textMesh.position.y += 2;
-    // box.name = 'scoreBox';
-    box.myData = { score: score }
-    // this.scene.add(this.gem);
+    textMesh.position.z += 5;
+    textMesh.position.y += 1;
+    box.myData = { score: score };
   }
 
   contructLastBlock(positionZ, wallMaterial) {
     this.wallMaterial = wallMaterial;
-    const endWall = this.constructEndWall(11.5, positionZ);
+    const endWall = this.constructEndWall(15, positionZ);
     const walls = this.constructWalls(positionZ);
-    const circularHit = this.constructCircularHit(17.5, positionZ);
+    const circularHit = this.constructCircularHit(20, positionZ);
     this.endBlockGroup.add(endWall, walls, circularHit);
   }
 
   constructEndWall(positionY, positionZ) {
     const width = 16;
-    const height = 23;
+    const height = 30;
     const depth = 1;
     const endWall = new Mesh(
       new BoxGeometry(width, height, depth),
@@ -103,7 +112,7 @@ export default class EndBlock {
       this.wallMaterial
     );
     physicsEndWallBody.position.y = positionY;
-    physicsEndWallBody.position.z = positionZ;
+    physicsEndWallBody.position.z = positionZ - 1.5;
     endWall.position.copy(physicsEndWallBody.position);
     this.physicsWorld.addBody(physicsEndWallBody);
     return endWall;
@@ -112,7 +121,7 @@ export default class EndBlock {
   constructCircularHit(positionY, positionZ) {
     const radiusTop = 1.2;
     const radiusBottom = 1.2;
-    const height = 4;
+    const height = 2;
     const numberOfSegments = 64;
     const circularHit = new Mesh(
       new CylinderGeometry(radiusTop, radiusBottom, height, numberOfSegments),
@@ -159,7 +168,7 @@ export default class EndBlock {
   createLeftWall(positionZ) {
     const width = 1;
     const height = 23;
-    const depth = 4;
+    const depth = 5.5;
     const leftWall = new Mesh(
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
@@ -181,7 +190,7 @@ export default class EndBlock {
   createRightWall(positionZ) {
     const width = 1;
     const height = 23;
-    const depth = 4;
+    const depth = 5.5;
     const rightWall = new Mesh(
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
@@ -202,7 +211,7 @@ export default class EndBlock {
   createBottomWall(positionZ) {
     const width = 18;
     const height = 1;
-    const depth = 4;
+    const depth = 5.5;
     const bottomWall = new Mesh(
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
@@ -222,7 +231,7 @@ export default class EndBlock {
   createLeftDiagonalWall1(positionZ) {
     const width = 4;
     const height = 1;
-    const depth = 4;
+    const depth = 5.5;
     const leftDiagonalWall1 = new Mesh(
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
@@ -247,7 +256,7 @@ export default class EndBlock {
   createLeftDiagonalWall2(positionZ) {
     const width = 4;
     const height = 1;
-    const depth = 4;
+    const depth = 5.5;
     const leftDiagonalWall2 = new Mesh(
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
@@ -271,7 +280,7 @@ export default class EndBlock {
   createRightDiagonalWall1(positionZ) {
     const width = 4;
     const height = 1;
-    const depth = 4;
+    const depth = 5.5;
     const rightDiagonalWall1 = new Mesh(
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })
@@ -296,7 +305,7 @@ export default class EndBlock {
   createRightDiagonalWall2(positionZ) {
     const width = 4;
     const height = 1;
-    const depth = 4;
+    const depth = 5.5;
     const rightDiagonalWall2 = new Mesh(
       new BoxGeometry(width, height, depth),
       new MeshBasicMaterial({ color: 0xe8e8e7 })

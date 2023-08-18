@@ -67,18 +67,28 @@ export default class World {
       this.endWallPlayerContact = new ContactMaterial(
         this.playerMaterial,
         this.wallMaterial,
-        { restitution: 0, friction: 5 }
+        { restitution: 0, friction: 10 }
       );
-
 
       this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
       this.physicsWorld.addContactMaterial(this.playerContactObstacleMaterial);
       this.physicsWorld.addContactMaterial(this.pathObstacleMaterial);
 
-      this.ballPinObs1 = new BallPinsObstacle(3, new Vector3(-3, 0, -80), new Vector3(0.009, 0.009, 0.009), this.obstacleMaterial, this.pathObstacleMaterial);
+      this.ballPinObs1 = new BallPinsObstacle(
+        3,
+        new Vector3(-3, 0, -trackLength * 6.5),
+        new Vector3(0.009, 0.009, 0.009),
+        this.obstacleMaterial,
+        this.pathObstacleMaterial
+      );
 
-      this.ballPinObs2 = new BallPinsObstacle(1, new Vector3(2, 0, -100), new Vector3(0.009, 0.009, 0.009), this.obstacleMaterial, this.pathObstacleMaterial);
-
+      this.ballPinObs2 = new BallPinsObstacle(
+        1,
+        new Vector3(2, 0, -trackLength * 9),
+        new Vector3(0.009, 0.009, 0.009),
+        this.obstacleMaterial,
+        this.pathObstacleMaterial
+      );
 
       // this.obstacle2 = new Obstacle(
       //   this.resources.items.ObstacleArmLiverHammer,
@@ -106,7 +116,6 @@ export default class World {
         this.obstacleMaterial
       );
 
-
       this.sideWall = new SideWalls(-trackLength * 20, this.wallMaterial);
       this.track = new GameTrack(trackLength, this.pathMaterial);
 
@@ -117,24 +126,44 @@ export default class World {
         filterMask: COLLISION_GROUPS.PLAYER_GROUP,
       });
 
-      this.PlayerObj = new Player2(this.playerMaterial, { filterGroup: COLLISION_GROUPS.PLAYER_GROUP, filterMask: COLLISION_GROUPS.GEMS_GROUP });
-      this.healthBlock = new HealthBallsBlock(this.healthMaterial, new Vec3(4, 0.5, -150), 1);
-      this.healthBlock = new HealthBallsBlock(this.healthMaterial, new Vec3(4, 0.5, -250), 2);
-      this.healthBlock = new HealthBallsBlock(this.healthMaterial, new Vec3(-2, 0.5, -200), 3);
-      this.healthBlock = new HealthBallsBlock(this.healthMaterial, new Vec3(2.5, 0.5, -80), 4);
-      this.endBlock = new EndBlock(-trackLength * 20 + 7, this.wallMaterial, this.scoreBoxMaterial);
-
-
+      this.PlayerObj = new Player2(this.playerMaterial, {
+        filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+        filterMask: COLLISION_GROUPS.GEMS_GROUP,
+      });
+      this.healthBlock1 = new HealthBallsBlock(
+        this.healthMaterial,
+        new Vec3(4, 0.5, -150),
+        1
+      );
+      this.healthBlock2 = new HealthBallsBlock(
+        this.healthMaterial,
+        new Vec3(4, 0.5, -250),
+        2
+      );
+      this.healthBlock3 = new HealthBallsBlock(
+        this.healthMaterial,
+        new Vec3(-2, 0.5, -200),
+        3
+      );
+      // this.healthBlock4 = new HealthBallsBlock(
+      //   this.healthMaterial,
+      //   new Vec3(2.5, 0.5, -80),
+      //   4
+      // );
+      this.endBlock = new EndBlock(
+        -trackLength * 20 + 7,
+        this.endWallPlayerContact,
+        this.scoreBoxMaterial
+      );
 
       // Simulate the Physics World
       this.objectsToUpdate.push(this.obstacle4);
       this.objectsToUpdate.push(this.obstacle5);
       this.objectsToUpdate.push(this.gemsBlock);
       this.objectsToUpdate.push(this.ballPinObs1);
-      this.objectsToUpdate.push(this.ballPinObs2)
+      this.objectsToUpdate.push(this.ballPinObs2);
       // this.objectsToUpdate.push(this.obstacle3);
       // this.objectsToUpdate.push(this.obstacle2);
-
     });
   }
 

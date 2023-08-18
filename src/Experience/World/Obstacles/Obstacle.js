@@ -39,7 +39,7 @@ export default class Obstacle {
       this.physicsWorld.addBody(rigidBody);
 
       // Position the physics body based on the mesh's world position
-      // rigidBody.position.copy(child.getWorldPosition(new THREE.Vector3()));
+      rigidBody.position.copy(child.getWorldPosition(new THREE.Vector3()));
       rigidBody.quaternion.copy(child.quaternion)
     });
 
@@ -51,7 +51,7 @@ export default class Obstacle {
   playAnimation() {
     this.animation = this.model.animations[0];
     this.mixer = new THREE.AnimationMixer(this.model);
-    let action = this.mixer.clipAction(this.animation);  
+    let action = this.mixer.clipAction(this.animation);
     action.play();
   }
 
