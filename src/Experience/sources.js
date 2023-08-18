@@ -49,4 +49,9 @@ export default [
     type: "font",
     path: "fonts/helvetiker_regular.typeface.json",
   },
+  {
+    name: "environmentMapTexture",
+    type: "texture",
+    path: "textures/environmentMap/nx.png"
+  }
 ];
