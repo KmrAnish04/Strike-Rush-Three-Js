@@ -63,7 +63,7 @@ export default class SceneWorld {
       this.pathObstacleMaterial = new ContactMaterial(
         this.obstacleMaterial,
         this.pathMaterial,
-        { friction: 1, restitution: 0 }
+        { friction: 0.2, restitution: 0.5 }
       );
       this.playerContactRampMaterial = new ContactMaterial(
         this.playerMaterial,

@@ -42,7 +42,7 @@ export default class AnimatedObstacle {
       this.physicsWorld.addBody(rigidBody);
 
       // Position the physics body based on the mesh's world position
-      // rigidBody.position.copy(child.getWorldPosition(new THREE.Vector3()));
+      // rigidBody.position.copy(child.getWorldPosition(new Vector3()));
       rigidBody.quaternion.copy(child.quaternion);
     });
 

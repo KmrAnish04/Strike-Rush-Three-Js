@@ -164,13 +164,19 @@ export default class Player {
 
   registerEvents() {
     // window.addEventListener("mou");
-    window.addEventListener("mousemove", (event) => {
+    let startTouch = 0;
+    let currentTouch = 0;
+    window.addEventListener('touchstart', (event) => {
+      startTouch = event.touches[0].clientX;
+    })
+    window.addEventListener('touchmove', (event) => {
+
       // Calculate mouse position in normalized device coordinates (-1 to 1)
       const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-
+      console.log("topuch: ", event)
       if (this.headBody && !this.isReachedDestination) {
-        this.headBody.position.x = mouseX * 4;
+        this.headBody.position.x += event.touches[0].screenX;
         this.RigidBodiesArr.forEach((body, index) => {
           if (index > 0) {
             gsap.to(this.RigidBodiesArr[index].position, {
@@ -221,7 +227,7 @@ export default class Player {
           console.log(
             "after",
             this.headBody,
-            this.RigidBodiesArr[0].hasEventListener("collide", () => {})
+            this.RigidBodiesArr[0].hasEventListener("collide", () => { })
           );
           break;
         }
@@ -314,7 +320,6 @@ export default class Player {
             this.scene.add(gemCollected);
 
             // Gem Animation
-
             const timeline = gsap.timeline();
             timeline
               .to(gemCollected.position, {
@@ -356,8 +361,6 @@ export default class Player {
         }
       }
     });
-    // }
-    // });
   }
 
   // Subtracting Player Health by removing the player balls
@@ -387,7 +390,7 @@ export default class Player {
     //   this.removeFromScene(mesh);
     //   gsap.to(rigidBody.position, { duration: 0.3, x: rigidBody.position.x + 100, y: rigidBody.position.y + 10 });
     // }, 1000);
-    rigidBody.position.y += 10;
+    rigidBody.position.y += 1000;
     rigidBody.position.x += 100;
     console.log("rmoved", this.headBody);
 
