@@ -339,7 +339,7 @@ export default class EndBlock {
   }
   constructWinBoxBoundry(positionZ) {
     let boxMesh = new Mesh(
-      new BoxGeometry(20, 22, 1),
+      new BoxGeometry(20, 28, 1),
       new MeshBasicMaterial({ color: "#e75480" })
     );
     let boxRigidBody = getPhysicsBody(
@@ -352,8 +352,7 @@ export default class EndBlock {
     boxMesh.position.copy(boxRigidBody.position);
 
     boxRigidBody.position.z = positionZ + 4;
-    boxRigidBody.position.y = 15;
-    // this.scene.add(boxMesh);
+    boxRigidBody.position.y = 13;
     this.physicsWorld.addBody(boxRigidBody);
   }
 
