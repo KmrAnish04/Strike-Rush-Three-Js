@@ -57,7 +57,7 @@ export default class EndBlock {
       if (child.isMesh) {
         const childBody = getPhysicsBody(
           child,
-          ShapeType.HULL,
+          ShapeType.MESH,
           this.spinnerMaterial,
           0
         );

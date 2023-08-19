@@ -10,6 +10,7 @@ import {
   PlaneGeometry,
   SpriteMaterial,
   Sprite,
+  Color,
 } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
@@ -101,7 +102,7 @@ export default class Player {
     for (let i = 0; i < noOfBalls; i++) {
       let spMsh = this.createBodyMesh();
       const sphereBody = this.addPhysicsToBodyMesh(spMsh);
-
+      sphereBody.name = i;
       sphereBody.position.set(
         0,
         2,
@@ -187,7 +188,7 @@ export default class Player {
     const gemSpriteMaterial = new SpriteMaterial({
       map: this.resources.items.HudGem,
       // color: 0xffffff,
-      transparent: true,
+      // transparent: true,
     });
     this.hudGem = new Sprite(gemSpriteMaterial);
     this.hudGem.scale.set(1, 1, 1);
@@ -300,10 +301,11 @@ export default class Player {
           const impact = collide.contact.getImpactVelocityAlongNormal();
           if (impact > 0.7) {
             ++this.gemCollected;
-            console.log("GEM COLLECTED", this.gemCollected);
-            collide.body.collisionFilterMask = 0;
-            // this.physicsWorld.removeBody(collide.body);
-            console.log("Collide", collide);
+            console.log("RIGID BODY", collide.body);
+            const collectedBall = this.RigidBodiesArr.findIndex(
+              (item) => item.name === collide.target.name
+            );
+            // if (collectedBall) this.RigidBodiesArr[collectedBall];
             let gemCollected = this.gemModel.clone().children.shift();
             gemCollected.position.set(
               Math.random() * (6.2 - -6.2) + -6.2,
@@ -340,27 +342,20 @@ export default class Player {
                 z: this.camera.position.z - 74,
               })
               .then(() => {
-                // for (let i = 0; i < this.bodyMeshesArr.length; i++) {
-                //   this.bodyMeshesArr[i].remove();
-                // }
                 gemCollected.material.dispose();
                 gemCollected.geometry.dispose();
                 this.scene.remove(gemCollected);
               });
-            setTimeout(() => {
-              // this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
-            }, 5000);
           }
           collide.body.position.set(200, 200, 0);
           break;
         }
       }
     });
-    // }
-    // });
   }
-
-  // Subtracting Player Health by removing the player balls
+  openPopup() {
+    this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
+  }
   removePlayerBalls() {
     // this.headBody = this.RigidBodiesArr[1];
     let rigidBody = this.RigidBodiesArr.shift();
@@ -441,9 +436,8 @@ export default class Player {
       let bodyMesh = this.createBodyMesh();
       let rigidBody = this.addPhysicsToBodyMesh(bodyMesh);
 
-      // rigidBody.addEventListener("collide")
+      rigidBody.name = 4 + i;
       this.checkCollisionForBody(rigidBody);
-
       // Visulaize the bodies
       this.scene.add(bodyMesh);
       this.physicsWorld.addBody(rigidBody);
@@ -451,14 +445,12 @@ export default class Player {
       this.bodyMeshesArr.push(bodyMesh);
       this.RigidBodiesArr.push(rigidBody);
 
-      // rigidBody.position.x = this.headBody.position.x - 1;
       gsap.to(rigidBody.position, {
         duration: 0.3,
         x: this.headBody.position.x,
       });
       rigidBody.position.y = this.headBody.position.y;
     }
-    // this.checkCollisionForBody();
   }
 
   update() {
