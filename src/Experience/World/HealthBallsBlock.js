@@ -70,7 +70,7 @@ export default class HealthBallsBlock {
     );
     let scoreCollider = getPhysicsBody(
       mesh,
-      ShapeType.Mesh,
+      ShapeType.BOX,
       this.healthMaterial,
       0
     );
@@ -81,7 +81,7 @@ export default class HealthBallsBlock {
 
     // Allocating the score for this block
     scoreCollider.myData = {
-      score: this.creaditPoints,
+      score: this.creaditPoints * 2,
       scoreBlock: this.healthBlockGroup,
     };
 

@@ -41,7 +41,7 @@ export default class SceneWorld {
       this.scoreX5Material = new Material("score5");
       this.scoreBoxMaterial = new Material("scoreBox");
 
-      const trackLength = 20;
+      const trackLength = 26;
       this.playerContactPathMaterial = new ContactMaterial(
         this.playerMaterial,
         this.pathMaterial,
@@ -84,98 +84,105 @@ export default class SceneWorld {
       this.physicsWorld.addContactMaterial(this.spinnerContactMaterial);
 
       this.ballPinObs1 = new BallPinsObstacle(
-        3,
-        new Vector3(-3, 0, -trackLength * 6.5),
+        1,
+        new Vector3(-2.5, 0, -trackLength * 2),
         new Vector3(0.009, 0.009, 0.009),
         this.obstacleMaterial,
         this.pathObstacleMaterial
       );
 
       this.ballPinObs2 = new BallPinsObstacle(
-        1,
-        new Vector3(2, 0, -trackLength * 9),
+        2,
+        new Vector3(2.5, 0, -trackLength * 2),
         new Vector3(0.009, 0.009, 0.009),
         this.obstacleMaterial,
         this.pathObstacleMaterial
       );
 
-      // this.obstacle2 = new AnimatedObstacle(
-      //   this.resources.items.ObstacleArmLiverHammer,
-      //   new Vector3(-4.5, 0, -6 * 20),
-      //   new Vector3(0.009, 0.009, 0.009),
-      //   this.obstacleMaterial
-      // );
-      // this.obstacle3 = new AnimatedObstacle(
-      //   this.resources.items.ObstacleLegLiverHammer,
-      //   new Vector3(0, 0, -10 * 20),
-      //   new Vector3(0.009, 0.009, 0.009),
-      //   this.obstacleMaterial
-      // );
+      this.gemsBlock1 = new GemsBlock(this.gemMaterial, -trackLength * 4, {
+        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+      });
+
       this.obstacle5 = new AnimatedObstacle(
         this.resources.items.SpinnerObstacle,
-        new Vector3(5.2, -0.1, -5 * 20),
+        new Vector3(-5.2, -0.1, -6 * trackLength),
         new Vector3(0.009, 0.009, 0.009),
         this.obstacleMaterial
       );
 
+      this.healthBlock = new HealthBallsBlock(
+        this.healthMaterial,
+        new Vec3(-2.5, 0.5, -8 * trackLength),
+        2
+      );
+
+      this.ballPinObs3 = new BallPinsObstacle(
+        4,
+        new Vector3(-1.6, 0, -10 * trackLength),
+        new Vector3(0.009, 0.009, 0.009),
+        this.obstacleMaterial,
+        this.pathObstacleMaterial
+      );
+
+      this.gemsBlock2 = new GemsBlock(this.gemMaterial, -trackLength * 12, {
+        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+      });
+
       this.obstacle4 = new AnimatedObstacle(
         this.resources.items.ObstacleArmLiverHammer,
-        new Vector3(-5.1, 0.3, -12 * 20),
+        new Vector3(5.1, 0.3, -14 * trackLength),
         new Vector3(0.001, 0.001, 0.001),
         this.obstacleMaterial
       );
 
-      this.sideWall = new SideWalls(-trackLength * 20, this.sideWallMaterial);
-      this.track = new GameTrack(trackLength, this.pathMaterial);
+      this.gemsBlock3 = new GemsBlock(this.gemMaterial, -trackLength * 16, {
+        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+      });
+
+      this.healthBlock = new HealthBallsBlock(
+        this.healthMaterial,
+        new Vec3(0, 0.5, -18 * trackLength),
+        1
+      );
+
+      this.gemsBlock4 = new GemsBlock(this.gemMaterial, -trackLength * 20, {
+        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+      });
 
       this.ramp = new Ramps(
         this.resources.items.Ramp1,
         new Vector3(0, 0, -3),
         new Vector3(0.05, 0.05, 0.05),
-        -16 * trackLength,
+        -23 * trackLength,
         this.rampMaterial
       );
-
-      this.gemsBlock = new GemsBlock(this.gemMaterial, -trackLength * 2, {
-        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
-        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
-      });
 
       this.PlayerObj = new Player(this.playerMaterial, {
         filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
         filterMask: COLLISION_GROUPS.GEMS_GROUP,
       });
-      this.healthBlock = new HealthBallsBlock(
-        this.healthMaterial,
-        new Vec3(4, 0.5, -150),
-        1
-      );
-      this.healthBlock = new HealthBallsBlock(
-        this.healthMaterial,
-        new Vec3(4, 0.5, -250),
-        2
-      );
-      this.healthBlock = new HealthBallsBlock(
-        this.healthMaterial,
-        new Vec3(-2, 0.5, -200),
-        3
-      );
-      this.healthBlock = new HealthBallsBlock(
-        this.healthMaterial,
-        new Vec3(2.5, 0.5, -80),
-        4
-      );
+
       this.endBlock = new EndBlock(
-        -trackLength * 20 + 7,
+        -trackLength * 26 + 7,
         this.endWallPlayerContact,
         this.scoreBoxMaterial,
         this.spinnerMaterial
       );
 
+      this.sideWall = new SideWalls(-trackLength * 26, this.sideWallMaterial);
+      this.track = new GameTrack(trackLength, this.pathMaterial);
+
       // Simulate the Physics World
       this.objectsToUpdate.push(this.obstacle4);
       this.objectsToUpdate.push(this.obstacle5);
-      this.objectsToUpdate.push(this.gemsBlock);
+      this.objectsToUpdate.push(this.gemsBlock1);
+      this.objectsToUpdate.push(this.gemsBlock2);
+      this.objectsToUpdate.push(this.gemsBlock3);
+      this.objectsToUpdate.push(this.gemsBlock4);
       this.objectsToUpdate.push(this.ballPinObs1);
       this.objectsToUpdate.push(this.ballPinObs2);
       // this.objectsToUpdate.push(this.obstacle3);

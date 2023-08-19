@@ -74,4 +74,9 @@ export default [
     type: "fbxModel",
     path: "models/Ramps/finishline.fbx",
   },
+  {
+    name: "HudGem",
+    type: "texture",
+    path: "textures/Gem Blue.png",
+  },
 ];

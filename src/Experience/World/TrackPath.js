@@ -26,7 +26,7 @@ export default class GameTrack {
   setGeometry() {
     this.width = 10;
     this.height = 1;
-    this.depth = 20;
+    this.depth = 26;
     let geometry = new BoxGeometry(this.width, this.height, this.depth);
     return geometry;
   }
@@ -64,14 +64,11 @@ export default class GameTrack {
     for (let tileNum = 0; tileNum < noOfTiles; tileNum++) {
       tileGeometry = this.setGeometry();
       tileMesh = this.setMesh(tileGeometry);
-      console.log(tileMesh);
       if (tileNum % 2 == 0) tileMesh.material.color = new Color(0x888888);
-      // else tileMesh.material.color = new Color(0xffffff)
       tileRigidBody = this.addPhysicsProperties(tileMesh);
 
       let lastTilePos = this.trackTiles[this.trackTiles.length - 1];
-      // console.log(lastTilePos);
-      tileRigidBody.position.set(0, 0 - 0.5, lastTilePos.position.z - 20);
+      tileRigidBody.position.set(0, 0 - 0.5, lastTilePos.position.z - 26);
       tileMesh.position.copy(tileRigidBody.position);
       this.trackTiles.push(tileRigidBody);
     }

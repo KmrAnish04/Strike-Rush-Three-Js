@@ -48,7 +48,7 @@ export default class EndBlock {
       spinners2
     );
     this.constructWinBoxes(positionZ);
-    this.constructWinBoxBoundry();
+    this.constructWinBoxBoundry(positionZ);
   }
 
   constructSpinners(positionZ, positionX) {
@@ -65,7 +65,7 @@ export default class EndBlock {
         child.position.z = positionZ + 1;
         child.position.x = positionX;
         child.position.y = 12;
-        child.material.color = new Color(0xe11584);
+        child.material.color = new Color(0x8b0000);
         // child.material.emissionIntensity = 15;
         this.meshesToUpdate.push(child);
         childBody.position.copy(child.position);
@@ -337,7 +337,7 @@ export default class EndBlock {
       );
     }
   }
-  constructWinBoxBoundry() {
+  constructWinBoxBoundry(positionZ) {
     let boxMesh = new Mesh(
       new BoxGeometry(20, 22, 1),
       new MeshBasicMaterial({ color: "#e75480" })
@@ -351,7 +351,7 @@ export default class EndBlock {
     boxMesh.quaternion.copy(boxRigidBody.quaternion);
     boxMesh.position.copy(boxRigidBody.position);
 
-    boxRigidBody.position.z = -388.8;
+    boxRigidBody.position.z = positionZ + 4;
     boxRigidBody.position.y = 15;
     // this.scene.add(boxMesh);
     this.physicsWorld.addBody(boxRigidBody);
