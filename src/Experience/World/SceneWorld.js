@@ -13,6 +13,7 @@ import HealthBallsBlock from "./HealthBallsBlock.js";
 import Player from "./Player.js";
 import CenterRamp from "./CenterRamp.js";
 import { COLLISION_BODIES } from "./Constants.js";
+import HUD from "./HUD.js";
 
 const COLLISION_GROUPS = {
   PLAYER_GROUP: 1,
@@ -90,6 +91,7 @@ export default class SceneWorld {
       this.physicsWorld.addContactMaterial(this.endWallPlayerContact);
       this.physicsWorld.addContactMaterial(this.spinnerContactMaterial);
 
+      this.hud = new HUD();
       this.ballPinObs1 = new BallPinsObstacle(
         1,
         new Vector3(-2.5, 0, -trackLength * 2),

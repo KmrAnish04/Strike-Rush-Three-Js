@@ -59,7 +59,7 @@ export default class Experience {
     this.camera.update();
     this.physicsWorld.step(1 / 60, deltaTime, 3);
     this.world.update();
-    this.cannonDebugger.update();
+    // this.cannonDebugger.update();
     this.renderer.update();
   }
 

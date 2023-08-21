@@ -3,7 +3,15 @@ import EndGamePopup from "./EndGamePopUp.js";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
-import { Mesh, MeshBasicMaterial, Group, PlaneGeometry, SpriteMaterial, Sprite } from "three";
+import {
+  Mesh,
+  MeshBasicMaterial,
+  Group,
+  PlaneGeometry,
+  SpriteMaterial,
+  Sprite,
+  Color,
+} from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { gsap } from "gsap";
@@ -31,11 +39,13 @@ export default class Player {
     this.headBody = null;
     this.isReachedDestination = false; // weather player reached to endblock or not
 
-    this.createPlayer(5);
+    this.createPlayer(4);
     this.headBody = this.RigidBodiesArr[0];
     this.registerEvents();
     // this.checkCollision();
-    this.playerBallCnt = this.createPlayerCntText(this.RigidBodiesArr.length.toString());
+    this.playerBallCnt = this.createPlayerCntText(
+      this.RigidBodiesArr.length.toString()
+    );
     this.createHudGem();
     const rotations = 7200;
     for (let ball of this.bodyMeshesArr) {
@@ -52,7 +62,10 @@ export default class Player {
       fontWeight: 200,
     });
     textGeometry.center();
-    const textMesh = new Mesh(textGeometry, new MeshBasicMaterial({ color: 0x000000 }));
+    const textMesh = new Mesh(
+      textGeometry,
+      new MeshBasicMaterial({ color: 0x000000 })
+    );
 
     textMesh.position.x = this.headBody.position.x;
     textMesh.position.z = this.headBody.position.z;
@@ -60,33 +73,41 @@ export default class Player {
 
     this.scene.add(textMesh);
     textMesh.material.transparent = true;
-    gsap.to(textMesh.position, {
-      duration: 0.2,
-      y: Math.random() + 5,
-      x: Math.random() * (3.2 - -3.2) + -3.2,
-    }).then(() => {
-      gsap.to(textMesh.material, {
-        duration: 0.4,
-        opacity: 0,
-      }).then(() => {
-        textGeometry.dispose();
-        textMesh.material.dispose();
-        this.scene.remove(textMesh);
+    gsap
+      .to(textMesh.position, {
+        duration: 0.2,
+        y: Math.random() + 5,
+        x: Math.random() * (3.2 - -3.2) + -3.2,
+      })
+      .then(() => {
+        gsap
+          .to(textMesh.material, {
+            duration: 0.4,
+            opacity: 0,
+          })
+          .then(() => {
+            textGeometry.dispose();
+            textMesh.material.dispose();
+            this.scene.remove(textMesh);
+          });
       });
-    });
   }
 
   createPlayer(noOfBalls) {
     let size = 0.4;
-    this.mass = 100; // Ball Mass
+    this.mass = 2; // Ball Mass
     let space = 1 * size;
 
     // Create Mesh for rigidbodies
     for (let i = 0; i < noOfBalls; i++) {
       let spMsh = this.createBodyMesh();
       const sphereBody = this.addPhysicsToBodyMesh(spMsh);
-
-      sphereBody.position.set(0, 2, -((noOfBalls - i) * (size * 2 + 2 * space) + size * 2 + space) + 1);
+      sphereBody.name = i;
+      sphereBody.position.set(
+        0,
+        2,
+        -((noOfBalls - i) * (size * 2 + 2 * space) + size * 2 + space) + 1
+      );
 
       // Storing the references of body mesh and rigidbodies for future use
       this.bodyMeshesArr.push(spMsh);
@@ -109,7 +130,10 @@ export default class Player {
       height: 0.6,
     });
     textGeometry.center();
-    let textMesh = new Mesh(textGeometry, new MeshBasicMaterial({ color: 0xffffff }));
+    let textMesh = new Mesh(
+      textGeometry,
+      new MeshBasicMaterial({ color: 0xffffff })
+    );
     textMesh.position.z = 0.4;
     textMesh.position.y = 0.2;
     // textMesh.rotation.y = -Math.PI;
@@ -120,8 +144,15 @@ export default class Player {
     // );
     textMesh.rotation.x = (Math.PI / 180) * -15;
     // crete text base
-    let textBaseMesh = new Mesh(new RoundedBoxGeometry(1.1, 1.1, 1, 10, 0.2), new MeshBasicMaterial({ color: "#FF10F0" }));
-    textBaseMesh.lookAt(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+    let textBaseMesh = new Mesh(
+      new RoundedBoxGeometry(1.1, 1.1, 1, 10, 0.2),
+      new MeshBasicMaterial({ color: "#FF10F0" })
+    );
+    textBaseMesh.lookAt(
+      this.camera.position.x,
+      this.camera.position.y,
+      this.camera.position.z
+    );
     textBaseMesh.position.y = 0.1;
 
     ballCnt.add(textMesh);
@@ -133,22 +164,14 @@ export default class Player {
   }
 
   registerEvents() {
-    window.addEventListener("touchmove", (event) => {
+    // window.addEventListener("mou");
+    window.addEventListener("mousemove", (event) => {
       // Calculate mouse position in normalized device coordinates (-1 to 1)
-      // const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-      const mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
+      const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      const min = -2.70;
-      const max = 2.70;
-      // Clamp number between two values with the following line:
-      const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
-
       if (this.headBody && !this.isReachedDestination) {
-        this.headBody.position.x = mouseX;
-        // console.log("clamp: ", clamp(mouseX, min, max))
-        // this.headBody.position.x = clamp(mouseX, min, max) * 1.25;
-
+        this.headBody.position.x = mouseX * 4;
         this.RigidBodiesArr.forEach((body, index) => {
           if (index > 0) {
             gsap.to(this.RigidBodiesArr[index].position, {
@@ -193,11 +216,8 @@ export default class Player {
           this.createScoreText(`+${collide.body.myData.score.toString()}`);
           // Update Ball Text
           this.scene.remove(this.playerBallCnt);
-          this.playerBallCnt = this.createPlayerCntText(this.RigidBodiesArr.length.toString());
-          console.log(
-            "after",
-            this.headBody,
-            this.RigidBodiesArr[0].hasEventListener("collide", () => { })
+          this.playerBallCnt = this.createPlayerCntText(
+            this.RigidBodiesArr.length.toString()
           );
           break;
         }
@@ -225,59 +245,52 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.OBSTACLE: {
-          console.log("Collided with obstacle", collide);
-
-          // collide.body.collisionFilterGroup = -1;
-          // collide.body.collisionFilterMask = 0;
-          // collide.body.collisionResponse = 0;
-
-          // collide.body.allowSleep = true;
-          // console.log("isEB: ", collide.body.remo('collide'))
-
+          console.log("Collided with obstacle");
+          collide.body.collisionFilterMask = 0;
           if (this.RigidBodiesArr.length) {
             // gsap.delayedCall(5, this.removePlayerBalls());
             this.removePlayerBalls(); // Subtracting Player's Health by removing the balls
-            // this.headBody = this.RigidBodiesArr[0];
+            this.headBody = this.RigidBodiesArr[0];
+            console.log("muyHead: ", this.headBody);
           } else {
             console.log("*********** Game Stopped ************");
           }
 
           this.scene.remove(this.playerBallCnt);
-          this.playerBallCnt = this.createPlayerCntText(this.RigidBodiesArr.length.toString());
+          this.playerBallCnt = this.createPlayerCntText(
+            this.RigidBodiesArr.length.toString()
+          );
 
           break;
         }
         case COLLISION_BODIES.ENDRAMP: {
           this.isReachedDestination = true;
-          this.endCameraAnimation();
           this.scene.remove(this.playerBallCnt);
-
+          this.endCameraAnimation();
           for (let i = 0; i < this.RigidBodiesArr.length; i++) {
             gsap.to(this.camera.rotation, {
               duration: 1.5,
               x: this.camera.rotation.x + (Math.PI / 180) * 15,
               z: 0,
             });
-            gsap.to(this.RigidBodiesArr[i].velocity, {
-              duration: 0.6,
-              x: -1.5 + (0.9 * i) / 2,
-              y: 12,
-              z: -40 - i,
-            }).then(() => {
-              gsap.to(this.RigidBodiesArr[i].velocity, {
-                duration: 2,
-                x: 0,
-                y: -0.5,
-                z: 0,
+            gsap
+              .to(this.RigidBodiesArr[i].velocity, {
+                duration: 0.6,
+                x: -1 + (0.3 * i) / 2,
+                y: 8.5,
+                z: -18 - i * 2,
+              })
+              .then(() => {
+                gsap.to(this.RigidBodiesArr[i].velocity, {
+                  duration: 2,
+                  x: 0,
+                  y: -0.5,
+                  z: 0,
+                });
               });
-            });
           }
           1;
           break;
-        }
-        case COLLISION_BODIES.CENTERRAMP: {
-          collide.body.collisionResponse = 0;
-          console.log(collide);
         }
         case COLLISION_BODIES.SCOREBOX: {
           const impact = collide.contact.getImpactVelocityAlongNormal();
@@ -289,11 +302,16 @@ export default class Player {
             );
             // if (collectedBall) this.RigidBodiesArr[collectedBall];
             let gemCollected = this.gemModel.clone().children.shift();
-            gemCollected.position.set(Math.random() * (6.2 - -6.2) + -6.2, collide.body.position.y + 5, collide.body.position.z);
+            gemCollected.position.set(
+              Math.random() * (6.2 - -6.2) + -6.2,
+              collide.body.position.y + 5,
+              collide.body.position.z
+            );
 
             this.scene.add(gemCollected);
 
             // Gem Animation
+
             const timeline = gsap.timeline();
             timeline
               .to(gemCollected.position, {
@@ -322,7 +340,6 @@ export default class Player {
                 gemCollected.material.dispose();
                 gemCollected.geometry.dispose();
                 this.scene.remove(gemCollected);
-                this.openPopup();
               });
           }
           collide.body.position.set(200, 200, 0);
@@ -331,17 +348,18 @@ export default class Player {
       }
     });
   }
+  openPopup() {
+    this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
+  }
   removePlayerBalls() {
     // this.headBody = this.RigidBodiesArr[1];
     let rigidBody = this.RigidBodiesArr.shift();
     let mesh = this.bodyMeshesArr.shift();
 
-    // rigidBody.
     rigidBody.collisionResponse = 0;
     rigidBody.collisionFilterMask = 0;
     rigidBody.collisionFilterGroup = 0;
-    // rigidBody.removeEventListener("collide", () => { console.log("removed Event listner!") });
-    rigidBody.hasEventListener('collide', () => { console.log("removed Event listner!") })
+    // rigidBody.
 
     // Remove object from scene and Dispose of the mesh's geometry and material to free up resources
     this.scene.remove(mesh);
@@ -351,23 +369,17 @@ export default class Player {
     // Remove the rigid body from the Physics World
     // this.physicsWorld.removeBody(rigidBody);
     console.log("headBody: ", this.RigidBodiesArr);
-    this.headBody = this.RigidBodiesArr.length ? this.RigidBodiesArr[0] : null;
-
-    setTimeout(() => {
-      this.physicsWorld.removeBody(rigidBody);
-    }, 2000);
-    console.log("rmoved", this.headBody);
 
     // The below way of removing balls is temporary, we should remove it from scene like above, (bcox remove is giveing error so we are using on temoporary basis)
-    // rigidBody.position.y += 1000;
-    // rigidBody.position.x += 100;
-    // console.log("rmoved", this.headBody);
 
     // gsap.delayedCall(10, this.removeFromScene(mesh));
     // setTimeout(() => {
     //   this.removeFromScene(mesh);
     //   gsap.to(rigidBody.position, { duration: 0.3, x: rigidBody.position.x + 100, y: rigidBody.position.y + 10 });
     // }, 1000);
+    rigidBody.position.y += 10;
+    rigidBody.position.x += 100;
+    console.log("rmoved", this.headBody);
 
     // New head
     // this.headBody = this.RigidBodiesArr[0];
@@ -392,7 +404,12 @@ export default class Player {
   }
 
   addPhysicsToBodyMesh(bodyMesh) {
-    let sphereBody = getPhysicsBody(bodyMesh, ShapeType.SPHERE, this.playerMaterial, this.mass);
+    let sphereBody = getPhysicsBody(
+      bodyMesh,
+      ShapeType.SPHERE,
+      this.playerMaterial,
+      this.mass
+    );
     sphereBody.linearDamping = 0;
     sphereBody.angularDamping = 0;
     return sphereBody;
@@ -434,15 +451,20 @@ export default class Player {
   update() {
     // Update snake's head position based on this.direction
     if (this.headBody && !this.isReachedDestination) {
-      this.headBody.velocity.z = -1 * this.experience.time.delta;
+      this.headBody.velocity.z = -15;
       if (this.headBody.velocity.z > -10) {
         this.headBody.velocity.z = -15;
       }
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
-    for (let body = 1; body < this.RigidBodiesArr.length && !this.isReachedDestination; body++) {
-      this.RigidBodiesArr[body].position.z = this.RigidBodiesArr[body - 1].position.z + 2;
+    for (
+      let body = 1;
+      body < this.RigidBodiesArr.length && !this.isReachedDestination;
+      body++
+    ) {
+      this.RigidBodiesArr[body].position.z =
+        this.RigidBodiesArr[body - 1].position.z + 2;
 
       if (body > 0) {
         gsap.to(this.RigidBodiesArr[body].position, {
@@ -461,13 +483,21 @@ export default class Player {
     }
 
     if (this.RigidBodiesArr.length && !this.isReachedDestination) {
-      this.camera.position.set(0, this.RigidBodiesArr[0].position.y + 20, this.RigidBodiesArr[0].position.z + 60);
-      this.camera.lookAt(0, this.RigidBodiesArr[0].position.y, this.RigidBodiesArr[0].position.z);
-      this.hudGem.position.set(this.camera.position.x + 12, this.camera.position.y + 14, this.camera.position.z - 74);
-    } else {
-      // if (!this.endAnimation) {
-      //   this.endCameraAnimation();
-      // }
+      this.camera.position.set(
+        0,
+        this.RigidBodiesArr[0].position.y + 20,
+        this.RigidBodiesArr[0].position.z + 60
+      );
+      this.camera.lookAt(
+        0,
+        this.RigidBodiesArr[0].position.y,
+        this.RigidBodiesArr[0].position.z
+      );
+      this.hudGem.position.set(
+        this.camera.position.x + 12,
+        this.camera.position.y + 14,
+        this.camera.position.z - 74
+      );
     }
   }
 }

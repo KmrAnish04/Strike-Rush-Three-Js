@@ -85,6 +85,21 @@ export default [
     path: "textures/Gem Blue.png",
   },
   {
+    name: "ProgressBarBg",
+    type: "texture",
+    path: "textures/Progress Bar Background.png",
+  },
+  {
+    name: "ProgressBarFg",
+    type: "texture",
+    path: "textures/Level Bar Turquoise.png",
+  },
+  {
+    name: "ProgressBarLevel",
+    type: "texture",
+    path: "textures/Progress Bar Small Turquoise.png",
+  },
+  {
     name: "environmentMapTexture",
     type: "cubeTexture",
     path: [
