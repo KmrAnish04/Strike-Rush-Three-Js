@@ -39,7 +39,7 @@ export default class Player {
     this.headBody = null;
     this.isReachedDestination = false; // weather player reached to endblock or not
 
-    this.createPlayer(4);
+    this.createPlayer(7);
     this.headBody = this.RigidBodiesArr[0];
     this.registerEvents();
     // this.checkCollision();
@@ -348,9 +348,11 @@ export default class Player {
       }
     });
   }
-  openPopup() {
-    this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
-  }
+
+
+  openPopup() {this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);}
+
+
   removePlayerBalls() {
     // this.headBody = this.RigidBodiesArr[1];
     let rigidBody = this.RigidBodiesArr.shift();
@@ -412,6 +414,9 @@ export default class Player {
     );
     sphereBody.linearDamping = 0;
     sphereBody.angularDamping = 0;
+    sphereBody.position.set(-4, 4, 0)
+    sphereBody.fixedRotation = true;
+    sphereBody.angularDamping = 0;
     return sphereBody;
   }
 
@@ -452,19 +457,16 @@ export default class Player {
     // Update snake's head position based on this.direction
     if (this.headBody && !this.isReachedDestination) {
       this.headBody.velocity.z = -15;
-      if (this.headBody.velocity.z > -10) {
-        this.headBody.velocity.z = -15;
-      }
+      this.headBody.velocity.x = 0;
+      if (this.headBody.velocity.z > -10) {this.headBody.velocity.z = -15;}
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
-    for (
-      let body = 1;
-      body < this.RigidBodiesArr.length && !this.isReachedDestination;
-      body++
-    ) {
-      this.RigidBodiesArr[body].position.z =
-        this.RigidBodiesArr[body - 1].position.z + 2;
+    for (let body = 1;body < this.RigidBodiesArr.length && !this.isReachedDestination;body++) {
+
+      // 
+      this.RigidBodiesArr[body].velocity.x = 0;
+      this.RigidBodiesArr[body].position.z = this.RigidBodiesArr[body - 1].position.z + 2;
 
       if (body > 0) {
         gsap.to(this.RigidBodiesArr[body].position, {
@@ -476,8 +478,8 @@ export default class Player {
 
     // Update Three.js sphere positions based on physics simulation
     for (let i = 0; i < this.RigidBodiesArr.length; i++) {
-      const sphereBody = this.RigidBodiesArr[i];
-      const sphereMesh = this.bodyMeshesArr[i];
+      let sphereBody = this.RigidBodiesArr[i];
+      let sphereMesh = this.bodyMeshesArr[i];
       sphereMesh.position.copy(sphereBody.position);
       sphereMesh.quaternion.copy(sphereBody.quaternion);
     }
