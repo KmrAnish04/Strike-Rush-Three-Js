@@ -1,19 +1,222 @@
-*
-{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
-
+@font-face {
+  font-family: LilitaOneRegular;
+  src: url(../static/fonts/LilitaOne-Regular.ttf);
+}
 html,
-body
-{
-    overflow: hidden;
+body {
+  overflow: hidden;
 }
 
-.webgl
-{
-    position: fixed;
-    top: 0;
-    left: 0;
-    outline: none;
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
 }
+
+.EndGamePopup {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: max-height 5s ease-in-out;
+}
+.EndGamePopup.active {
+  max-height: 100%;
+}
+.EndGamePopupBody {
+  height: 100%;
+  width: 40%;
+  display: flex;
+  background-image: url("./textures/Background Shadow Purple.png");
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.section1 {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.section1 .totalGemsCollectedDiv {
+  display: flex;
+  margin-left: 60px;
+}
+
+.section1 .totalGemsCollectedDiv .totalGemsLabel {
+  margin-left: -95px;
+  margin-top: 24px;
+  margin-right: 2px;
+  font-family: LilitaOneRegular;
+  color: #ffffff;
+  font-size: 30px;
+}
+.section1 .totalGemsCollectedDiv .Background {
+  width: 40%;
+  height: 20%;
+  margin-top: 23px;
+}
+
+.section1 .homeButtonImage {
+  width: 50%;
+}
+
+.section1 .homeImage {
+  width: 40%;
+  margin-left: -63px;
+  margin-bottom: 20px;
+}
+
+.section1 .totalGemsCollected {
+  rotate: 30deg;
+  width: 40%;
+  height: 40%;
+  margin-top: 22px;
+}
+
+.section2 {
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+.section2 .levelCompleted {
+  width: 80%;
+}
+
+.section2 .gemsCollectedDiv {
+  display: flex;
+  margin-top: 50px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.section2 .gemsCollectedDiv .gem {
+  margin-left: 10px;
+  width: 10%;
+}
+
+.section2 .gemsCollectedDiv .gemsCollectedLabel {
+  font-family: LilitaOneRegular;
+  color: #ffffff;
+  font-size: 40px;
+}
+.section2 .levelCompletedDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section3 {
+  margin-bottom: 10px;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section3 .scoreIncreaserDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.section3 .scoreIncreaserDiv .scoreIncreaser {
+  width: 60%;
+}
+
+.section3 .scoreIncreaserDiv .scoreIncreaserPin {
+  margin-top: -70px;
+  width: 10%;
+}
+
+.section4 {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.section4 .doubleGemsDiv {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.section4 .doubleGemsDiv .videoBackground {
+  width: 33%;
+}
+.section4 .doubleGemsDiv .video {
+  width: 8%;
+  margin-left: -115px;
+}
+.section4 .doubleGemsDiv .collectedGems {
+  font-family: LilitaOneRegular;
+  color: #ffffff;
+  font-size: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.section4 .doubleGemsDiv .gem {
+  width: 7%;
+}
+
+.section4 .nextButtonDiv {
+  margin-top: 20px;
+}
+
+.section4 .nextButtonDiv .nextButton {
+  font-family: LilitaOneRegular;
+  background-color: transparent;
+  border: 0px;
+  color: #000000;
+  font-size: 35px;
+}
+
+/* .HUD {
+  width: 100%;
+  height: 20%;
+}
+.HUD .gems-collection-HUD {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+  height: 30%;
+  margin-top: 2%;
+  margin-left: 80%;
+}
+.HUD .gems-collection {
+  width: 30%;
+  height: 80%;
+}
+.HUD .collected {
+  font-family: LilitaOneRegular;
+  font-size: 28px;
+  margin-left: -90px;
+  margin-bottom: 50px;
+  color: #ffffff;
+}
+ */

@@ -1,11 +1,18 @@
+import Experience from "../Experience.js";
+
 import {
   AmbientLight,
   DirectionalLight,
   SRGBColorSpace,
   MeshStandardMaterial,
   Mesh,
+  Color,
+  DoubleSide,
+  MeshBasicMaterial,
+  NearestFilter,
+  NearestMipMapLinearFilter,
+  NearestMipMapNearestFilter,
 } from "three";
-import Experience from "../Experience.js";
 
 export default class Environment {
   constructor() {
@@ -19,7 +26,8 @@ export default class Environment {
     }
 
     this.setSunLight();
-    this.setEnvironmentMap();
+    this.setEnvironment();
+    // this.setEnvironmentMap();
   }
 
   setSunLight() {
@@ -67,9 +75,12 @@ export default class Environment {
 
   setEnvironmentMap() {
     this.environmentMap = {};
-    this.environmentMap.intensity = 0.4;
+    this.environmentMap.intensity = 15;
     this.environmentMap.texture = this.resources.items.environmentMapTexture;
     this.environmentMap.texture.colorSpace = SRGBColorSpace;
+    console.log("THIS IS ENVIORNMENT MAP", this.environmentMap);
+    // this.environmentMap.color = new Color(0xe70fffff);
+    this.environmentMap.emission = 15;
 
     this.scene.environment = this.environmentMap.texture;
 
@@ -96,6 +107,35 @@ export default class Environment {
         .max(4)
         .step(0.001)
         .onChange(this.environmentMap.updateMaterials);
+    }
+  }
+
+  setEnvironment() {
+    this.buildings = [];
+    this.envMap = this.resources.items.environmentMapTexture;
+    this.envMap.magFilter = NearestFilter;
+    this.envMap.minFilter = NearestFilter;
+    this.scene.background = this.resources.items.environmentMapTexture;
+    this.building = this.resources.items.Buildings;
+    const noOfBuildings = 500;
+    for (let i = 0; i < noOfBuildings; i++) {
+      const building = this.building.clone();
+      this.building.traverse((child) => {
+        if (child.isMesh) {
+          child.material = new MeshBasicMaterial({});
+          child.material.map = this.resources.items.BuildingsTexture;
+          child.material.color = new Color(0xe70fff);
+        }
+      });
+      building.scale.set(0.02, Math.random() / 10, 0.03);
+      building.rotation.x = -Math.PI / 2;
+      building.position.set(
+        (Math.random() - 0.5) * 3000,
+        -700 - Math.random() * 1000,
+        (Math.random() - 1) * 5000
+      );
+      this.scene.add(building);
+      this.buildings.push(building);
     }
   }
 }

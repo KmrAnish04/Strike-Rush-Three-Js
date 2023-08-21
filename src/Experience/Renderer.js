@@ -1,4 +1,3 @@
-import { CineonToneMapping, PCFSoftShadowMap, WebGLRenderer } from "three";
 import Experience from "./Experience.js";
 
 export default class Renderer {
@@ -13,18 +12,23 @@ export default class Renderer {
   }
 
   setInstance() {
-    this.instance = new WebGLRenderer({
-      canvas: this.canvas,
-      antialias: true,
+    const loadThree = () => import("three");
+
+    // When you need to use the component, call the function
+    loadThree().then((module) => {
+      this.instance = new module.WebGLRenderer({
+        canvas: this.canvas,
+        antialias: true,
+      });
+      this.instance.useLegacyLights = true;
+      this.instance.toneMapping = module.CineonToneMapping;
+      this.instance.toneMappingExposure = 1.75;
+      this.instance.shadowMap.enabled = true;
+      this.instance.shadowMap.type = module.PCFSoftShadowMap;
+      this.instance.setClearColor("#f47de9");
+      this.instance.setSize(this.sizes.width, this.sizes.height);
+      this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
     });
-    this.instance.useLegacyLights = true;
-    this.instance.toneMapping = CineonToneMapping;
-    this.instance.toneMappingExposure = 1.75;
-    this.instance.shadowMap.enabled = true;
-    this.instance.shadowMap.type = PCFSoftShadowMap;
-    this.instance.setClearColor("#211d20");
-    this.instance.setSize(this.sizes.width, this.sizes.height);
-    this.instance.setPixelRatio(Math.min(this.sizes.pixelRatio, 2));
   }
 
   resize() {
@@ -33,6 +37,6 @@ export default class Renderer {
   }
 
   update() {
-    this.instance.render(this.scene, this.camera.instance);
+    if (this.instance) this.instance.render(this.scene, this.camera.instance);
   }
 }
