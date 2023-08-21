@@ -25,7 +25,7 @@ export default class AnimatedObstacle {
   setModel(modelPosition, modelScaling) {
     this.model = this.resource;
     this.model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
-    this.model.rotation.y = Math.PI;
+    // this.model.rotation.y = Math.PI;
     this.model.children.forEach((child) => {
       child.castShadow = true;
       this.meshesArray.push(child);
@@ -53,7 +53,8 @@ export default class AnimatedObstacle {
     this.animation = this.model.animations[0];
     this.mixer = new AnimationMixer(this.model);
     let action = this.mixer.clipAction(this.animation);
-    action.timeScale = 0.8 + Math.random();
+    // action.timeScale = 0.8? + Math.random();
+    action.timeScale = 0.95 
     action.play();
   }
 

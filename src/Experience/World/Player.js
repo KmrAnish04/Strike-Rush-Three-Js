@@ -164,14 +164,14 @@ export default class Player {
   }
 
   registerEvents() {
-    // window.addEventListener("mou");
     window.addEventListener("mousemove", (event) => {
+      // console.log(event);
       // Calculate mouse position in normalized device coordinates (-1 to 1)
       const mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
       if (this.headBody && !this.isReachedDestination) {
-        this.headBody.position.x = mouseX * 4;
+        this.headBody.position.x = mouseX * 3;
         this.RigidBodiesArr.forEach((body, index) => {
           if (index > 0) {
             gsap.to(this.RigidBodiesArr[index].position, {
@@ -203,7 +203,7 @@ export default class Player {
       const bodyType = collide.body.material.name;
 
       switch (bodyType) {
-        case COLLISION_BODIES.HEALTH_BLOCK: {
+        case COLLISION_BODIES.HEALTH: {
           console.log("score added", collide.body);
           collide.body.collisionFilterMask = 0; // dont take collision again with already collided body
           console.log("before", this.headBody, this.RigidBodiesArr);
@@ -226,7 +226,7 @@ export default class Player {
           );
           break;
         }
-        case COLLISION_BODIES.GEM_ITEM: {
+        case COLLISION_BODIES.GEM: {
           ++this.gemCollected;
           this.createScoreText("+1");
           // Gem Animation
@@ -252,6 +252,8 @@ export default class Player {
         case COLLISION_BODIES.OBSTACLE: {
           console.log("Collided with obstacle");
           collide.body.collisionFilterMask = 0;
+          console.log(collide);
+          collide.body.collisionResponse = 0;
           if (this.RigidBodiesArr.length) {
             // gsap.delayedCall(5, this.removePlayerBalls());
             this.removePlayerBalls(); // Subtracting Player's Health by removing the balls
@@ -268,8 +270,9 @@ export default class Player {
 
           break;
         }
-        case COLLISION_BODIES.RAMP: {
+        case COLLISION_BODIES.ENDRAMP: {
           this.isReachedDestination = true;
+          this.endCameraAnimation();
           this.scene.remove(this.playerBallCnt);
 
           for (let i = 0; i < this.RigidBodiesArr.length; i++) {
@@ -297,7 +300,11 @@ export default class Player {
           1;
           break;
         }
-        case COLLISION_BODIES.SCORE_BOX: {
+        case COLLISION_BODIES.CENTERRAMP: {
+          collide.body.collisionResponse = 0;
+          console.log(collide);
+        }
+        case COLLISION_BODIES.SCOREBOX: {
           const impact = collide.contact.getImpactVelocityAlongNormal();
           if (impact > 0.7) {
             ++this.gemCollected;
@@ -345,6 +352,7 @@ export default class Player {
                 gemCollected.material.dispose();
                 gemCollected.geometry.dispose();
                 this.scene.remove(gemCollected);
+                this.openPopup();
               });
           }
           collide.body.position.set(200, 200, 0);
@@ -361,10 +369,10 @@ export default class Player {
     let rigidBody = this.RigidBodiesArr.shift();
     let mesh = this.bodyMeshesArr.shift();
 
+    // rigidBody.
     rigidBody.collisionResponse = 0;
     rigidBody.collisionFilterMask = 0;
     rigidBody.collisionFilterGroup = 0;
-    // rigidBody.
 
     // Remove object from scene and Dispose of the mesh's geometry and material to free up resources
     this.scene.remove(mesh);
@@ -382,8 +390,14 @@ export default class Player {
     //   this.removeFromScene(mesh);
     //   gsap.to(rigidBody.position, { duration: 0.3, x: rigidBody.position.x + 100, y: rigidBody.position.y + 10 });
     // }, 1000);
-    rigidBody.position.y += 10;
-    rigidBody.position.x += 100;
+    // rigidBody.position.y += 100;
+    // rigidBody.position.x += 100;
+    // rigidBody.velocity.x = 0;
+    // rigidBody.velocity.y = 0;
+    // rigidBody.velocity.z = 0;
+    setTimeout(() => {
+      this.physicsWorld.removeBody(rigidBody);
+    }, 2000);
     console.log("rmoved", this.headBody);
 
     // New head
@@ -503,10 +517,6 @@ export default class Player {
         this.camera.position.y + 14,
         this.camera.position.z - 74
       );
-    } else {
-      if (!this.endAnimation) {
-        this.endCameraAnimation();
-      }
     }
   }
 }

@@ -11,6 +11,8 @@ import SideWalls from "./SideWalls.js";
 import GemsBlock from "./GemsBlock.js";
 import HealthBallsBlock from "./HealthBallsBlock.js";
 import Player from "./Player.js";
+import CenterRamp from "./CenterRamp.js";
+import { COLLISION_BODIES } from "./Constants.js";
 
 const COLLISION_GROUPS = {
   PLAYER_GROUP: 1,
@@ -28,18 +30,17 @@ export default class SceneWorld {
     this.resources.on("ready", () => {
       // Setup
       this.environment = new Environment();
-      this.playerMaterial = new Material("player");
-      this.healthMaterial = new Material("health");
-      this.pathMaterial = new Material("path");
-      this.wallMaterial = new Material("wall");
-      this.sideWallMaterial = new Material("sidewall");
-      this.rampMaterial = new Material("ramp");
-      this.gemMaterial = new Material("gem");
-      this.spinnerMaterial = new Material("spinner");
-      this.obstacleMaterial = new Material("obstacle");
-      this.scoreX1Material = new Material("score1");
-      this.scoreX5Material = new Material("score5");
-      this.scoreBoxMaterial = new Material("scoreBox");
+      this.playerMaterial = new Material(COLLISION_BODIES.PLAYER);
+      this.healthMaterial = new Material(COLLISION_BODIES.HEALTH);
+      this.pathMaterial = new Material(COLLISION_BODIES.PATH);
+      this.wallMaterial = new Material(COLLISION_BODIES.WALL);
+      this.sideWallMaterial = new Material(COLLISION_BODIES.SIDEWALL);
+      this.centerRampMaterial = new Material(COLLISION_BODIES.CENTERRAMP);
+      this.rampMaterial = new Material(COLLISION_BODIES.ENDRAMP);
+      this.gemMaterial = new Material(COLLISION_BODIES.GEM);
+      this.spinnerMaterial = new Material(COLLISION_BODIES.SPINNER);
+      this.obstacleMaterial = new Material(COLLISION_BODIES.OBSTACLE);
+      this.scoreBoxMaterial = new Material(COLLISION_BODIES.SCOREBOX);
 
       const trackLength = 26;
       this.playerContactPathMaterial = new ContactMaterial(
@@ -65,6 +66,11 @@ export default class SceneWorld {
         this.pathMaterial,
         { friction: 1, restitution: 0 }
       );
+      this.midRampContactMaterial = new ContactMaterial(
+        this.playerMaterial,
+        this.centerRampMaterial,
+        { restitution: 0, friction: 100 }
+      );
       this.playerContactRampMaterial = new ContactMaterial(
         this.playerMaterial,
         this.rampMaterial,
@@ -80,6 +86,7 @@ export default class SceneWorld {
       this.physicsWorld.addContactMaterial(this.playerContactObstacleMaterial);
       this.physicsWorld.addContactMaterial(this.pathObstacleMaterial);
       this.physicsWorld.addContactMaterial(this.playerContactRampMaterial);
+      this.physicsWorld.addContactMaterial(this.midRampContactMaterial);
       this.physicsWorld.addContactMaterial(this.endWallPlayerContact);
       this.physicsWorld.addContactMaterial(this.spinnerContactMaterial);
 
@@ -117,6 +124,11 @@ export default class SceneWorld {
         2
       );
 
+      // this.centerRamp = new CenterRamp(
+      //   this.centerRampMaterial,
+      //   new Vec3(2.5, -1, -8 * trackLength)
+      // );
+
       this.ballPinObs3 = new BallPinsObstacle(
         4,
         new Vector3(-1.6, 0, -10 * trackLength),
@@ -132,7 +144,7 @@ export default class SceneWorld {
 
       this.obstacle4 = new AnimatedObstacle(
         this.resources.items.ObstacleArmLiverHammer,
-        new Vector3(5.1, 0.3, -14 * trackLength),
+        new Vector3(-5.1, 0.3, -14 * trackLength),
         new Vector3(0.001, 0.001, 0.001),
         this.obstacleMaterial
       );
@@ -185,6 +197,7 @@ export default class SceneWorld {
       this.objectsToUpdate.push(this.gemsBlock4);
       this.objectsToUpdate.push(this.ballPinObs1);
       this.objectsToUpdate.push(this.ballPinObs2);
+      this.objectsToUpdate.push(this.ballPinObs3);
       // this.objectsToUpdate.push(this.obstacle3);
       // this.objectsToUpdate.push(this.obstacle2);
     });
