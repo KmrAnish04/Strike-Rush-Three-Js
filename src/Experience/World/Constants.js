@@ -1,10 +1,17 @@
-export const COLLISION_BODIES={ // Bodies on which we want to add collision callback
-  RAMP: 'ramp',
-  HEALTH_BLOCK: 'health',
-  GEM_ITEM: 'gem',
-  OBSTACLE: 'obstacle',
-  SCORE_BOX: 'scoreBox'
-}
+export const COLLISION_BODIES = {
+  // Bodies on which we want to add collision callback
+  PLAYER: "player",
+  HEALTH: "health",
+  PATH: "path",
+  WALL: "wall",
+  SIDEWALL: "sidewall",
+  CENTERRAMP: "centerramp",
+  ENDRAMP: "endramp",
+  SPINNER: "spinner",
+  GEM: "gem",
+  OBSTACLE: "obstacle",
+  SCOREBOX: "scorebox",
+};
 
 export default [
   //FRONT WALL

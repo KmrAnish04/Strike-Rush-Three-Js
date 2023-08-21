@@ -25,6 +25,16 @@ export default [
     path: "models/Ramps/Ramp1.fbx",
   },
   {
+    name: "CenterRamp",
+    type: "fbxModel",
+    path: "models/Ramps/MidRamp.fbx",
+  },
+  {
+    name: "CenterRampTexture",
+    type: "texture",
+    path: "models/Ramps/rampa 1.png",
+  },
+  {
     name: "GemBall",
     type: "fbxModel",
     path: "models/BallAndGem/Gem.fbx",
@@ -55,11 +65,6 @@ export default [
     path: "fonts/helvetiker_regular.typeface.json",
   },
   {
-    name: "Environment",
-    type: "fbxModel",
-    path: "models/Enviornment/SkyBoxCylinder.FBX",
-  },
-  {
     name: "Buildings",
     type: "fbxModel",
     path: "models/Enviornment/St_Building.FBX",
@@ -78,5 +83,17 @@ export default [
     name: "HudGem",
     type: "texture",
     path: "textures/Gem Blue.png",
+  },
+  {
+    name: "environmentMapTexture",
+    type: "cubeTexture",
+    path: [
+      "textures/environmentMap/px.png",
+      "textures/environmentMap/nx.png",
+      "textures/environmentMap/py.png",
+      "textures/environmentMap/ny.png",
+      "textures/environmentMap/pz.png",
+      "textures/environmentMap/nz.png",
+    ],
   },
 ];

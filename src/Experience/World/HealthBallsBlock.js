@@ -81,7 +81,7 @@ export default class HealthBallsBlock {
 
     // Allocating the score for this block
     scoreCollider.myData = {
-      score: this.creaditPoints * 2,
+      score: this.creaditPoints * this.creaditPoints,
       scoreBlock: this.healthBlockGroup,
     };
 

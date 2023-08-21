@@ -3,6 +3,7 @@ import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
 import { Vector3, AnimationMixer } from "three";
+import { Vec3 } from "cannon-es";
 
 export default class AnimatedObstacle {
   constructor(obstacleType, modelPostition, modelScaling, obstacleMaterial) {
@@ -24,7 +25,7 @@ export default class AnimatedObstacle {
   setModel(modelPosition, modelScaling) {
     this.model = this.resource;
     this.model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
-
+    // this.model.rotation.y = Math.PI;
     this.model.children.forEach((child) => {
       child.castShadow = true;
       this.meshesArray.push(child);
@@ -36,7 +37,8 @@ export default class AnimatedObstacle {
         this.obstacleMaterial,
         0
       );
-
+      // Position the physics body based on the mesh's world position
+      rigidBody.quaternion.copy(child.quaternion);
       // Add the rigid body to the physics world
       this.rigidBodiesArray.push(rigidBody);
       this.physicsWorld.addBody(rigidBody);
@@ -55,6 +57,8 @@ export default class AnimatedObstacle {
     this.animation = this.model.animations[0];
     this.mixer = new AnimationMixer(this.model);
     let action = this.mixer.clipAction(this.animation);
+    // action.timeScale = 0.8? + Math.random();
+    action.timeScale = 0.95 
     action.play();
   }
 

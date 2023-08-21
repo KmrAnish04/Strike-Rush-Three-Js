@@ -21,7 +21,7 @@ export default class BallPinsObstacle {
     this.obstacleMaterial = obstacleMaterial;
 
     this.positionX = modelPostition.x;
-    this.positionY = modelPostition.y;
+    this.positionY = modelPostition.y + 1;
     this.positionZ = modelPostition.z;
     this.size = size;
     this.pathObstacleMaterial = pathObstacleMaterial;
