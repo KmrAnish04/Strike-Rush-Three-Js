@@ -195,6 +195,7 @@ export default class Player {
 
       switch (bodyType) {
         case COLLISION_BODIES.HEALTH: {
+          this.resources.audios.HEALTH.play();
           collide.body.collisionFilterMask = 0; // dont take collision again with already collided body
 
           this.addPlayerBalls(collide.body.myData.score);
@@ -210,6 +211,9 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.GEM: {
+          if (this.resources.audios.GEM.isPlaying) {
+            this.resources.audios.GEM.play();
+          } else this.resources.audios.GEM.play();
           ++this.gemCollected;
           document.getElementById("gemsCollected").textContent =
             this.gemCollected;
@@ -218,14 +222,15 @@ export default class Player {
           gsap.to(collide.body.position, {
             delay: 0.3,
             duration: 0.4,
-            x: this.camera.position.x + 12,
-            y: this.camera.position.y - 2,
-            z: this.camera.position.z - 74,
+            x: 7,
+            y: 17,
+            z: collide.body.position.z,
           });
 
           break;
         }
         case COLLISION_BODIES.OBSTACLE: {
+          console.log(collide);
           collide.body.collisionFilterMask = 0;
           if (this.RigidBodiesArr.length) {
             // gsap.delayedCall(5, this.removePlayerBalls());
@@ -274,9 +279,9 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.SCOREBOX: {
+          this.resources.audios.SCORE.play();
           const impact = collide.contact.getImpactVelocityAlongNormal();
           if (impact > 0.7) {
-            ++this.gemCollected;
             const collectedBall = this.RigidBodiesArr.findIndex(
               (item) => item.name === collide.target.name
             );
@@ -309,10 +314,6 @@ export default class Player {
                 x: 0.015,
                 y: 0.015,
                 z: 0.015,
-              })
-              .call(() => {
-                document.getElementById("gemsCollected").textContent =
-                  this.gemCollected;
               }) // Scale out
               .to(gemCollected.position, {
                 duration: 1,
@@ -321,6 +322,9 @@ export default class Player {
                 z: this.endWallPositionZ,
               })
               .then(() => {
+                ++this.gemCollected;
+                document.getElementById("gemsCollected").textContent =
+                  this.gemCollected;
                 gemCollected.material.dispose();
                 gemCollected.geometry.dispose();
                 this.scene.remove(gemCollected);

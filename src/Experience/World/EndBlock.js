@@ -21,6 +21,7 @@ export default class EndBlock {
     this.time = this.experience.time;
     this.resources = this.experience.resources;
     this.scene = this.experience.scene;
+    this.randomValue = Math.random();
     this.endBlockGroup = new Group();
     this.physicsWorld = this.experience.physicsWorld;
     this.scoreBoxMaterial = scoreBoxMaterial;
@@ -407,15 +408,14 @@ export default class EndBlock {
   }
   update() {
     const deltaTime = this.time.delta;
-    const randomValue = Math.random();
     if (this.bodiesToUpdate[0]) {
       this.meshesToUpdate[0].rotation.y -=
-        (Math.PI / 720) * deltaTime * randomValue;
+        (Math.PI / 720) * deltaTime * this.randomValue;
       this.bodiesToUpdate[0].quaternion.copy(this.meshesToUpdate[0].quaternion);
     }
     if (this.bodiesToUpdate[1]) {
       this.meshesToUpdate[1].rotation.y +=
-        (Math.PI / 720) * deltaTime * randomValue;
+        (Math.PI / 720) * deltaTime * this.randomValue;
       this.bodiesToUpdate[1].quaternion.copy(this.meshesToUpdate[1].quaternion);
     }
   }
