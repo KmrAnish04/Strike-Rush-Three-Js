@@ -100,15 +100,20 @@ export default [
     path: "textures/Progress Bar Small Turquoise.png",
   },
   {
+    name: "PlayerBall",
+    type: "texture",
+    path: "textures/PlayerBall.png",
+  },
+  {
     name: "environmentMapTexture",
     type: "cubeTexture",
     path: [
-      "textures/environmentMap/px.png",
-      "textures/environmentMap/nx.png",
-      "textures/environmentMap/py.png",
-      "textures/environmentMap/ny.png",
-      "textures/environmentMap/pz.png",
-      "textures/environmentMap/nz.png",
+      "textures/environmentMap/envmap/px.png",
+      "textures/environmentMap/envmap/nx.png",
+      "textures/environmentMap/envmap/py.png",
+      "textures/environmentMap/envmap/ny.png",
+      "textures/environmentMap/envmap/pz.png",
+      "textures/environmentMap/envmap/nz.png",
     ],
   },
 ];

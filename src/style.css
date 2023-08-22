@@ -220,3 +220,104 @@ body {
   color: #ffffff;
 }
  */
+
+#hud-ui {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  align-items: center;
+  flex-direction: column;
+}
+
+#hud-ui .progressBarContainer {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBar {
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 38%;
+  height: 80%;
+}
+
+#hud-ui .progressBarContainer .progressBarCurrentLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarCurrentLevel .currentLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+  margin-right: 28px;
+}
+#hud-ui
+  .progressBarContainer
+  .progressBarCurrentLevel
+  .progressBarCurrentLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBarNextLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .nextLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .progressBarNextLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBar .progressBarImg {
+  width: 100%;
+}
+
+#hud-ui .gemsCollectContainer {
+  margin-left: 250px;
+  position: relative;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg {
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg .gemsCollectedBGImg {
+  width: 45%;
+  opacity: 50%;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollected {
+  color: #ffffff;
+  font-size: 28px;
+  font-family: LilitaOneRegular;
+  margin-left: -80px;
+  z-index: 2;
+}
+#hud-ui .gemsCollectContainer .gemsCollectImage {
+  width: 20%;
+  rotate: 35deg;
+}
