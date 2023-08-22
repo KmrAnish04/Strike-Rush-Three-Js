@@ -281,12 +281,14 @@ export default class Player {
                 z: -18 - i * 2,
               })
               .then(() => {
-                gsap.to(this.RigidBodiesArr[i].velocity, {
-                  duration: 2,
-                  x: 0,
-                  y: -0.5,
-                  z: 0,
-                });
+                gsap
+                  .to(this.RigidBodiesArr[i].velocity, {
+                    duration: 2,
+                    x: 0,
+                    y: -0.5,
+                    z: 0,
+                  })
+                  .then(() => (this.RigidBodiesArr[i].mass = 0.07));
               });
           }
           1;
@@ -342,16 +344,16 @@ export default class Player {
                 this.scene.remove(gemCollected);
               });
           }
-          collide.body.position.set(200, 200, 0);
+          collide.body.position.set(900, 200, 0);
           break;
         }
       }
     });
   }
 
-
-  openPopup() {this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);}
-
+  openPopup() {
+    this.endGamePopup = new EndGamePopup(this.gemCollected, 2002);
+  }
 
   removePlayerBalls() {
     // this.headBody = this.RigidBodiesArr[1];
@@ -414,7 +416,7 @@ export default class Player {
     );
     sphereBody.linearDamping = 0;
     sphereBody.angularDamping = 0;
-    sphereBody.position.set(-4, 4, 0)
+    sphereBody.position.set(-4, 4, 0);
     sphereBody.fixedRotation = true;
     sphereBody.angularDamping = 0;
     return sphereBody;
@@ -458,15 +460,21 @@ export default class Player {
     if (this.headBody && !this.isReachedDestination) {
       this.headBody.velocity.z = -15;
       this.headBody.velocity.x = 0;
-      if (this.headBody.velocity.z > -10) {this.headBody.velocity.z = -15;}
+      if (this.headBody.velocity.z > -10) {
+        this.headBody.velocity.z = -15;
+      }
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
-    for (let body = 1;body < this.RigidBodiesArr.length && !this.isReachedDestination;body++) {
-
-      // 
+    for (
+      let body = 1;
+      body < this.RigidBodiesArr.length && !this.isReachedDestination;
+      body++
+    ) {
+      //
       this.RigidBodiesArr[body].velocity.x = 0;
-      this.RigidBodiesArr[body].position.z = this.RigidBodiesArr[body - 1].position.z + 2;
+      this.RigidBodiesArr[body].position.z =
+        this.RigidBodiesArr[body - 1].position.z + 2;
 
       if (body > 0) {
         gsap.to(this.RigidBodiesArr[body].position, {
