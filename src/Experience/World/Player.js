@@ -244,7 +244,7 @@ export default class Player {
             duration: 0.4,
             x: this.camera.position.x + 12,
             y: this.camera.position.y - 2,
-            z: this.camera.position.z - 74,
+            z: this.camera.position.z - 74, 
           });
 
           // this.endGamePopup()
