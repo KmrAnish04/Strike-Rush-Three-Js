@@ -288,14 +288,28 @@ export default class SceneWorld {
         this.rampMaterial
       );
 
-      this.PlayerObj = new Player(
-        this.playerMaterial,
-        {
-          filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
-          filterMask: COLLISION_GROUPS.GEMS_GROUP,
-        },
-        -trackLength * 26 + 7
-      );
+
+      // window.addEventListener("click", (event) => {
+      //   this.PlayerObj = new Player(
+      //     this.playerMaterial,
+      //     {
+      //       filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+      //       filterMask: COLLISION_GROUPS.GEMS_GROUP,
+      //     },
+      //     -trackLength * 26 + 7
+      //   );
+      // })
+      setTimeout(() => {
+        this.PlayerObj = new Player(
+          this.playerMaterial,
+          {
+            filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+            filterMask: COLLISION_GROUPS.GEMS_GROUP,
+          },
+          -trackLength * 26 + 7
+        );
+      }, 10);
+
 
       this.endBlock = new EndBlock(
         -trackLength * 26 + 7,

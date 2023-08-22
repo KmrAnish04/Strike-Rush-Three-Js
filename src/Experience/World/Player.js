@@ -36,9 +36,12 @@ export default class Player {
     this.sphereRadius = 0.3;
     this.headBody = null;
     this.isReachedDestination = false; // weather player reached to endblock or not
+    this.playerVelocity = 0;
+
 
     this.createPlayer(7);
     this.headBody = this.RigidBodiesArr[0];
+    this.playerVelocity = this.headBody.velocity.x;
     this.registerEvents();
     this.playerBallCnt = this.createPlayerCntText(
       this.RigidBodiesArr.length.toString()
@@ -423,34 +426,36 @@ export default class Player {
       rigidBody.position.y = this.headBody.position.y;
     }
   }
-
   update() {
     // Update snake's head position based on this.direction
+    this.playerVelocity += -2 * this.time.delta;
     if (this.headBody && !this.isReachedDestination) {
-      this.headBody.velocity.z = -15;
+      this.headBody.velocity.z = Math.round(this.playerVelocity);
       this.headBody.velocity.x = 0;
-      if (this.headBody.velocity.z > -10) {
-        this.headBody.velocity.z = -15;
-      }
+      // if (this.headBody.velocity.z > -10) {
+      //   this.headBody.velocity.z = Math.round(this.playerVelocity);
+      // }
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
-    for (
-      let body = 1;
-      body < this.RigidBodiesArr.length && !this.isReachedDestination;
-      body++
-    ) {
-      this.RigidBodiesArr[body].velocity.x = 0;
-      this.RigidBodiesArr[body].position.z =
-        this.RigidBodiesArr[body - 1].position.z + 2;
 
-      if (body > 0) {
-        gsap.to(this.RigidBodiesArr[body].position, {
-          duration: 0.1,
-          x: this.RigidBodiesArr[body - 1].position.x,
-        });
-      }
-    }
+
+    // for (
+    //   let body = 1;
+    //   body < this.RigidBodiesArr.length && !this.isReachedDestination;
+    //   body++
+    // ) {
+    //   this.RigidBodiesArr[body].velocity.x = 0;
+    //   this.RigidBodiesArr[body].position.z =
+    //     this.RigidBodiesArr[body - 1].position.z + 2;
+
+    //   if (body > 0) {
+    //     gsap.to(this.RigidBodiesArr[body].position, {
+    //       duration: 0.1,
+    //       x: this.RigidBodiesArr[body - 1].position.x,
+    //     });
+    //   }
+    // }
 
     // Update Three.js sphere positions based on physics simulation
     for (let i = 0; i < this.RigidBodiesArr.length; i++) {

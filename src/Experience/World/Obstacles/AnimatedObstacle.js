@@ -60,7 +60,8 @@ export default class AnimatedObstacle {
   }
 
   update() {
-    this.mixer.update(this.time.delta * 0.001);
+    // this.mixer.update(this.time.delta * 0.001); //Anish-> Previous
+    this.mixer.update(this.time.delta ); //Anish-> Changed
 
     for (let i = 0; i < this.rigidBodiesArray.length; i++) {
       const physicsBody = this.rigidBodiesArray[i];
