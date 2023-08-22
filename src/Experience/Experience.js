@@ -34,7 +34,7 @@ export default class Experience {
     this.resources = new Resources(sources);
     this.camera = new Camera();
     this.renderer = new Renderer();
-    this.physicsWorld = new World({ gravity: new Vec3(0, -0.4, 0) });
+    this.physicsWorld = new World({ gravity: new Vec3(0, -9.8, 0) });
     this.world = new SceneWorld();
     this.cannonDebugger = new CannonDebugger(this.scene, this.physicsWorld);
 
@@ -59,7 +59,7 @@ export default class Experience {
     this.camera.update();
     this.physicsWorld.step(1 / 60, deltaTime, 3);
     this.world.update();
-    this.cannonDebugger.update();
+    // this.cannonDebugger.update();
     this.renderer.update();
   }
 

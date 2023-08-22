@@ -13,6 +13,7 @@ import HealthBallsBlock from "./HealthBallsBlock.js";
 import Player from "./Player.js";
 import CenterRamp from "./CenterRamp.js";
 import { COLLISION_BODIES } from "./Constants.js";
+import HUD from "./HUD.js";
 
 const COLLISION_GROUPS = {
   PLAYER_GROUP: 1,
@@ -46,12 +47,18 @@ export default class SceneWorld {
       this.playerContactPathMaterial = new ContactMaterial(
         this.playerMaterial,
         this.pathMaterial,
-        { friction: 0, restitution: 0 }
+        {
+          friction: 0,
+          restitution: 0,
+        }
       );
       this.playerContactObstacleMaterial = new ContactMaterial(
         this.playerMaterial,
         this.obstacleMaterial,
-        { friction: 1, restitution: 0 }
+        {
+          friction: 1,
+          restitution: 0,
+        }
       );
       this.spinnerContactMaterial = new ContactMaterial(
         this.playerMaterial,
@@ -64,22 +71,34 @@ export default class SceneWorld {
       this.pathObstacleMaterial = new ContactMaterial(
         this.obstacleMaterial,
         this.pathMaterial,
-        { friction: 0.2, restitution: 0.5 }
+        {
+          friction: 0.2,
+          restitution: 0.5,
+        }
       );
       this.midRampContactMaterial = new ContactMaterial(
         this.playerMaterial,
         this.centerRampMaterial,
-        { restitution: 0, friction: 100 }
+        {
+          restitution: 0,
+          friction: 100,
+        }
       );
       this.playerContactRampMaterial = new ContactMaterial(
         this.playerMaterial,
         this.rampMaterial,
-        { friction: 0, restitution: 0 }
+        {
+          friction: 0,
+          restitution: 0,
+        }
       );
       this.endWallPlayerContact = new ContactMaterial(
         this.playerMaterial,
         this.wallMaterial,
-        { restitution: 0, friction: 10 }
+        {
+          restitution: 0,
+          friction: 10,
+        }
       );
 
       this.physicsWorld.addContactMaterial(this.playerContactPathMaterial);
@@ -90,6 +109,7 @@ export default class SceneWorld {
       this.physicsWorld.addContactMaterial(this.endWallPlayerContact);
       this.physicsWorld.addContactMaterial(this.spinnerContactMaterial);
 
+      this.hud = new HUD();
       this.ballPinObs1 = new BallPinsObstacle(
         1,
         new Vector3(-2.5, 0, -trackLength * 2),
@@ -124,10 +144,10 @@ export default class SceneWorld {
         2
       );
 
-      // this.centerRamp = new CenterRamp(
-      //   this.centerRampMaterial,
-      //   new Vec3(2.5, -1, -8 * trackLength)
-      // );
+      this.centerRamp = new CenterRamp(
+        this.centerRampMaterial,
+        new Vec3(2.5, -1, -8 * trackLength)
+      );
 
       this.ballPinObs3 = new BallPinsObstacle(
         4,

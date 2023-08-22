@@ -25,8 +25,9 @@ export default class CenterRamp {
 
     this.rampBody = getPhysicsBody(
       this.rampModel,
-      ShapeType.MESH,
-      this.rampMaterial
+      ShapeType.HULL,
+      this.rampMaterial,
+      0
     );
 
     this.rampBody.quaternion.setFromAxisAngle(new Vec3(1, 0, 0), -Math.PI / 2);
