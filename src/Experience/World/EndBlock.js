@@ -1,5 +1,5 @@
 import Experience from "../Experience";
-import WinBoxArr from "./Constants";
+import { WINBOX_PROPS } from "./Constants";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper";
 import { ShapeType } from "three-to-cannon";
 
@@ -10,7 +10,7 @@ import {
   DoubleSide,
   Group,
   Mesh,
-  MeshBasicMaterial,
+  MeshStandardMaterial,
 } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { Vec3, Material } from "cannon-es";
@@ -21,10 +21,11 @@ export default class EndBlock {
     this.time = this.experience.time;
     this.resources = this.experience.resources;
     this.scene = this.experience.scene;
+    this.randomValue = Math.random();
     this.endBlockGroup = new Group();
     this.physicsWorld = this.experience.physicsWorld;
     this.scoreBoxMaterial = scoreBoxMaterial;
-    this.winBoxArray = WinBoxArr;
+    this.winBoxArray = WINBOX_PROPS;
     this.spinnerMaterial = spinnerMaterial;
     this.physicsObjects = [];
     this.bodiesToUpdate = [];
@@ -65,8 +66,7 @@ export default class EndBlock {
         child.position.z = positionZ + 1;
         child.position.x = positionX;
         child.position.y = 12;
-        child.material.color = new Color(0x8b0000);
-        // child.material.emissionIntensity = 15;
+        child.material.color = new Color(0xe70fff);
         this.meshesToUpdate.push(child);
         childBody.position.copy(child.position);
         childBody.quaternion.copy(child.quaternion);
@@ -74,8 +74,6 @@ export default class EndBlock {
         this.bodiesToUpdate.push(childBody);
       }
     });
-    console.log("OBJECTS TO PUSH ARRAY", this.meshesToUpdate);
-    console.log("OBJECTS TO PUSH ARRAY", this.bodiesToUpdate);
     return spinner;
   }
   constructEndWall(positionY, positionZ) {
@@ -84,7 +82,7 @@ export default class EndBlock {
     const depth = 1;
     const endWall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: "#e75480" })
+      new MeshStandardMaterial({ color: "#e75480" })
     );
     const physicsEndWallBody = getPhysicsBody(
       endWall,
@@ -114,7 +112,7 @@ export default class EndBlock {
     const numberOfSegments = 64;
     const circularHit = new Mesh(
       new CylinderGeometry(radiusTop, radiusBottom, height, numberOfSegments),
-      new MeshBasicMaterial({ color: 0xe201c9 })
+      new MeshStandardMaterial({ color: 0xe201c9 })
     );
     const physicsCircularHitBody = getPhysicsBody(
       circularHit,
@@ -161,7 +159,7 @@ export default class EndBlock {
     const depth = 5.5;
     const leftWall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xe8e8e7 })
     );
     //Physics
     const rigidBody = getPhysicsBody(
@@ -192,7 +190,7 @@ export default class EndBlock {
     const depth = 5.5;
     const rightWall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xe8e8e7 })
     );
     const rigidBody = getPhysicsBody(
       rightWall,
@@ -222,7 +220,7 @@ export default class EndBlock {
     const depth = 5.5;
     const bottomWall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xe8e8e7 })
     );
     const rigidBody = getPhysicsBody(
       bottomWall,
@@ -242,7 +240,7 @@ export default class EndBlock {
     const depth = 5.5;
     const leftDiagonalWall1 = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xe8e8e7 })
     );
     //Physics
     const rigidBody = getPhysicsBody(
@@ -264,7 +262,7 @@ export default class EndBlock {
     const depth = 5.5;
     const leftDiagonalWall2 = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xe8e8e7 })
     );
     const rigidBody = getPhysicsBody(
       leftDiagonalWall2,
@@ -285,7 +283,7 @@ export default class EndBlock {
     const depth = 5.5;
     const rightDiagonalWall1 = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xe8e8e7 })
     );
     //Physics
     const rigidBody = getPhysicsBody(
@@ -307,7 +305,7 @@ export default class EndBlock {
     const depth = 5.5;
     const rightDiagonalWall2 = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshBasicMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xe8e8e7 })
     );
     //Physics
     const rigidBody = getPhysicsBody(
@@ -340,7 +338,7 @@ export default class EndBlock {
   constructWinBoxBoundry(positionZ) {
     let boxMesh = new Mesh(
       new BoxGeometry(20, 28, 1),
-      new MeshBasicMaterial({ color: "#e75480" })
+      new MeshStandardMaterial({ color: "#e75480" })
     );
     let boxRigidBody = getPhysicsBody(
       boxMesh,
@@ -368,7 +366,7 @@ export default class EndBlock {
   ) {
     const planeMesh = new Mesh(
       new BoxGeometry(4, 4, 0.3, 2, 2, 2),
-      new MeshBasicMaterial({ color: color, side: DoubleSide })
+      new MeshStandardMaterial({ color: color, side: DoubleSide })
     );
 
     const boxRigidBody = getPhysicsBody(
@@ -399,7 +397,7 @@ export default class EndBlock {
       textGeometry.center();
       const textMesh = new Mesh(
         textGeometry,
-        new MeshBasicMaterial({ color: 0x000000 })
+        new MeshStandardMaterial({ color: 0x000000 })
       );
       textMesh.position.copy(planeMesh.position);
       textMesh.position.z += 0.5;
@@ -411,11 +409,13 @@ export default class EndBlock {
   update() {
     const deltaTime = this.time.delta;
     if (this.bodiesToUpdate[0]) {
-      this.meshesToUpdate[0].rotation.y -= (Math.PI / 720) * deltaTime * 0.3;
+      this.meshesToUpdate[0].rotation.y -=
+        (Math.PI / 720) * deltaTime * this.randomValue;
       this.bodiesToUpdate[0].quaternion.copy(this.meshesToUpdate[0].quaternion);
     }
     if (this.bodiesToUpdate[1]) {
-      this.meshesToUpdate[1].rotation.y += (Math.PI / 720) * deltaTime * 0.3;
+      this.meshesToUpdate[1].rotation.y +=
+        (Math.PI / 720) * deltaTime * this.randomValue;
       this.bodiesToUpdate[1].quaternion.copy(this.meshesToUpdate[1].quaternion);
     }
   }

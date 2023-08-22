@@ -7,7 +7,6 @@ import { Vec3 } from "cannon-es";
 export default class CenterRamp {
   constructor(rampMaterial, position) {
     this.experience = new Experience();
-    this.position = position;
     this.resources = this.experience.resources;
 
     this.rampModel = this.resources.items.CenterRamp.children[0];
@@ -18,6 +17,7 @@ export default class CenterRamp {
     this.scene = this.experience.scene;
     this.setModel(position);
   }
+
   setModel(position) {
     this.scene.add(this.rampModel);
     this.rampModel.material.map = this.rampModelTexture;
@@ -25,8 +25,9 @@ export default class CenterRamp {
 
     this.rampBody = getPhysicsBody(
       this.rampModel,
-      ShapeType.MESH,
-      this.rampMaterial
+      ShapeType.HULL,
+      this.rampMaterial,
+      0
     );
 
     this.rampBody.quaternion.setFromAxisAngle(new Vec3(1, 0, 0), -Math.PI / 2);

@@ -100,6 +100,11 @@ export default [
     path: "textures/Progress Bar Small Turquoise.png",
   },
   {
+    name: "PlayerBall",
+    type: "texture",
+    path: "textures/PlayerBall.png",
+  },
+  {
     name: "environmentMapTexture",
     type: "cubeTexture",
     path: [

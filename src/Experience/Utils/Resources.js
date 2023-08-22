@@ -13,8 +13,9 @@ export default class Resources extends EventEmitter {
     this.items = {};
     this.toLoad = this.sources.length;
     this.loaded = 0;
-
+    this.audios = {};
     this.setLoaders();
+    this.loadAudios();
     this.startLoading();
   }
 
@@ -25,6 +26,18 @@ export default class Resources extends EventEmitter {
     this.loaders.textureLoader = new TextureLoader();
     this.loaders.cubeTextureLoader = new CubeTextureLoader();
     this.loaders.fontLoader = new FontLoader();
+  }
+
+  loadAudios() {
+    const gemCollect = new Audio("./sounds/GemsCollect.WAV");
+    const healthCollect = new Audio("./sounds/HealthCollect.WAV");
+    const Scored = new Audio("./sounds/Score.WAV");
+
+    this.audios = {
+      GEM: gemCollect,
+      HEALTH: healthCollect,
+      SCORE: Scored,
+    };
   }
 
   startLoading() {
