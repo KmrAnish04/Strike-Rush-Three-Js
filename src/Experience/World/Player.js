@@ -3,7 +3,14 @@ import EndGamePopup from "./EndGamePopUp.js";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
-import { Mesh, MeshBasicMaterial, Group, PlaneGeometry, SpriteMaterial, Sprite } from "three";
+import {
+  Mesh,
+  MeshBasicMaterial,
+  Group,
+  PlaneGeometry,
+  SpriteMaterial,
+  Sprite,
+} from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { gsap } from "gsap";
@@ -35,7 +42,9 @@ export default class Player {
     this.headBody = this.RigidBodiesArr[0];
     this.registerEvents();
     // this.checkCollision();
-    this.playerBallCnt = this.createPlayerCntText(this.RigidBodiesArr.length.toString());
+    this.playerBallCnt = this.createPlayerCntText(
+      this.RigidBodiesArr.length.toString()
+    );
     this.createHudGem();
     const rotations = 7200;
     for (let ball of this.bodyMeshesArr) {
@@ -52,7 +61,10 @@ export default class Player {
       fontWeight: 200,
     });
     textGeometry.center();
-    const textMesh = new Mesh(textGeometry, new MeshBasicMaterial({ color: 0x000000 }));
+    const textMesh = new Mesh(
+      textGeometry,
+      new MeshBasicMaterial({ color: 0x000000 })
+    );
 
     textMesh.position.x = this.headBody.position.x;
     textMesh.position.z = this.headBody.position.z;
@@ -60,20 +72,24 @@ export default class Player {
 
     this.scene.add(textMesh);
     textMesh.material.transparent = true;
-    gsap.to(textMesh.position, {
-      duration: 0.2,
-      y: Math.random() + 5,
-      x: Math.random() * (3.2 - -3.2) + -3.2,
-    }).then(() => {
-      gsap.to(textMesh.material, {
-        duration: 0.4,
-        opacity: 0,
-      }).then(() => {
-        textGeometry.dispose();
-        textMesh.material.dispose();
-        this.scene.remove(textMesh);
+    gsap
+      .to(textMesh.position, {
+        duration: 0.2,
+        y: Math.random() + 5,
+        x: Math.random() * (3.2 - -3.2) + -3.2,
+      })
+      .then(() => {
+        gsap
+          .to(textMesh.material, {
+            duration: 0.4,
+            opacity: 0,
+          })
+          .then(() => {
+            textGeometry.dispose();
+            textMesh.material.dispose();
+            this.scene.remove(textMesh);
+          });
       });
-    });
   }
 
   createPlayer(noOfBalls) {
@@ -86,7 +102,11 @@ export default class Player {
       let spMsh = this.createBodyMesh();
       const sphereBody = this.addPhysicsToBodyMesh(spMsh);
 
-      sphereBody.position.set(0, 2, -((noOfBalls - i) * (size * 2 + 2 * space) + size * 2 + space) + 1);
+      sphereBody.position.set(
+        0,
+        2,
+        -((noOfBalls - i) * (size * 2 + 2 * space) + size * 2 + space) + 1
+      );
 
       // Storing the references of body mesh and rigidbodies for future use
       this.bodyMeshesArr.push(spMsh);
@@ -109,7 +129,10 @@ export default class Player {
       height: 0.6,
     });
     textGeometry.center();
-    let textMesh = new Mesh(textGeometry, new MeshBasicMaterial({ color: 0xffffff }));
+    let textMesh = new Mesh(
+      textGeometry,
+      new MeshBasicMaterial({ color: 0xffffff })
+    );
     textMesh.position.z = 0.4;
     textMesh.position.y = 0.2;
     // textMesh.rotation.y = -Math.PI;
@@ -120,8 +143,15 @@ export default class Player {
     // );
     textMesh.rotation.x = (Math.PI / 180) * -15;
     // crete text base
-    let textBaseMesh = new Mesh(new RoundedBoxGeometry(1.1, 1.1, 1, 10, 0.2), new MeshBasicMaterial({ color: "#FF10F0" }));
-    textBaseMesh.lookAt(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+    let textBaseMesh = new Mesh(
+      new RoundedBoxGeometry(1.1, 1.1, 1, 10, 0.2),
+      new MeshBasicMaterial({ color: "#FF10F0" })
+    );
+    textBaseMesh.lookAt(
+      this.camera.position.x,
+      this.camera.position.y,
+      this.camera.position.z
+    );
     textBaseMesh.position.y = 0.1;
 
     ballCnt.add(textMesh);
@@ -139,8 +169,8 @@ export default class Player {
       const mouseX = (event.touches[0].clientX / window.innerWidth) * 2 - 1;
       const mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
 
-      const min = -2.70;
-      const max = 2.70;
+      const min = -2.7;
+      const max = 2.7;
       // Clamp number between two values with the following line:
       const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
@@ -193,7 +223,9 @@ export default class Player {
           this.createScoreText(`+${collide.body.myData.score.toString()}`);
           // Update Ball Text
           this.scene.remove(this.playerBallCnt);
-          this.playerBallCnt = this.createPlayerCntText(this.RigidBodiesArr.length.toString());
+          this.playerBallCnt = this.createPlayerCntText(
+            this.RigidBodiesArr.length.toString()
+          );
           console.log(
             "after",
             this.headBody,
@@ -222,6 +254,8 @@ export default class Player {
             z: this.camera.position.z - 74,
           });
 
+          this.endGamePopup()
+
           break;
         }
         case COLLISION_BODIES.OBSTACLE: {
@@ -239,11 +273,14 @@ export default class Player {
             this.removePlayerBalls(); // Subtracting Player's Health by removing the balls
             // this.headBody = this.RigidBodiesArr[0];
           } else {
+            this.endGamePopup();
             console.log("*********** Game Stopped ************");
           }
 
           this.scene.remove(this.playerBallCnt);
-          this.playerBallCnt = this.createPlayerCntText(this.RigidBodiesArr.length.toString());
+          this.playerBallCnt = this.createPlayerCntText(
+            this.RigidBodiesArr.length.toString()
+          );
 
           break;
         }
@@ -258,19 +295,21 @@ export default class Player {
               x: this.camera.rotation.x + (Math.PI / 180) * 15,
               z: 0,
             });
-            gsap.to(this.RigidBodiesArr[i].velocity, {
-              duration: 0.6,
-              x: -1.5 + (0.9 * i) / 2,
-              y: 12,
-              z: -40 - i,
-            }).then(() => {
-              gsap.to(this.RigidBodiesArr[i].velocity, {
-                duration: 2,
-                x: 0,
-                y: -0.5,
-                z: 0,
+            gsap
+              .to(this.RigidBodiesArr[i].velocity, {
+                duration: 0.6,
+                x: -1.5 + (0.9 * i) / 2,
+                y: 12,
+                z: -20 - i,
+              })
+              .then(() => {
+                gsap.to(this.RigidBodiesArr[i].velocity, {
+                  duration: 2,
+                  x: 0,
+                  y: -0.5,
+                  z: 0,
+                });
               });
-            });
           }
           1;
           break;
@@ -289,7 +328,11 @@ export default class Player {
             );
             // if (collectedBall) this.RigidBodiesArr[collectedBall];
             let gemCollected = this.gemModel.clone().children.shift();
-            gemCollected.position.set(Math.random() * (6.2 - -6.2) + -6.2, collide.body.position.y + 5, collide.body.position.z);
+            gemCollected.position.set(
+              Math.random() * (6.2 - -6.2) + -6.2,
+              collide.body.position.y + 5,
+              collide.body.position.z
+            );
 
             this.scene.add(gemCollected);
 
@@ -322,7 +365,7 @@ export default class Player {
                 gemCollected.material.dispose();
                 gemCollected.geometry.dispose();
                 this.scene.remove(gemCollected);
-                this.openPopup();
+                this.endGamePopup();
               });
           }
           collide.body.position.set(200, 200, 0);
@@ -331,6 +374,11 @@ export default class Player {
       }
     });
   }
+
+  endGamePopup() {
+    this.endPopup = new EndGamePopup();
+  }
+
   removePlayerBalls() {
     // this.headBody = this.RigidBodiesArr[1];
     let rigidBody = this.RigidBodiesArr.shift();
@@ -341,7 +389,7 @@ export default class Player {
     rigidBody.collisionFilterMask = 0;
     rigidBody.collisionFilterGroup = 0;
     // rigidBody.removeEventListener("collide", () => { console.log("removed Event listner!") });
-    rigidBody.hasEventListener('collide', () => { console.log("removed Event listner!") })
+    rigidBody.hasEventListener("collide", () => { console.log("removed Event listner!"); });
 
     // Remove object from scene and Dispose of the mesh's geometry and material to free up resources
     this.scene.remove(mesh);

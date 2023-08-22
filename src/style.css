@@ -89,7 +89,7 @@ body {
 }
 
 .section2 {
-  margin-top: 40px;
+  margin-top: 40 rem auto;
   margin-bottom: 10px;
 }
 
@@ -113,7 +113,7 @@ body {
 .section2 .gemsCollectedDiv .gemsCollectedLabel {
   font-family: LilitaOneRegular;
   color: #ffffff;
-  font-size: 40px;
+  font-size: 7em;
 }
 .section2 .levelCompletedDiv {
   display: flex;
@@ -220,3 +220,51 @@ body {
   color: #ffffff;
 }
  */
+
+
+ /* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .EndGamePopupBody{
+    width: 100%;
+  } 
+  .levelCompleted .section2{
+    width: 80%;
+  }
+  .section2 .gemsCollectedDiv .gem {
+    margin-left: 10px;
+    /* width: 10%; */
+  }
+  
+  
+  /* .gemsCollectedLabel {
+    font-size: 0em;
+  } */
+  /* .gemsCollectedLabel{ font-size: 2000vw;} */
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .EndGamePopupBody{
+    width: 100%;
+  } 
+  .levelCompleted .section2{
+    width: 80%;
+  }
+  .section2 .gemsCollectedDiv .gem {
+    margin-left: 10px;
+    width: 10%;
+  }
+  
+  /* .gemsCollectedLabel {
+    font-size: 0em;
+  } */
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}

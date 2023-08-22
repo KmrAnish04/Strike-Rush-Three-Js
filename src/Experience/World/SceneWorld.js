@@ -136,6 +136,13 @@ export default class SceneWorld {
         this.obstacleMaterial,
         this.pathObstacleMaterial
       );
+      this.ballPinObs4 = new BallPinsObstacle(
+        4,
+        new Vector3(-1.6, 0, -15 * trackLength),
+        new Vector3(0.009, 0.009, 0.009),
+        this.obstacleMaterial,
+        this.pathObstacleMaterial
+      );
 
       this.gemsBlock2 = new GemsBlock(this.gemMaterial, -trackLength * 12, {
         filterGroup: COLLISION_GROUPS.GEMS_GROUP,
@@ -198,6 +205,7 @@ export default class SceneWorld {
       this.objectsToUpdate.push(this.ballPinObs1);
       this.objectsToUpdate.push(this.ballPinObs2);
       this.objectsToUpdate.push(this.ballPinObs3);
+      this.objectsToUpdate.push(this.ballPinObs4)
       // this.objectsToUpdate.push(this.obstacle3);
       // this.objectsToUpdate.push(this.obstacle2);
     });

@@ -140,9 +140,10 @@ export default class EndGamePopup {
     const gemsCollectedLabel = document.createElement("label");
     gemsCollectedLabel.className = "gemsCollectedLabel";
     gemsCollectedLabel.id = "gemsCollectedLabel";
-    gemsCollectedLabel.textContent = `${this.collectedGems} X 1 = ${
-      this.collectedGems * 1
-    } `;
+    // gemsCollectedLabel.textContent = `${this.collectedGems} X 1 = ${
+    //   this.collectedGems * 1
+    // } `;
+    gemsCollectedLabel.textContent = '22 x 1 = 22';
 
     const gem = document.createElement("img");
     gem.className = "gem";
