@@ -3,17 +3,11 @@ import EndGamePopup from "./EndGamePopUp.js";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
-import {
-  Mesh,
-  MeshStandardMaterial,
-  Group,
-  SpriteMaterial,
-  Sprite,
-} from "three";
+import { Mesh, MeshStandardMaterial, Group } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { gsap } from "gsap";
-import { COLLISION_BODIES } from "./Constants.js";
+import { COLLISION_BODIES } from "../Utils/Constants.js";
 
 export default class Player {
   constructor(playerMaterial, options, endWallPositionZ) {
@@ -28,6 +22,10 @@ export default class Player {
     this.endAnimation = false;
     this.endWallPositionZ = endWallPositionZ;
     this.PlayerBallModel = this.resources.items.HealthBall;
+    this.playerBallGeometry = this.PlayerBallModel.children[0].geometry;
+    this.playerBallMaterial = this.PlayerBallModel.children[0].material;
+    this.PlayerBallModel.children[0].geometry = null;
+    this.PlayerBallModel.children[0].material = null;
     this.gemModel = this.resources.items.GemBall;
     this.gemCollected = 0;
 
@@ -43,11 +41,6 @@ export default class Player {
     this.playerBallCnt = this.createPlayerCntText(
       this.RigidBodiesArr.length.toString()
     );
-    this.createHudGem();
-    const rotations = 7200;
-    for (let ball of this.bodyMeshesArr) {
-      gsap.to(ball.rotation, { duration: 20, x: (Math.PI / 180) * rotations });
-    }
   }
 
   createScoreText(score) {
@@ -175,20 +168,6 @@ export default class Player {
     });
   }
 
-  createHudGem() {
-    const gemSpriteMaterial = new SpriteMaterial({
-      map: this.resources.items.HudGem,
-      // color: 0xffffff,
-      // transparent: true,
-    });
-    this.hudGem = new Sprite(gemSpriteMaterial);
-    this.hudGem.scale.set(1, 1, 1);
-    this.scene.add(this.hudGem);
-    this.hudGem.position.z = this.camera.position.x + 12;
-    this.hudGem.position.y = this.camera.position.y + 14;
-    this.hudGem.position.x = this.camera.position.z - 74;
-  }
-
   checkCollisionForBody(rigidBody) {
     rigidBody.addEventListener("collide", (collide) => {
       const bodyType = collide.body.material.name;
@@ -253,16 +232,21 @@ export default class Player {
           this.endCameraAnimation();
           for (let i = 0; i < this.RigidBodiesArr.length; i++) {
             gsap.to(this.camera.rotation, {
-              duration: 1.5,
+              duration: 1,
               x: this.camera.rotation.x + (Math.PI / 180) * 15,
               z: 0,
+            });
+            gsap.to(this.camera.position, {
+              duration: 1,
+              y: this.camera.position.y - 3,
+              z: this.camera.position.z - 2,
             });
             gsap
               .to(this.RigidBodiesArr[i].velocity, {
                 duration: 0.6,
-                x: -1 + (0.3 * i) / 2,
+                x: -1 + (0.4 * i) / 2,
                 y: 8.5,
-                z: -19 - i * 2,
+                z: -18 - i * 2,
               })
               .then(() => {
                 gsap
@@ -272,7 +256,10 @@ export default class Player {
                     y: -0.5,
                     z: 0,
                   })
-                  .then(() => (this.RigidBodiesArr[i].mass = 0.15));
+                  .then(() => {
+                    this.RigidBodiesArr[i].angularDamping = 1;
+                    this.RigidBodiesArr[i].mass = 0.1;
+                  });
               });
           }
           1;
@@ -318,7 +305,7 @@ export default class Player {
               .to(gemCollected.position, {
                 duration: 1,
                 x: 7.5,
-                y: 37,
+                y: 90,
                 z: this.endWallPositionZ,
               })
               .then(() => {
@@ -370,6 +357,8 @@ export default class Player {
     // Create Mesh for rigidbodies
     let spMsh = this.PlayerBallModel.clone();
     let sphereBody = spMsh.children.shift();
+    sphereBody.geometry = this.playerBallGeometry;
+    sphereBody.material = this.playerBallMaterial;
     sphereBody.scale.set(0.012, 0.012, 0.012);
     sphereBody.material.map = this.resources.items.PlayerBall;
     sphereBody.castShadow = true;
@@ -470,11 +459,6 @@ export default class Player {
         0,
         this.RigidBodiesArr[0].position.y,
         this.RigidBodiesArr[0].position.z
-      );
-      this.hudGem.position.set(
-        this.camera.position.x + 12,
-        this.camera.position.y + 14,
-        this.camera.position.z - 74
       );
     }
   }

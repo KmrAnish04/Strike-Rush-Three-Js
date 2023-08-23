@@ -6,7 +6,7 @@ import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
 import SceneWorld from "./World/SceneWorld.js";
 import Resources from "./Utils/Resources.js";
-import sources from "./sources.js";
+import { SOURCES } from "./Utils/Constants.js";
 import { Mesh, Scene } from "three";
 import { World, Vec3 } from "cannon-es";
 
@@ -31,7 +31,7 @@ export default class Experience {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new Scene();
-    this.resources = new Resources(sources);
+    this.resources = new Resources(SOURCES);
     this.camera = new Camera();
     this.renderer = new Renderer();
     this.physicsWorld = new World({ gravity: new Vec3(0, -9.8, 0) });
@@ -59,7 +59,7 @@ export default class Experience {
     this.camera.update();
     this.physicsWorld.step(1 / 60, deltaTime, 3);
     this.world.update();
-    // this.cannonDebugger.update();
+    this.cannonDebugger.update();
     this.renderer.update();
   }
 

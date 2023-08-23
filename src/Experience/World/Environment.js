@@ -18,14 +18,14 @@ export default class Environment {
   }
 
   setSunLight() {
-    this.ambient = new AmbientLight("#ffffff", 1);
+    this.ambient = new AmbientLight("#ffffff", 0.5);
     this.scene.add(this.ambient);
     this.sunLight = new DirectionalLight("#ffffff", 2);
     this.sunLight.castShadow = true;
     this.sunLight.shadow.camera.far = 1000;
-    this.sunLight.shadow.camera.left = -50;
-    this.sunLight.shadow.camera.right = 50;
-    this.sunLight.shadow.camera.top = 800;
+    this.sunLight.shadow.camera.left = 50;
+    this.sunLight.shadow.camera.right = -50;
+    this.sunLight.shadow.camera.top = 600;
     this.sunLight.shadow.camera.bottom = 0;
     this.sunLight.shadow.mapSize.set(2048, 2048);
     this.sunLight.shadow.bias = 0.0001;
@@ -71,11 +71,17 @@ export default class Environment {
     this.envMap.minFilter = NearestFilter;
     this.scene.background = this.resources.items.environmentMapTexture;
     this.building = this.resources.items.Buildings;
+    const buildingGeometry = this.building.children[0].geometry;
+    const buildingMaterial = this.building.children[0].material;
+    this.building.geometry = null;
+    this.building.material = null;
     const noOfBuildings = 500;
     for (let i = 0; i < noOfBuildings; i++) {
       const building = this.building.clone();
       this.building.traverse((child) => {
         if (child.isMesh) {
+          child.geometry = buildingGeometry;
+          child.material = buildingMaterial;
           child.material.transparent = false;
           child.material.alphaTest = 0.1;
           child.material.map = this.resources.items.BuildingsTexture;

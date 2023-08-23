@@ -12,7 +12,7 @@ import GemsBlock from "./GemsBlock.js";
 import HealthBallsBlock from "./HealthBallsBlock.js";
 import Player from "./Player.js";
 import CenterRamp from "./CenterRamp.js";
-import { COLLISION_BODIES } from "./Constants.js";
+import { COLLISION_BODIES } from "../Utils/Constants.js";
 import HUD from "./HUD.js";
 
 const COLLISION_GROUPS = {
@@ -282,7 +282,6 @@ export default class SceneWorld {
 
       this.ramp = new Ramps(
         this.resources.items.Ramp1,
-        new Vector3(0, 0, -3),
         new Vector3(0.05, 0.05, 0.05),
         -23 * trackLength,
         this.rampMaterial

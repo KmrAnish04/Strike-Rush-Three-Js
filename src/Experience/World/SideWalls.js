@@ -51,7 +51,7 @@ export default class SideWalls {
   constructWallMesh(width, height, depth) {
     const wall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: "#E459D2", side: DoubleSide })
+      new MeshStandardMaterial({ color: 0xe459d2, side: DoubleSide })
     );
     wall.receiveShadow = true;
     return wall;

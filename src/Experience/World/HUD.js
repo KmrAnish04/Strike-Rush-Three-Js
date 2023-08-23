@@ -1,9 +1,4 @@
-import {
-  LinearMipMapNearestFilter,
-  SRGBColorSpace,
-  Sprite,
-  SpriteMaterial,
-} from "three";
+import { SRGBColorSpace, Sprite, SpriteMaterial } from "three";
 import Experience from "../Experience";
 import { gsap } from "gsap";
 
