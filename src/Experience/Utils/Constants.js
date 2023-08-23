@@ -338,7 +338,7 @@ export const SOURCES = [
   {
     name: "scoreFont",
     type: "font",
-    path: "fonts/helvetiker_regular.typeface.json",
+    path: "fonts/LilitaOne_Regular.json",
   },
   {
     name: "Buildings",
