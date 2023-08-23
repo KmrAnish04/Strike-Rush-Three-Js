@@ -1,14 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Strike-Rush</title>
-    <link rel="stylesheet" href="./style.css" />
-  </head>
-  <body>
-    <canvas class="webgl"></canvas>
-    <!-- <div class="HUD" style="position: absolute">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Strike-Rush</title>
+        <link rel="stylesheet" href="./style.css" />
+    </head>
+    <body>
+        <script>
+            (function () {
+                var script = document.createElement("script");
+                // script.style.width = "100px";
+                script.onload = function () {
+                    var stats = new Stats();
+                    document.body.appendChild(stats.dom);
+                    requestAnimationFrame(function loop() {
+                        stats.update();
+                        requestAnimationFrame(loop);
+                    });
+                };
+                script.src = "https://mrdoob.github.io/stats.js/build/stats.min.js";
+                document.head.appendChild(script);
+            })();
+        </script>
+        <canvas class="webgl"></canvas>
+        <!-- <div class="HUD" style="position: absolute">
       <div class="gems-collection-HUD">
         <img src="textures/Button Right Gray.png" class="gems-collection" />
         <label class="collected">2002</label>
@@ -45,6 +61,6 @@
         </div>
       </div>
     </div> -->
-    <script type="module" src="./script.js"></script>
-  </body>
+        <script type="module" src="./script.js"></script>
+    </body>
 </html>
