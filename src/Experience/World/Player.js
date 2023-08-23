@@ -12,12 +12,22 @@ import { COLLISION_BODIES } from "../Utils/Constants.js";
 export default class Player {
   constructor(playerMaterial, options, endWallPositionZ) {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.time = this.experience.time;
-    this.debug = this.experience.debug;
-    this.physicsWorld = this.experience.physicsWorld;
-    this.camera = this.experience.camera.instance;
+    const {
+      scene,
+      audioManager,
+      resources,
+      time,
+      debug,
+      physicsWorld,
+      camera,
+    } = this.experience;
+    this.scene = scene;
+    this.audioManager = audioManager;
+    this.resources = resources;
+    this.time = time;
+    this.debug = debug;
+    this.physicsWorld = physicsWorld;
+    this.camera = camera.instance;
     this.playerMaterial = playerMaterial;
     this.endAnimation = false;
     this.endWallPositionZ = endWallPositionZ;
@@ -43,12 +53,12 @@ export default class Player {
     );
   }
 
-  createScoreText(score) {
+  createScoreText(score, size, headBodyPosition, positionZ) {
     // Score Popups
     const textGeometry = new TextGeometry(score, {
       font: this.resources.items.scoreFont,
-      size: 0.7,
-      height: 0.1,
+      size: size,
+      height: 0.3,
       fontWeight: 200,
     });
     textGeometry.center();
@@ -58,21 +68,22 @@ export default class Player {
     );
 
     textMesh.position.x = this.headBody.position.x;
-    textMesh.position.z = this.headBody.position.z;
+    textMesh.position.z = headBodyPosition;
     textMesh.position.y = 0;
 
     this.scene.add(textMesh);
     textMesh.material.transparent = true;
     gsap
       .to(textMesh.position, {
-        duration: 0.2,
+        duration: 0.3,
         y: Math.random() + 5,
-        x: Math.random() * (3.2 - -3.2) + -3.2,
+        x: Math.random() * (4 - -4) + -4,
+        z: headBodyPosition + positionZ,
       })
       .then(() => {
         gsap
           .to(textMesh.material, {
-            duration: 0.4,
+            duration: 0.3,
             opacity: 0,
           })
           .then(() => {
@@ -174,14 +185,19 @@ export default class Player {
 
       switch (bodyType) {
         case COLLISION_BODIES.HEALTH: {
-          this.resources.audios.HEALTH.play();
+          this.audioManager.playAudio(this.resources.items.HealthCollect);
           collide.body.collisionFilterMask = 0; // dont take collision again with already collided body
 
           this.addPlayerBalls(collide.body.myData.score);
           this.scene.remove(collide.body.myData.scoreBlock);
           this.physicsWorld.removeBody(collide.body);
 
-          this.createScoreText(`+${collide.body.myData.score.toString()}`);
+          this.createScoreText(
+            `+${collide.body.myData.score.toString()}`,
+            0.7,
+            this.headBody.position.z,
+            0
+          );
           // Update Ball Text
           this.scene.remove(this.playerBallCnt);
           this.playerBallCnt = this.createPlayerCntText(
@@ -190,13 +206,11 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.GEM: {
-          if (this.resources.audios.GEM.isPlaying) {
-            this.resources.audios.GEM.play();
-          } else this.resources.audios.GEM.play();
+          this.audioManager.playAudio(this.resources.items.GemCollect);
           ++this.gemCollected;
           document.getElementById("gemsCollected").textContent =
             this.gemCollected;
-          this.createScoreText("+1");
+          this.createScoreText("+1", 0.7, this.headBody.position.z, 0);
           gsap.to(collide.body.position, { duration: 0.3, y: 7 });
           gsap.to(collide.body.position, {
             delay: 0.3,
@@ -266,9 +280,15 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.SCOREBOX: {
-          this.resources.audios.SCORE.play();
           const impact = collide.contact.getImpactVelocityAlongNormal();
           if (impact > 0.7) {
+            this.audioManager.playAudio(this.resources.items.Score);
+            this.createScoreText(
+              collide.body.myData.score,
+              1.5,
+              this.headBody.position.z,
+              4
+            );
             const collectedBall = this.RigidBodiesArr.findIndex(
               (item) => item.name === collide.target.name
             );
@@ -304,8 +324,8 @@ export default class Player {
               }) // Scale out
               .to(gemCollected.position, {
                 duration: 1,
-                x: 7.5,
-                y: 90,
+                x: 12,
+                y: 48,
                 z: this.endWallPositionZ,
               })
               .then(() => {

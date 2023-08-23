@@ -7,8 +7,9 @@ import { BoxGeometry, DoubleSide, Mesh, MeshStandardMaterial } from "three";
 export default class SideWalls {
   constructor(tracklength, wallMaterial) {
     this.experience = new Experience();
-    this.physicsWorld = this.experience.physicsWorld;
-    this.scene = this.experience.scene;
+    const { physicsWorld, scene } = this.experience;
+    this.physicsWorld = physicsWorld;
+    this.scene = scene;
     this.trackLength = tracklength;
     this.wallMaterial = wallMaterial;
     this.constructSideWalls();

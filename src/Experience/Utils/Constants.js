@@ -326,6 +326,11 @@ export const SOURCES = [
     path: "textures/ground.png",
   },
   {
+    name: "rampTexture",
+    type: "texture",
+    path: "models/Ramps/rampa 1.png",
+  },
+  {
     name: "SpinnerObstacle",
     type: "fbxModel",
     path: "models/Obstacle/spinnerObs.fbx",
@@ -391,5 +396,20 @@ export const SOURCES = [
       "textures/environmentMap/pz.png",
       "textures/environmentMap/nz.png",
     ],
+  },
+  {
+    name: "GemCollect",
+    type: "audio",
+    path: "sounds/GemsCollect.WAV",
+  },
+  {
+    name: "HealthCollect",
+    type: "audio",
+    path: "sounds/HealthCollect.WAV",
+  },
+  {
+    name: "Score",
+    type: "audio",
+    path: "sounds/Score.WAV",
   },
 ];

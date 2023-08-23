@@ -3,7 +3,7 @@ import { ShapeType } from "three-to-cannon";
 import { getPhysicsBody } from "../../Utils/PhycisBodyHelper.js";
 
 import { Vec3 } from "cannon-es";
-import { BoxGeometry, Color, Mesh, MeshBasicMaterial } from "three";
+import { BoxGeometry, Color, Mesh, MeshStandardMaterial } from "three";
 import { COLLISION_BODIES } from "../../Utils/Constants.js";
 
 export default class Ramps {
@@ -26,13 +26,17 @@ export default class Ramps {
     const childMesh = this.model.children[0];
     childMesh.scale.set(modelScaling.x, modelScaling.y - 0.02, modelScaling.z);
     this.model.traverse((child) => {
-      if (child.isMesh) child.material.map.flipY = false;
+      if (child.isMesh) {
+        child.material = new MeshStandardMaterial({
+          map: this.resources.items.rampTexture,
+        });
+        child.material.map.flipY = false;
+      }
     });
     const rigidBody = getPhysicsBody(
       childMesh,
       ShapeType.HULL,
       COLLISION_BODIES.CENTERRAMP,
-      // new Material("default"),
       0
     );
     rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 1, 0), Math.PI);
@@ -51,7 +55,7 @@ export default class Ramps {
   createHiddenRampJumper(positionZ) {
     const boxMesh = new Mesh(
       new BoxGeometry(10, 3.3, 8),
-      new MeshBasicMaterial({ color: 0xe70fff })
+      new MeshStandardMaterial({ color: 0xfca510 })
     );
     const boxBody = getPhysicsBody(
       boxMesh,

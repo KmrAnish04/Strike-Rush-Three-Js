@@ -23,9 +23,10 @@ const COLLISION_GROUPS = {
 export default class SceneWorld {
   constructor() {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.physicsWorld = this.experience.physicsWorld;
+    const { scene, resources, physicsWorld } = this.experience;
+    this.scene = scene;
+    this.resources = resources;
+    this.physicsWorld = physicsWorld;
     this.objectsToUpdate = [];
     // Wait for resources
     this.resources.on("ready", () => {

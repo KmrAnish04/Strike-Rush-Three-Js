@@ -18,12 +18,13 @@ import { Vec3, Material } from "cannon-es";
 export default class EndBlock {
   constructor(positionZ, wallMaterial, scoreBoxMaterial, spinnerMaterial) {
     this.experience = new Experience();
-    this.time = this.experience.time;
-    this.resources = this.experience.resources;
-    this.scene = this.experience.scene;
-    this.randomValue = Math.random();
+    const { time, resources, scene, physicsWorld } = this.experience;
+    this.time = time;
+    this.resources = resources;
+    this.scene = scene;
+    this.randomValue = 0.5;
     this.endBlockGroup = new Group();
-    this.physicsWorld = this.experience.physicsWorld;
+    this.physicsWorld = physicsWorld;
     this.scoreBoxMaterial = scoreBoxMaterial;
     this.winBoxArray = WINBOX_PROPS;
     this.spinnerMaterial = spinnerMaterial;

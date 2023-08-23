@@ -5,9 +5,10 @@ import { AmbientLight, DirectionalLight, Color, NearestFilter } from "three";
 export default class Environment {
   constructor() {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.debug = this.experience.debug;
+    const { scene, resources, debug } = this.experience;
+    this.scene = scene;
+    this.resources = resources;
+    this.debug = debug;
     // Debug
     if (this.debug.active) {
       this.debugFolder = this.debug.ui.addFolder("environment");

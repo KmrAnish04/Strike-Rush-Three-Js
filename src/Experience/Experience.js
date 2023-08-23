@@ -7,6 +7,8 @@ import Renderer from "./Renderer.js";
 import SceneWorld from "./World/SceneWorld.js";
 import Resources from "./Utils/Resources.js";
 import { SOURCES } from "./Utils/Constants.js";
+import AudioManager from "./World/AudioManager.js";
+
 import { Mesh, Scene } from "three";
 import { World, Vec3 } from "cannon-es";
 
@@ -31,8 +33,9 @@ export default class Experience {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new Scene();
-    this.resources = new Resources(SOURCES);
     this.camera = new Camera();
+    this.resources = new Resources(SOURCES);
+    this.audioManager = new AudioManager();
     this.renderer = new Renderer();
     this.physicsWorld = new World({ gravity: new Vec3(0, -9.8, 0) });
     this.world = new SceneWorld();

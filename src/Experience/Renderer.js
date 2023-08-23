@@ -3,10 +3,11 @@ import Experience from "./Experience.js";
 export default class Renderer {
   constructor() {
     this.experience = new Experience();
-    this.canvas = this.experience.canvas;
-    this.sizes = this.experience.sizes;
-    this.scene = this.experience.scene;
-    this.camera = this.experience.camera;
+    const { canvas, sizes, scene, camera } = this.experience;
+    this.canvas = canvas;
+    this.sizes = sizes;
+    this.scene = scene;
+    this.camera = camera;
 
     this.setInstance();
   }
