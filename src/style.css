@@ -29,6 +29,7 @@ body {
   align-items: center;
   overflow: hidden;
   transition: max-height 5s ease-in-out;
+  z-index: 3;
 }
 .EndGamePopup.active {
   max-height: 100%;
@@ -43,6 +44,8 @@ body {
   align-items: center;
 }
 
+
+/* Home Button and Gems Count */
 .section1 {
   display: flex;
   flex-direction: row;
@@ -52,41 +55,47 @@ body {
   margin-bottom: 10px;
 }
 
-.section1 .totalGemsCollectedDiv {
-  display: flex;
-  margin-left: 60px;
+/* Gems Count - Start*/
+.totalGemsCollectedDiv {
+  position: relative;
 }
 
-.section1 .totalGemsCollectedDiv .totalGemsLabel {
-  margin-left: -95px;
-  margin-top: 24px;
-  margin-right: 2px;
+.totalGemsCollected {
+  rotate: 30deg;
+}
+
+.totalGemsLabel {
+  position: absolute;
   font-family: LilitaOneRegular;
   color: #ffffff;
-  font-size: 30px;
+  font-size: 4vw;
+  top: 45%;
+  left: -80%;
+  transform: translate(-50%, -50%);
 }
-.section1 .totalGemsCollectedDiv .Background {
-  width: 40%;
-  height: 20%;
-  margin-top: 23px;
+.GemsCountBackground {
+  position: absolute;
+  right: 30%;
 }
+/* Gems Count - End */
 
-.section1 .homeButtonImage {
-  width: 50%;
+/* Home Button - Start */
+.homeButton{
+  position: relative;
 }
+.section1 .homeButtonImage {}
 
-.section1 .homeImage {
-  width: 40%;
-  margin-left: -63px;
-  margin-bottom: 20px;
+.homeImage {
+  position: absolute;
+  margin: 0;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+/* Home Button - End */
 
-.section1 .totalGemsCollected {
-  rotate: 30deg;
-  width: 40%;
-  height: 40%;
-  margin-top: 22px;
-}
+/* Home Buton and Gems Count Section - End */
+
 
 .section2 {
   margin-top: 40 rem auto;
@@ -147,31 +156,70 @@ body {
   width: 10%;
 }
 
+/* Speedo Meter CSS */
+.scoreIncreaserPin{
+  position: relative;
+  /* background: yellow;  */
+  /* height: 190px; */
+  height: 80%;
+  width: 10%;
+  bottom: 50px;
+  /* left: 140px; */
+  /* top: 3px; */
+  /* clip-path: polygon(90px 10px, 11px 10px, 20px 150px, 10px 190px, 0 150px); */
+  transform-origin: 20px 145px;
+  animation: animate-pointer 3s ease-in-out infinite;
+}
+.scoreIncreaser::before {
+  content: '';
+  position: absolute;
+  width: 10%;
+  /* height: 10px; */
+  background: gray;
+  /* top: 140px; */
+  /* left: 5px; */
+  border-radius: 50%;
+}
+@keyframes animate-pointer {
+  0% {transform: rotate(-80deg);}
+  80% {transform: rotate(60deg);}
+  100% {transform: rotate(-80deg);}
+}
+/* Speedo Meter CSS */
+
 .section4 {
   margin-top: 20px;
   display: flex;
+  /* width: 100px;  */
+  height: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
 }
 
-.section4 .doubleGemsDiv {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
+.doubleGemsDiv {
+  position: relative;
+  width: 300px;
+  height: 130px;
+  overflow: hidden;
 }
 
-.section4 .doubleGemsDiv .videoBackground {
-  width: 33%;
+
+.videoBackground{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 5;
 }
-.section4 .doubleGemsDiv .video {
+.video {
   width: 8%;
   margin-left: -115px;
+  /* z-index: 40; */
 }
-.section4 .doubleGemsDiv .collectedGems {
+.collectedGems {
   font-family: LilitaOneRegular;
   color: #ffffff;
   font-size: 30px;
@@ -179,7 +227,7 @@ body {
   margin-right: 10px;
 }
 
-.section4 .doubleGemsDiv .gem {
+.gem {
   width: 7%;
 }
 
@@ -220,6 +268,208 @@ body {
   color: #ffffff;
 }
  */
+
+#hud-ui {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  align-items: center;
+  flex-direction: column;
+}
+
+#hud-ui .progressBarContainer {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBar {
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 38%;
+  height: 80%;
+}
+
+#hud-ui .progressBarContainer .progressBarCurrentLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarCurrentLevel .currentLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+  margin-right: 28px;
+}
+#hud-ui
+  .progressBarContainer
+  .progressBarCurrentLevel
+  .progressBarCurrentLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBarNextLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .nextLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .progressBarNextLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBar .progressBarImg {
+  width: 100%;
+}
+
+#hud-ui .gemsCollectContainer {
+  margin-left: 250px;
+  position: relative;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg {
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg .gemsCollectedBGImg {
+  width: 45%;
+  opacity: 50%;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollected {
+  color: #ffffff;
+  font-size: 28px;
+  font-family: LilitaOneRegular;
+  margin-left: -80px;
+  z-index: 2;
+}
+#hud-ui .gemsCollectContainer .gemsCollectImage {
+  width: 20%;
+  rotate: 35deg;
+}
+
+#hud-ui {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  align-items: center;
+  flex-direction: column;
+}
+
+#hud-ui .progressBarContainer {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBar {
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 38%;
+  height: 80%;
+}
+
+#hud-ui .progressBarContainer .progressBarCurrentLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarCurrentLevel .currentLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+  margin-right: 28px;
+}
+#hud-ui
+  .progressBarContainer
+  .progressBarCurrentLevel
+  .progressBarCurrentLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBarNextLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .nextLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .progressBarNextLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBar .progressBarImg {
+  width: 100%;
+}
+
+#hud-ui .gemsCollectContainer {
+  margin-left: 250px;
+  position: relative;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg {
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg .gemsCollectedBGImg {
+  width: 45%;
+  opacity: 50%;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollected {
+  color: #ffffff;
+  font-size: 28px;
+  font-family: LilitaOneRegular;
+  margin-left: -80px;
+  z-index: 2;
+}
+#hud-ui .gemsCollectContainer .gemsCollectImage {
+  width: 20%;
+  rotate: 35deg;
+}
 
 
  /* Extra small devices (phones, 600px and down) */

@@ -126,10 +126,16 @@ export default class SceneWorld {
         this.pathObstacleMaterial
       );
 
-      this.gemsBlock1 = new GemsBlock(this.gemMaterial, -trackLength * 4, {
-        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
-        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
-      });
+      this.gemsBlock1 = new GemsBlock(
+        5,
+        this.gemMaterial,
+        -trackLength * 4,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(0, 0.25, 0)
+      );
 
       this.obstacle5 = new AnimatedObstacle(
         this.resources.items.SpinnerObstacle,
@@ -146,7 +152,78 @@ export default class SceneWorld {
 
       this.centerRamp = new CenterRamp(
         this.centerRampMaterial,
-        new Vec3(2.5, -1, -8 * trackLength)
+        new Vec3(2.5, -0.5, -8 * trackLength)
+      );
+
+      this.rampGem1 = new GemsBlock(
+        1,
+        this.gemMaterial,
+        -trackLength * 8,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(6.5, 0.25, 20)
+      );
+      this.rampGem2 = new GemsBlock(
+        1,
+        this.gemMaterial,
+        -trackLength * 8,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(6.5, 2, 15)
+      );
+      this.rampGem3 = new GemsBlock(
+        1,
+        this.gemMaterial,
+        -trackLength * 8,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(6.5, 2.5, 10)
+      );
+      this.rampGem4 = new GemsBlock(
+        1,
+        this.gemMaterial,
+        -trackLength * 8,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(6.5, 2.5, 5)
+      );
+      this.rampGem5 = new GemsBlock(
+        1,
+        this.gemMaterial,
+        -trackLength * 8,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(6.5, 2.5, 0)
+      );
+      this.rampGem6 = new GemsBlock(
+        1,
+        this.gemMaterial,
+        -trackLength * 8,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(6.5, 2, -5)
+      );
+      this.rampGem7 = new GemsBlock(
+        1,
+        this.gemMaterial,
+        -trackLength * 8,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(6.5, 0.25, -10)
       );
 
       this.ballPinObs3 = new BallPinsObstacle(
@@ -156,18 +233,24 @@ export default class SceneWorld {
         this.obstacleMaterial,
         this.pathObstacleMaterial
       );
-      this.ballPinObs4 = new BallPinsObstacle(
-        4,
-        new Vector3(-1.6, 0, -15 * trackLength),
-        new Vector3(0.009, 0.009, 0.009),
-        this.obstacleMaterial,
-        this.pathObstacleMaterial
-      );
+      // this.ballPinObs4 = new BallPinsObstacle(
+      //   4,
+      //   new Vector3(-1.6, 0, -15 * trackLength),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial,
+      //   this.pathObstacleMaterial
+      // );
 
-      this.gemsBlock2 = new GemsBlock(this.gemMaterial, -trackLength * 12, {
-        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
-        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
-      });
+      this.gemsBlock2 = new GemsBlock(
+        5,
+        this.gemMaterial,
+        -trackLength * 12,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(0, 0.25, 0)
+      );
 
       this.obstacle4 = new AnimatedObstacle(
         this.resources.items.ObstacleArmLiverHammer,
@@ -176,10 +259,16 @@ export default class SceneWorld {
         this.obstacleMaterial
       );
 
-      this.gemsBlock3 = new GemsBlock(this.gemMaterial, -trackLength * 16, {
-        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
-        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
-      });
+      this.gemsBlock3 = new GemsBlock(
+        5,
+        this.gemMaterial,
+        -trackLength * 16,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(0, 0.25, 0)
+      );
 
       this.healthBlock = new HealthBallsBlock(
         this.healthMaterial,
@@ -187,10 +276,16 @@ export default class SceneWorld {
         1
       );
 
-      this.gemsBlock4 = new GemsBlock(this.gemMaterial, -trackLength * 20, {
-        filterGroup: COLLISION_GROUPS.GEMS_GROUP,
-        filterMask: COLLISION_GROUPS.PLAYER_GROUP,
-      });
+      this.gemsBlock4 = new GemsBlock(
+        5,
+        this.gemMaterial,
+        -trackLength * 20,
+        {
+          filterGroup: COLLISION_GROUPS.GEMS_GROUP,
+          filterMask: COLLISION_GROUPS.PLAYER_GROUP,
+        },
+        new Vec3(0, 0.25, 0)
+      );
 
       this.ramp = new Ramps(
         this.resources.items.Ramp1,
@@ -200,10 +295,34 @@ export default class SceneWorld {
         this.rampMaterial
       );
 
-      this.PlayerObj = new Player(this.playerMaterial, {
-        filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
-        filterMask: COLLISION_GROUPS.GEMS_GROUP,
-      });
+      // this.PlayerObj = new Player(
+      //   this.playerMaterial,
+      //   {
+      //     filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+      //     filterMask: COLLISION_GROUPS.GEMS_GROUP,
+      //   },
+      //   -trackLength * 26 + 7
+      // );
+      // window.addEventListener("click", (event) => {
+      //   this.PlayerObj = new Player(
+      //     this.playerMaterial,
+      //     {
+      //       filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+      //       filterMask: COLLISION_GROUPS.GEMS_GROUP,
+      //     },
+      //     -trackLength * 26 + 7
+      //   );
+      // })
+      setTimeout(() => {
+        this.PlayerObj = new Player(
+          this.playerMaterial,
+          {
+            filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+            filterMask: COLLISION_GROUPS.GEMS_GROUP,
+          },
+          -trackLength * 26 + 7
+        );
+      }, 1000);
 
       this.endBlock = new EndBlock(
         -trackLength * 26 + 7,
@@ -222,12 +341,17 @@ export default class SceneWorld {
       this.objectsToUpdate.push(this.gemsBlock2);
       this.objectsToUpdate.push(this.gemsBlock3);
       this.objectsToUpdate.push(this.gemsBlock4);
+      this.objectsToUpdate.push(this.gemsBlock5);
       this.objectsToUpdate.push(this.ballPinObs1);
       this.objectsToUpdate.push(this.ballPinObs2);
       this.objectsToUpdate.push(this.ballPinObs3);
-      this.objectsToUpdate.push(this.ballPinObs4)
-      // this.objectsToUpdate.push(this.obstacle3);
-      // this.objectsToUpdate.push(this.obstacle2);
+      this.objectsToUpdate.push(this.rampGem1);
+      this.objectsToUpdate.push(this.rampGem2);
+      this.objectsToUpdate.push(this.rampGem3);
+      this.objectsToUpdate.push(this.rampGem4);
+      this.objectsToUpdate.push(this.rampGem5);
+      this.objectsToUpdate.push(this.rampGem6);
+      this.objectsToUpdate.push(this.rampGem7);
     });
   }
 

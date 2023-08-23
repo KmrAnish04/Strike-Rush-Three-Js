@@ -13,7 +13,7 @@ export const COLLISION_BODIES = {
   SCOREBOX: "scorebox",
 };
 
-export default [
+export const WINBOX_PROPS = [
   //FRONT WALL
   {
     isFrontWall: true,

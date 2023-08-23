@@ -80,8 +80,9 @@ export default class EndGamePopup {
     homeImage.id = "homeImage";
     homeImage.src = "./textures/Main Menu Green.png";
 
-    homeButton.appendChild(homeButtonImage);
+    // homeButtonImage.appendChild(homeImage)
     homeButton.appendChild(homeImage);
+    homeButton.appendChild(homeButtonImage);
 
     homeButton.addEventListener("click", () => {
       console.log("Home Clicked");
@@ -97,19 +98,21 @@ export default class EndGamePopup {
     totalGemsCollectedDiv.id = "totalGemsCollectedDiv";
 
     const background = document.createElement("img");
-    background.className = "Background";
+    background.className = "GemsCountBackground";
     background.id = "Background";
-    background.src = "./textures/Button Right Gray.png";
+    background.src = "./textures/Progress Bar Background.png";
+
+    const totalGemsCollected = document.createElement("img");
+    totalGemsCollected.className = "totalGemsCollected";
+    totalGemsCollected.id = "totalGemsCollected";
+    totalGemsCollected.src = "./textures/Gem Blue.png";
+
 
     const totalGemsLabel = document.createElement("label");
     totalGemsLabel.className = "totalGemsLabel";
     totalGemsLabel.id = "totalGemsLabel";
     totalGemsLabel.textContent = `${this.totalCoins}`;
 
-    const totalGemsCollected = document.createElement("img");
-    totalGemsCollected.className = "totalGemsCollected";
-    totalGemsCollected.id = "totalGemsCollected";
-    totalGemsCollected.src = "./textures/Gem Blue.png";
 
     totalGemsCollectedDiv.appendChild(background);
     totalGemsCollectedDiv.appendChild(totalGemsLabel);

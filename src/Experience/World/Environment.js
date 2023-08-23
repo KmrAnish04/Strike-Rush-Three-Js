@@ -1,18 +1,6 @@
 import Experience from "../Experience.js";
 
-import {
-  AmbientLight,
-  DirectionalLight,
-  SRGBColorSpace,
-  MeshStandardMaterial,
-  Mesh,
-  Color,
-  DoubleSide,
-  MeshBasicMaterial,
-  NearestFilter,
-  NearestMipMapLinearFilter,
-  NearestMipMapNearestFilter,
-} from "three";
+import { AmbientLight, DirectionalLight, Color, NearestFilter } from "three";
 
 export default class Environment {
   constructor() {
@@ -27,18 +15,21 @@ export default class Environment {
 
     this.setSunLight();
     this.setEnvironment();
-    // this.setEnvironmentMap();
   }
 
   setSunLight() {
     this.ambient = new AmbientLight("#ffffff", 1);
     this.scene.add(this.ambient);
-    this.sunLight = new DirectionalLight("#ffffff", 4);
+    this.sunLight = new DirectionalLight("#ffffff", 2);
     this.sunLight.castShadow = true;
-    this.sunLight.shadow.camera.far = 15;
-    this.sunLight.shadow.mapSize.set(1024, 1024);
-    this.sunLight.shadow.normalBias = 0.05;
-    this.sunLight.position.set(3.5, 2, -1.25);
+    this.sunLight.shadow.camera.far = 1000;
+    this.sunLight.shadow.camera.left = -50;
+    this.sunLight.shadow.camera.right = 50;
+    this.sunLight.shadow.camera.top = 800;
+    this.sunLight.shadow.camera.bottom = 0;
+    this.sunLight.shadow.mapSize.set(2048, 2048);
+    this.sunLight.shadow.bias = 0.0001;
+    this.sunLight.position.set(0, 100, 0);
     this.scene.add(this.sunLight);
 
     // Debug
@@ -73,43 +64,6 @@ export default class Environment {
     }
   }
 
-  setEnvironmentMap() {
-    this.environmentMap = {};
-    this.environmentMap.intensity = 15;
-    this.environmentMap.texture = this.resources.items.environmentMapTexture;
-    this.environmentMap.texture.colorSpace = SRGBColorSpace;
-    console.log("THIS IS ENVIORNMENT MAP", this.environmentMap);
-    // this.environmentMap.color = new Color(0xe70fffff);
-    this.environmentMap.emission = 15;
-
-    this.scene.environment = this.environmentMap.texture;
-
-    this.environmentMap.updateMaterials = () => {
-      this.scene.traverse((child) => {
-        if (
-          child instanceof Mesh &&
-          child.material instanceof MeshStandardMaterial
-        ) {
-          child.material.envMap = this.environmentMap.texture;
-          child.material.envMapIntensity = this.environmentMap.intensity;
-          child.material.needsUpdate = true;
-        }
-      });
-    };
-    this.environmentMap.updateMaterials();
-
-    // Debug
-    if (this.debug.active) {
-      this.debugFolder
-        .add(this.environmentMap, "intensity")
-        .name("envMapIntensity")
-        .min(0)
-        .max(4)
-        .step(0.001)
-        .onChange(this.environmentMap.updateMaterials);
-    }
-  }
-
   setEnvironment() {
     this.buildings = [];
     this.envMap = this.resources.items.environmentMapTexture;
@@ -122,7 +76,8 @@ export default class Environment {
       const building = this.building.clone();
       this.building.traverse((child) => {
         if (child.isMesh) {
-          child.material = new MeshBasicMaterial({});
+          child.material.transparent = false;
+          child.material.alphaTest = 0.1;
           child.material.map = this.resources.items.BuildingsTexture;
           child.material.color = new Color(0xe70fff);
         }

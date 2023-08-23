@@ -1,6 +1,6 @@
 import Experience from "../Experience.js";
 
-import { Mesh, MeshBasicMaterial, Group, BoxGeometry } from "three";
+import { Mesh, MeshStandardMaterial, Group, BoxGeometry } from "three";
 import { ShapeType } from "three-to-cannon";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 
@@ -66,7 +66,7 @@ export default class HealthBallsBlock {
 
     let mesh = new Mesh(
       new BoxGeometry(maxX, maxY, maxZ),
-      new MeshBasicMaterial({ color: 0xff0000 })
+      new MeshStandardMaterial({ color: 0xff0000 })
     );
     let scoreCollider = getPhysicsBody(
       mesh,

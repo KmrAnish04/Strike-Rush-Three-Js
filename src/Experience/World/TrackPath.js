@@ -48,6 +48,7 @@ export default class GameTrack {
   setMesh(geometry) {
     let mesh = new Mesh(geometry, this.material);
     this.scene.add(mesh);
+    mesh.receiveShadow = true;
     return mesh;
   }
 

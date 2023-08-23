@@ -5,21 +5,18 @@ import { ShapeType } from "three-to-cannon";
 
 import {
   Mesh,
-  MeshBasicMaterial,
+  MeshStandardMaterial,
   Group,
-  PlaneGeometry,
   SpriteMaterial,
   Sprite,
-  Color,
 } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { gsap } from "gsap";
-import Constants, { COLLISION_BODIES } from "./Constants.js";
-import { Vec3 } from "cannon-es";
+import { COLLISION_BODIES } from "./Constants.js";
 
 export default class Player {
-  constructor(playerMaterial, options) {
+  constructor(playerMaterial, options, endWallPositionZ) {
     this.experience = new Experience();
     this.scene = this.experience.scene;
     this.resources = this.experience.resources;
@@ -29,6 +26,7 @@ export default class Player {
     this.camera = this.experience.camera.instance;
     this.playerMaterial = playerMaterial;
     this.endAnimation = false;
+    this.endWallPositionZ = endWallPositionZ;
     this.PlayerBallModel = this.resources.items.HealthBall;
     this.gemModel = this.resources.items.GemBall;
     this.gemCollected = 0;
@@ -38,11 +36,12 @@ export default class Player {
     this.sphereRadius = 0.3;
     this.headBody = null;
     this.isReachedDestination = false; // weather player reached to endblock or not
+    this.playerVelocity = 0;
 
     this.createPlayer(7);
     this.headBody = this.RigidBodiesArr[0];
+    this.playerVelocity = this.headBody.velocity.x;
     this.registerEvents();
-    // this.checkCollision();
     this.playerBallCnt = this.createPlayerCntText(
       this.RigidBodiesArr.length.toString()
     );
@@ -64,7 +63,7 @@ export default class Player {
     textGeometry.center();
     const textMesh = new Mesh(
       textGeometry,
-      new MeshBasicMaterial({ color: 0x000000 })
+      new MeshStandardMaterial({ color: 0x000000 })
     );
 
     textMesh.position.x = this.headBody.position.x;
@@ -126,27 +125,21 @@ export default class Player {
     // create text
     let textGeometry = new TextGeometry(count, {
       font: this.resources.items.scoreFont,
-      size: 0.7,
+      size: 0.6,
       height: 0.6,
     });
     textGeometry.center();
     let textMesh = new Mesh(
       textGeometry,
-      new MeshBasicMaterial({ color: 0xffffff })
+      new MeshStandardMaterial({ color: 0xffffff })
     );
     textMesh.position.z = 0.4;
     textMesh.position.y = 0.2;
-    // textMesh.rotation.y = -Math.PI;
-    // textMesh.lookAt(
-    //   this.camera.position.x,
-    //   this.camera.position.y,
-    //   this.camera.position.z
-    // );
-    textMesh.rotation.x = (Math.PI / 180) * -15;
+    textMesh.rotation.x = (Math.PI / 180) * -30;
     // crete text base
     let textBaseMesh = new Mesh(
       new RoundedBoxGeometry(1.1, 1.1, 1, 10, 0.2),
-      new MeshBasicMaterial({ color: "#FF10F0" })
+      new MeshStandardMaterial({ color: "#FF10F0" })
     );
     textBaseMesh.lookAt(
       this.camera.position.x,
@@ -209,12 +202,10 @@ export default class Player {
 
       switch (bodyType) {
         case COLLISION_BODIES.HEALTH: {
-          console.log("score added", collide.body);
+          this.resources.audios.HEALTH.play();
           collide.body.collisionFilterMask = 0; // dont take collision again with already collided body
-          console.log("before", this.headBody, this.RigidBodiesArr);
 
           this.addPlayerBalls(collide.body.myData.score);
-          console.log("all balls: ", this.RigidBodiesArr);
           this.scene.remove(collide.body.myData.scoreBlock);
           this.physicsWorld.removeBody(collide.body);
 
@@ -227,38 +218,33 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.GEM: {
+          if (this.resources.audios.GEM.isPlaying) {
+            this.resources.audios.GEM.play();
+          } else this.resources.audios.GEM.play();
           ++this.gemCollected;
+          document.getElementById("gemsCollected").textContent =
+            this.gemCollected;
           this.createScoreText("+1");
-          // Gem Animation
-          // const timeline = gsap.timeline();
-          // timeline
-          //     .to(collide.body.position, { duration: 0.3, y:7})
-          //     .to(collide.body.scale, { duration: 1, x: 0.02, y: 0.02, z: 0.02 }) // Scale in
-          //     .to(collide.body.scale, { duration: 0.8, x: 0.015, y: 0.015, z: 0.015 }) // Scale out
-          //     .to(collide.body.position, { duration: 10, x: window.innerWidth - 500, y: window.innerHeight })
-
-          // Play Gem Collect Animation
           gsap.to(collide.body.position, { duration: 0.3, y: 7 });
           gsap.to(collide.body.position, {
             delay: 0.3,
             duration: 0.4,
-            x: this.camera.position.x + 12,
-            y: this.camera.position.y - 2,
-            z: this.camera.position.z - 74, 
+            x: 7,
+            y: 17,
+            z: collide.body.position.z,
           });
 
-          // this.endGamePopup()
+          this.openPopup()
 
           break;
         }
         case COLLISION_BODIES.OBSTACLE: {
-          console.log("Collided with obstacle");
+          console.log(collide);
           collide.body.collisionFilterMask = 0;
           if (this.RigidBodiesArr.length) {
             // gsap.delayedCall(5, this.removePlayerBalls());
             this.removePlayerBalls(); // Subtracting Player's Health by removing the balls
             this.headBody = this.RigidBodiesArr[0];
-            console.log("muyHead: ", this.headBody);
           } else {
             this.endGamePopup();
             console.log("*********** Game Stopped ************");
@@ -286,7 +272,7 @@ export default class Player {
                 duration: 0.6,
                 x: -1 + (0.3 * i) / 2,
                 y: 8.5,
-                z: -18 - i * 2,
+                z: -19 - i * 2,
               })
               .then(() => {
                 gsap
@@ -296,17 +282,16 @@ export default class Player {
                     y: -0.5,
                     z: 0,
                   })
-                  .then(() => (this.RigidBodiesArr[i].mass = 0.07));
+                  .then(() => (this.RigidBodiesArr[i].mass = 0.15));
               });
           }
           1;
           break;
         }
         case COLLISION_BODIES.SCOREBOX: {
+          this.resources.audios.SCORE.play();
           const impact = collide.contact.getImpactVelocityAlongNormal();
           if (impact > 0.7) {
-            ++this.gemCollected;
-            console.log("RIGID BODY", collide.body);
             const collectedBall = this.RigidBodiesArr.findIndex(
               (item) => item.name === collide.target.name
             );
@@ -326,7 +311,7 @@ export default class Player {
             timeline
               .to(gemCollected.position, {
                 duration: 0.3,
-                y: collide.target.position.y + Math.random() * 5,
+                y: collide.target.position.y + Math.random() * 7,
               })
               .to(gemCollected.scale, {
                 duration: 1,
@@ -342,11 +327,14 @@ export default class Player {
               }) // Scale out
               .to(gemCollected.position, {
                 duration: 1,
-                x: this.camera.position.x + 12,
-                y: this.camera.position.y + 14,
-                z: this.camera.position.z - 74,
+                x: 7.5,
+                y: 37,
+                z: this.endWallPositionZ,
               })
               .then(() => {
+                ++this.gemCollected;
+                document.getElementById("gemsCollected").textContent =
+                  this.gemCollected;
                 gemCollected.material.dispose();
                 gemCollected.geometry.dispose();
                 this.scene.remove(gemCollected);
@@ -364,14 +352,12 @@ export default class Player {
   }
 
   removePlayerBalls() {
-    // this.headBody = this.RigidBodiesArr[1];
     let rigidBody = this.RigidBodiesArr.shift();
     let mesh = this.bodyMeshesArr.shift();
 
     rigidBody.collisionResponse = 0;
     rigidBody.collisionFilterMask = 0;
     rigidBody.collisionFilterGroup = 0;
-    // rigidBody.
 
     // Remove object from scene and Dispose of the mesh's geometry and material to free up resources
     this.scene.remove(mesh);
@@ -379,22 +365,8 @@ export default class Player {
     mesh.material.dispose();
 
     // Remove the rigid body from the Physics World
-    // this.physicsWorld.removeBody(rigidBody);
-    console.log("headBody: ", this.RigidBodiesArr);
-
-    // The below way of removing balls is temporary, we should remove it from scene like above, (bcox remove is giveing error so we are using on temoporary basis)
-
-    // gsap.delayedCall(10, this.removeFromScene(mesh));
-    // setTimeout(() => {
-    //   this.removeFromScene(mesh);
-    //   gsap.to(rigidBody.position, { duration: 0.3, x: rigidBody.position.x + 100, y: rigidBody.position.y + 10 });
-    // }, 1000);
     rigidBody.position.y += 10;
     rigidBody.position.x += 100;
-    console.log("rmoved", this.headBody);
-
-    // New head
-    // this.headBody = this.RigidBodiesArr[0];
   }
 
   removeFromScene(obj) {
@@ -409,9 +381,8 @@ export default class Player {
     let spMsh = this.PlayerBallModel.clone();
     let sphereBody = spMsh.children.shift();
     sphereBody.scale.set(0.012, 0.012, 0.012);
-    sphereBody.material.map = null;
-
-    // const sphereMesh = new Mesh(sphereGeometry, sphereMaterial);
+    sphereBody.material.map = this.resources.items.PlayerBall;
+    sphereBody.castShadow = true;
     return sphereBody;
   }
 
@@ -465,32 +436,33 @@ export default class Player {
 
   update() {
     // Update snake's head position based on this.direction
+    this.playerVelocity += -200 * this.time.delta;
     if (this.headBody && !this.isReachedDestination) {
-      this.headBody.velocity.z = -15;
+      this.headBody.velocity.z = Math.round(this.playerVelocity);
       this.headBody.velocity.x = 0;
       if (this.headBody.velocity.z > -10) {
-        this.headBody.velocity.z = -15;
+        this.headBody.velocity.z = Math.round(this.playerVelocity);
       }
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
-    for (
-      let body = 1;
-      body < this.RigidBodiesArr.length && !this.isReachedDestination;
-      body++
-    ) {
-      //
-      this.RigidBodiesArr[body].velocity.x = 0;
-      this.RigidBodiesArr[body].position.z =
-        this.RigidBodiesArr[body - 1].position.z + 2;
 
-      if (body > 0) {
-        gsap.to(this.RigidBodiesArr[body].position, {
-          duration: 0.1,
-          x: this.RigidBodiesArr[body - 1].position.x,
-        });
-      }
-    }
+    // for (
+    //   let body = 1;
+    //   body < this.RigidBodiesArr.length && !this.isReachedDestination;
+    //   body++
+    // ) {
+    //   this.RigidBodiesArr[body].velocity.x = 0;
+    //   this.RigidBodiesArr[body].position.z =
+    //     this.RigidBodiesArr[body - 1].position.z + 2;
+
+    //   if (body > 0) {
+    //     gsap.to(this.RigidBodiesArr[body].position, {
+    //       duration: 0.1,
+    //       x: this.RigidBodiesArr[body - 1].position.x,
+    //     });
+    //   }
+    // }
 
     // Update Three.js sphere positions based on physics simulation
     for (let i = 0; i < this.RigidBodiesArr.length; i++) {

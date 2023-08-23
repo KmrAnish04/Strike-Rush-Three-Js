@@ -25,7 +25,6 @@ export default class AnimatedObstacle {
   setModel(modelPosition, modelScaling) {
     this.model = this.resource;
     this.model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
-    // this.model.rotation.y = Math.PI;
     this.model.children.forEach((child) => {
       child.castShadow = true;
       this.meshesArray.push(child);
@@ -44,7 +43,6 @@ export default class AnimatedObstacle {
       this.physicsWorld.addBody(rigidBody);
 
       // Position the physics body based on the mesh's world position
-      // rigidBody.position.copy(child.getWorldPosition(new Vector3()));
       rigidBody.quaternion.copy(child.quaternion);
     });
 
@@ -57,13 +55,13 @@ export default class AnimatedObstacle {
     this.animation = this.model.animations[0];
     this.mixer = new AnimationMixer(this.model);
     let action = this.mixer.clipAction(this.animation);
-    // action.timeScale = 0.8? + Math.random();
-    action.timeScale = 0.95 
+    action.timeScale = 0.95;
     action.play();
   }
 
   update() {
-    this.mixer.update(this.time.delta * 0.001);
+    // this.mixer.update(this.time.delta * 0.001); //Anish-> Previous
+    this.mixer.update(this.time.delta); //Anish-> Changed
 
     for (let i = 0; i < this.rigidBodiesArray.length; i++) {
       const physicsBody = this.rigidBodiesArray[i];

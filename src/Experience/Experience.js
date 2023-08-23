@@ -57,7 +57,7 @@ export default class Experience {
   update() {
     const deltaTime = this.time.delta;
     this.camera.update();
-    this.physicsWorld.step(1 / 60, deltaTime, 3);
+    this.physicsWorld.step(1 / 60, deltaTime);
     this.world.update();
     // this.cannonDebugger.update();
     this.renderer.update();
