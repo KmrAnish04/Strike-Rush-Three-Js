@@ -65,7 +65,7 @@ export default class SceneWorld {
         this.playerMaterial,
         this.spinnerMaterial,
         {
-          restitution: 0.2,
+          restitution: 1,
           friction: 0,
         }
       );

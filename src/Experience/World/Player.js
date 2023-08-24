@@ -3,7 +3,7 @@ import EndGamePopup from "./EndGamePopUp.js";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 import { ShapeType } from "three-to-cannon";
 
-import { Mesh, MeshStandardMaterial, Group } from "three";
+import { Mesh, MeshStandardMaterial, Group, Color } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
 import { gsap } from "gsap";
@@ -33,7 +33,6 @@ export default class Player {
     this.endWallPositionZ = endWallPositionZ;
     this.PlayerBallModel = this.resources.items.HealthBall;
     this.playerBallGeometry = this.PlayerBallModel.children[0].geometry;
-    this.playerBallMaterial = this.PlayerBallModel.children[0].material;
     this.PlayerBallModel.children[0].geometry = null;
     this.PlayerBallModel.children[0].material = null;
     this.gemModel = this.resources.items.GemBall;
@@ -223,7 +222,6 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.OBSTACLE: {
-          console.log(collide);
           collide.body.collisionFilterMask = 0;
           if (this.RigidBodiesArr.length) {
             // gsap.delayedCall(5, this.removePlayerBalls());
@@ -377,10 +375,14 @@ export default class Player {
     // Create Mesh for rigidbodies
     let spMsh = this.PlayerBallModel.clone();
     let sphereBody = spMsh.children.shift();
+    sphereBody.material = new MeshStandardMaterial({
+      color: 0x0065ff,
+      map: this.resources.items.PlayerBall,
+      roughness: 1,
+    });
+    sphereBody.material.color = new Color(0x0065ff);
     sphereBody.geometry = this.playerBallGeometry;
-    sphereBody.material = this.playerBallMaterial;
     sphereBody.scale.set(0.012, 0.012, 0.012);
-    sphereBody.material.map = this.resources.items.PlayerBall;
     sphereBody.castShadow = true;
     return sphereBody;
   }

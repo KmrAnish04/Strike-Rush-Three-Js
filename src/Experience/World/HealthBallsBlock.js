@@ -1,6 +1,6 @@
 import Experience from "../Experience.js";
 
-import { Mesh, MeshStandardMaterial, Group, BoxGeometry } from "three";
+import { Mesh, MeshStandardMaterial, Group, BoxGeometry, Color } from "three";
 import { ShapeType } from "three-to-cannon";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 
@@ -33,7 +33,12 @@ export default class HealthBallsBlock {
 
   createBalls() {
     let model = this.resource.clone().children.shift();
-    model.scale.set(0.007, 0.007, 0.007);
+    model.material = new MeshStandardMaterial({
+      color: 0x0065ff,
+      map: this.resources.items.PlayerBall,
+      roughness: 1,
+    });
+    model.scale.set(0.01, 0.01, 0.01);
     this.healthBlockGroup.add(model);
     return model;
   }

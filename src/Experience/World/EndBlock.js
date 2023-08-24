@@ -64,7 +64,7 @@ export default class EndBlock {
           0
         );
         child.rotation.x = -Math.PI / 2;
-        child.position.z = positionZ + 1;
+        child.position.z = positionZ ;
         child.position.x = positionX;
         child.position.y = 12;
         child.material.color = new Color(0xe70fff);
