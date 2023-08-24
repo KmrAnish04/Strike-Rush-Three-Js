@@ -5,7 +5,8 @@ export default class Time extends EventEmitter {
     super();
 
     // Setup
-    this.start = performance.now();
+    // this.start = performance.now();
+    this.start = Date.now();
     this.lastTime = this.start;
     this.elapsed = 0;
     this.delta = 16;
@@ -16,7 +17,8 @@ export default class Time extends EventEmitter {
   }
 
   tick() {
-    const currentTime = performance.now() / 1000;
+    // const currentTime = performance.now() / 1000;
+    const currentTime = Date.now();
     this.delta = currentTime - this.lastTime;
     this.lastTime = currentTime;
     this.elapsed = this.lastTime - this.start;

@@ -12,7 +12,7 @@ import GemsBlock from "./GemsBlock.js";
 import HealthBallsBlock from "./HealthBallsBlock.js";
 import Player from "./Player.js";
 import CenterRamp from "./CenterRamp.js";
-import { COLLISION_BODIES } from "./Constants.js";
+import { COLLISION_BODIES } from "../Utils/Constants.js";
 import HUD from "./HUD.js";
 
 const COLLISION_GROUPS = {
@@ -23,9 +23,10 @@ const COLLISION_GROUPS = {
 export default class SceneWorld {
   constructor() {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.physicsWorld = this.experience.physicsWorld;
+    const { scene, resources, physicsWorld } = this.experience;
+    this.scene = scene;
+    this.resources = resources;
+    this.physicsWorld = physicsWorld;
     this.objectsToUpdate = [];
     // Wait for resources
     this.resources.on("ready", () => {
@@ -64,7 +65,7 @@ export default class SceneWorld {
         this.playerMaterial,
         this.spinnerMaterial,
         {
-          restitution: 0.2,
+          restitution: 1,
           friction: 0,
         }
       );
@@ -289,20 +290,19 @@ export default class SceneWorld {
 
       this.ramp = new Ramps(
         this.resources.items.Ramp1,
-        new Vector3(0, 0, -3),
         new Vector3(0.05, 0.05, 0.05),
         -23 * trackLength,
         this.rampMaterial
       );
 
-      // this.PlayerObj = new Player(
-      //   this.playerMaterial,
-      //   {
-      //     filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
-      //     filterMask: COLLISION_GROUPS.GEMS_GROUP,
-      //   },
-      //   -trackLength * 26 + 7
-      // );
+      this.PlayerObj = new Player(
+        this.playerMaterial,
+        {
+          filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+          filterMask: COLLISION_GROUPS.GEMS_GROUP,
+        },
+        -trackLength * 26 + 7
+      );
       // window.addEventListener("click", (event) => {
       //   this.PlayerObj = new Player(
       //     this.playerMaterial,
@@ -313,16 +313,16 @@ export default class SceneWorld {
       //     -trackLength * 26 + 7
       //   );
       // })
-      setTimeout(() => {
-        this.PlayerObj = new Player(
-          this.playerMaterial,
-          {
-            filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
-            filterMask: COLLISION_GROUPS.GEMS_GROUP,
-          },
-          -trackLength * 26 + 7
-        );
-      }, 1000);
+      // setTimeout(() => {
+      //   this.PlayerObj = new Player(
+      //     this.playerMaterial,
+      //     {
+      //       filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+      //       filterMask: COLLISION_GROUPS.GEMS_GROUP,
+      //     },
+      //     -trackLength * 26 + 7
+      //   );
+      // }, 1000);
 
       this.endBlock = new EndBlock(
         -trackLength * 26 + 7,

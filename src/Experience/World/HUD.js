@@ -1,19 +1,15 @@
-import {
-  LinearMipMapNearestFilter,
-  SRGBColorSpace,
-  Sprite,
-  SpriteMaterial,
-} from "three";
+import { SRGBColorSpace, Sprite, SpriteMaterial } from "three";
 import Experience from "../Experience";
 import { gsap } from "gsap";
 
 export default class HUD {
   constructor(gemsCollected) {
     this.experience = new Experience();
+    const { resources, scene, camera } = this.experience;
     this.collected = gemsCollected;
-    this.resources = this.experience.resources;
-    this.scene = this.experience.scene;
-    this.camera = this.experience.camera.instance;
+    this.resources = resources;
+    this.scene = scene;
+    this.camera = camera.instance;
     this.gem = this.resources.items.HudGem;
     this.progressBarBackground = this.resources.items.ProgressBarBg;
     this.progressBarForeground = this.resources.items.ProgressBarFg;

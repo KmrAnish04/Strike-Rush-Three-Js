@@ -7,6 +7,7 @@ export default class EndGamePopup {
     this.totalCoins = totalCoins;
     this.createPopup();
   }
+
   createPopup() {
     const endPopup = document.createElement("div");
     endPopup.className = "EndGamePopup";
@@ -16,6 +17,7 @@ export default class EndGamePopup {
     endPopup.appendChild(endGamePopupBody);
     document.body.appendChild(endPopup);
   }
+
   createPopupBody() {
     const popupBody = document.createElement("div");
     popupBody.className = "EndGamePopupBody";
@@ -23,6 +25,7 @@ export default class EndGamePopup {
     this.createPopupBodyContent(popupBody);
     return popupBody;
   }
+
   createPopupBodyContent(popupBody) {
     //Section 1
     const section1 = document.createElement("div");

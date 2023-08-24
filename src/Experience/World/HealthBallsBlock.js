@@ -1,20 +1,20 @@
 import Experience from "../Experience.js";
 
-import { Mesh, MeshStandardMaterial, Group, BoxGeometry } from "three";
+import { Mesh, MeshStandardMaterial, Group, BoxGeometry, Color } from "three";
 import { ShapeType } from "three-to-cannon";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
 
 export default class HealthBallsBlock {
   constructor(healthMaterial, blockPosition, noOfBallToPlace) {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.time = this.experience.time;
-    this.debug = this.experience.debug;
-    this.physicsWorld = this.experience.physicsWorld;
-    this.resource = this.resources.items.HealthBall;
+    const { scene, resources, time, debug, physicsWorld } = this.experience;
+    this.scene = scene;
+    this.resources = resources;
+    this.time = time;
+    this.debug = debug;
+    this.physicsWorld = physicsWorld;
+    this.resource = resources.items.HealthBall;
     this.healthMaterial = healthMaterial;
-
     this.creaditPoints = noOfBallToPlace; // The score user will get
     this.healthBlockGroup = new Group();
     this.healthBlockGroup.name = "Health-Add";
@@ -22,21 +22,23 @@ export default class HealthBallsBlock {
       noOfBallToPlace,
       blockPosition
     );
-
     // The socreBlock position should always set like below, bcoz group and rigid bodies are two different objects
     this.healthBlockGroup.position.x =
       this.healthBlockGroup.position.x + blockPosition.x;
     scoreBlock.position.x = scoreBlock.position.x + blockPosition.x;
-
     this.healthBlockGroup.position.z =
       this.healthBlockGroup.position.z + blockPosition.z;
     scoreBlock.position.z = scoreBlock.position.z + blockPosition.z;
   }
 
   createBalls() {
-    let model = this.resource.clone();
-    model = model.children.shift();
-    model.scale.set(0.007, 0.007, 0.007);
+    let model = this.resource.clone().children.shift();
+    model.material = new MeshStandardMaterial({
+      color: 0x0065ff,
+      map: this.resources.items.PlayerBall,
+      roughness: 1,
+    });
+    model.scale.set(0.01, 0.01, 0.01);
     this.healthBlockGroup.add(model);
     return model;
   }

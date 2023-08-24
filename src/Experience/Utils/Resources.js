@@ -1,4 +1,4 @@
-import { TextureLoader, CubeTextureLoader } from "three";
+import { TextureLoader, CubeTextureLoader, AudioLoader } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
 import EventEmitter from "./EventEmitter.js";
@@ -13,9 +13,7 @@ export default class Resources extends EventEmitter {
     this.items = {};
     this.toLoad = this.sources.length;
     this.loaded = 0;
-    this.audios = {};
     this.setLoaders();
-    this.loadAudios();
     this.startLoading();
   }
 
@@ -26,18 +24,7 @@ export default class Resources extends EventEmitter {
     this.loaders.textureLoader = new TextureLoader();
     this.loaders.cubeTextureLoader = new CubeTextureLoader();
     this.loaders.fontLoader = new FontLoader();
-  }
-
-  loadAudios() {
-    const gemCollect = new Audio("./sounds/GemsCollect.WAV");
-    const healthCollect = new Audio("./sounds/HealthCollect.WAV");
-    const Scored = new Audio("./sounds/Score.WAV");
-
-    this.audios = {
-      GEM: gemCollect,
-      HEALTH: healthCollect,
-      SCORE: Scored,
-    };
+    this.loaders.audioLoader = new AudioLoader();
   }
 
   startLoading() {
@@ -61,6 +48,10 @@ export default class Resources extends EventEmitter {
         });
       } else if (source.type === "font") {
         this.loaders.fontLoader.load(source.path, (file) => {
+          this.sourceLoaded(source, file);
+        });
+      } else if (source.type === "audio") {
+        this.loaders.audioLoader.load(source.path, (file) => {
           this.sourceLoaded(source, file);
         });
       }

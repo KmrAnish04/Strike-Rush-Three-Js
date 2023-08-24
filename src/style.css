@@ -83,7 +83,7 @@ body {
 .homeButton{
   position: relative;
 }
-.section1 .homeButtonImage {}
+/* .section1 .homeButtonImage {} */
 
 .homeImage {
   position: absolute;
@@ -102,7 +102,7 @@ body {
   margin-bottom: 10px;
 }
 
-.section2 .levelCompleted {
+.section2 .levelCompleted { 
   width: 80%;
 }
 
@@ -243,31 +243,118 @@ body {
   font-size: 35px;
 }
 
-/* .HUD {
+#hud-ui {
+  position: relative;
+  display: flex;
   width: 100%;
-  height: 20%;
-}
-.HUD .gems-collection-HUD {
-  flex-direction: column;
+  height: 100%;
+  pointer-events: none;
   align-items: center;
-  justify-content: center;
-  width: 20%;
-  height: 30%;
-  margin-top: 2%;
-  margin-left: 80%;
+  flex-direction: column;
 }
-.HUD .gems-collection {
-  width: 30%;
+
+#hud-ui .progressBarContainer {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBar {
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 38%;
   height: 80%;
 }
-.HUD .collected {
-  font-family: LilitaOneRegular;
-  font-size: 28px;
-  margin-left: -90px;
-  margin-bottom: 50px;
-  color: #ffffff;
+
+#hud-ui .progressBarContainer .progressBarCurrentLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
- */
+#hud-ui .progressBarContainer .progressBarCurrentLevel .currentLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+  margin-right: 28px;
+}
+#hud-ui
+  .progressBarContainer
+  .progressBarCurrentLevel
+  .progressBarCurrentLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBarNextLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .nextLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .progressBarNextLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBar .progressBarImg {
+  width: 100%;
+}
+
+#hud-ui .gemsCollectContainer {
+  margin-left: 250px;
+  position: relative;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg {
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg .gemsCollectedBGImg {
+  width: 45%;
+  opacity: 50%;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollected {
+  color: #ffffff;
+  font-size: 28px;
+  font-family: LilitaOneRegular;
+  margin-left: -80px;
+  z-index: 2;
+}
+#hud-ui .gemsCollectContainer .gemsCollectImage {
+  width: 20%;
+  rotate: 35deg;
+}
+
+@media screen and (max-width: 620px) {
+  #hud-ui {
+    scale: 0.8;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  #hud-ui {
+    scale: 0.9;
+  }
+}
 
 #hud-ui {
   position: relative;
@@ -370,105 +457,16 @@ body {
   rotate: 35deg;
 }
 
-#hud-ui {
-  position: relative;
-  display: flex;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  align-items: center;
-  flex-direction: column;
+@media screen and (max-width: 620px) {
+  #hud-ui {
+    scale: 0.8;
+  }
 }
 
-#hud-ui .progressBarContainer {
-  display: flex;
-  position: relative;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-#hud-ui .progressBarContainer .progressBar {
-  margin-left: 5%;
-  margin-right: 5%;
-  width: 38%;
-  height: 80%;
-}
-
-#hud-ui .progressBarContainer .progressBarCurrentLevel {
-  width: 10%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-#hud-ui .progressBarContainer .progressBarCurrentLevel .currentLevel {
-  color: #ffffff;
-  font-size: 24px;
-  font-family: LilitaOneRegular;
-  margin-left: -28px;
-  margin-right: 28px;
-}
-#hud-ui
-  .progressBarContainer
-  .progressBarCurrentLevel
-  .progressBarCurrentLevelImg {
-  width: 100%;
-}
-
-#hud-ui .progressBarContainer .progressBarNextLevel {
-  width: 10%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-#hud-ui .progressBarContainer .progressBarNextLevel .nextLevel {
-  color: #ffffff;
-  font-size: 24px;
-  font-family: LilitaOneRegular;
-  margin-left: -28px;
-}
-#hud-ui .progressBarContainer .progressBarNextLevel .progressBarNextLevelImg {
-  width: 100%;
-}
-
-#hud-ui .progressBarContainer .progressBar .progressBarImg {
-  width: 100%;
-}
-
-#hud-ui .gemsCollectContainer {
-  margin-left: 250px;
-  position: relative;
-  margin-top: 2%;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-#hud-ui .gemsCollectContainer .gemsCollectedBg {
-  width: 300px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
-#hud-ui .gemsCollectContainer .gemsCollectedBg .gemsCollectedBGImg {
-  width: 45%;
-  opacity: 50%;
-}
-
-#hud-ui .gemsCollectContainer .gemsCollected {
-  color: #ffffff;
-  font-size: 28px;
-  font-family: LilitaOneRegular;
-  margin-left: -80px;
-  z-index: 2;
-}
-#hud-ui .gemsCollectContainer .gemsCollectImage {
-  width: 20%;
-  rotate: 35deg;
+@media screen and (max-width: 960px) {
+  #hud-ui {
+    scale: 0.9;
+  }
 }
 
 
