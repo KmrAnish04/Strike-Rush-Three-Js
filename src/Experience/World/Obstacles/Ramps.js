@@ -28,7 +28,7 @@ export default class Ramps {
     this.model.traverse((child) => {
       if (child.isMesh) {
         child.material = new MeshStandardMaterial({
-          map: this.resources.items.rampTexture,
+          map: this.resources.items.CenterRampTexture,
         });
         child.material.map.flipY = false;
       }

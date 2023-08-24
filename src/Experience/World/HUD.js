@@ -70,8 +70,7 @@ export default class HUD {
     progressBarCurrentLevel.className = "progressBarCurrentLevel";
 
     const progressBarCurrentLevelImg = document.createElement("img");
-    progressBarCurrentLevelImg.src =
-      "./textures/Progress Bar Small Turquoise.png";
+    progressBarCurrentLevelImg.src = "/textures/ProgressBarSmallTurquoise.png";
     progressBarCurrentLevelImg.className = "progressBarCurrentLevelImg";
 
     const currentLevel = document.createElement("label");
@@ -85,7 +84,7 @@ export default class HUD {
     progressBarNextLevel.className = "progressBarNextLevel";
 
     const progressBarNextLevelImg = document.createElement("img");
-    progressBarNextLevelImg.src = "./textures/Progress Bar Small Turquoise.png";
+    progressBarNextLevelImg.src = "/textures/ProgressBarSmallTurquoise.png";
     progressBarNextLevelImg.className = "progressBarNextLevelImg";
 
     const nextLevel = document.createElement("label");
@@ -99,7 +98,7 @@ export default class HUD {
     progressBar.className = "progressBar";
 
     const progressBarImg = document.createElement("img");
-    progressBarImg.src = "./textures/Level Bar Turquoise.png";
+    progressBarImg.src = "/textures/LevelBarTurquoise.png";
     progressBarImg.className = "progressBarImg";
 
     progressBar.appendChild(progressBarImg);
@@ -118,7 +117,7 @@ export default class HUD {
     gemsCollectedBg.className = "gemsCollectedBg";
 
     const gemsCollectedBGImg = document.createElement("img");
-    gemsCollectedBGImg.src = "./textures/Progress Bar Background.png";
+    gemsCollectedBGImg.src = "/textures/ProgressBarBackground.png";
     gemsCollectedBGImg.className = "gemsCollectedBGImg";
 
     const gemsCollected = document.createElement("label");
@@ -127,7 +126,7 @@ export default class HUD {
     gemsCollected.textContent = 0;
 
     const gemsCollectImage = document.createElement("img");
-    gemsCollectImage.src = "./textures/Gem Blue.png";
+    gemsCollectImage.src = "/textures/GemBlue.png";
     gemsCollectImage.className = "gemsCollectImage";
 
     gemsCollectedBg.appendChild(gemsCollectedBGImg);

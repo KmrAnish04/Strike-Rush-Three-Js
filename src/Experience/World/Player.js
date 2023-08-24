@@ -76,7 +76,7 @@ export default class Player {
     textMesh.material.transparent = true;
     gsap
       .to(textMesh.position, {
-        duration: 0.3,
+        duration: 0.5,
         y: Math.random() + 5,
         x: Math.random() * (4 - -4) + -4,
         z: headBodyPosition + positionZ,
@@ -84,7 +84,7 @@ export default class Player {
       .then(() => {
         gsap
           .to(textMesh.material, {
-            duration: 0.3,
+            duration: 0.4,
             opacity: 0,
           })
           .then(() => {
@@ -237,7 +237,7 @@ export default class Player {
             this.removePlayerBalls(); // Subtracting Player's Health by removing the balls
             this.headBody = this.RigidBodiesArr[0];
           } else {
-            this.endGamePopup();
+            // this.endGamePopup();
             console.log("*********** Game Stopped ************");
           }
 
@@ -293,9 +293,9 @@ export default class Player {
             this.audioManager.playAudio(this.resources.items.Score);
             this.createScoreText(
               collide.body.myData.score,
-              1.5,
+              1.7,
               this.headBody.position.z,
-              4
+              6
             );
             const collectedBall = this.RigidBodiesArr.findIndex(
               (item) => item.name === collide.target.name

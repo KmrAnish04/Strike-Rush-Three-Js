@@ -76,12 +76,12 @@ export default class EndGamePopup {
     const homeButtonImage = document.createElement("img");
     homeButtonImage.className = "homeButtonImage";
     homeButtonImage.id = "homeButtonImage";
-    homeButtonImage.src = "./textures/Button Square Green.png";
+    homeButtonImage.src = "/textures/ButtonSquareGreen.png";
 
     const homeImage = document.createElement("img");
     homeImage.className = "homeImage";
     homeImage.id = "homeImage";
-    homeImage.src = "./textures/Main Menu Green.png";
+    homeImage.src = "/textures/MainMenuGreen.png";
 
     // homeButtonImage.appendChild(homeImage)
     homeButton.appendChild(homeImage);
@@ -103,19 +103,17 @@ export default class EndGamePopup {
     const background = document.createElement("img");
     background.className = "GemsCountBackground";
     background.id = "Background";
-    background.src = "./textures/Progress Bar Background.png";
+    background.src = "/textures/ProgressBarBackground.png";
 
     const totalGemsCollected = document.createElement("img");
     totalGemsCollected.className = "totalGemsCollected";
     totalGemsCollected.id = "totalGemsCollected";
-    totalGemsCollected.src = "./textures/Gem Blue.png";
-
+    totalGemsCollected.src = "/textures/GemBlue.png";
 
     const totalGemsLabel = document.createElement("label");
     totalGemsLabel.className = "totalGemsLabel";
     totalGemsLabel.id = "totalGemsLabel";
     totalGemsLabel.textContent = `${this.totalCoins}`;
-
 
     totalGemsCollectedDiv.appendChild(background);
     totalGemsCollectedDiv.appendChild(totalGemsLabel);
@@ -132,7 +130,7 @@ export default class EndGamePopup {
     const levelCompleted = document.createElement("img");
     levelCompleted.className = "levelCompleted";
     levelCompleted.id = "levelCompleted";
-    levelCompleted.src = "./textures/Level Completed.png";
+    levelCompleted.src = "/textures/LevelCompleted.png";
     levelCompletedDiv.appendChild(levelCompleted);
 
     return levelCompletedDiv;
@@ -149,12 +147,12 @@ export default class EndGamePopup {
     // gemsCollectedLabel.textContent = `${this.collectedGems} X 1 = ${
     //   this.collectedGems * 1
     // } `;
-    gemsCollectedLabel.textContent = '22 x 1 = 22';
+    gemsCollectedLabel.textContent = "22 x 1 = 22";
 
     const gem = document.createElement("img");
     gem.className = "gem";
     gem.id = "gem";
-    gem.src = "./textures/Gem Blue.png";
+    gem.src = "/textures/GemBlue.png";
     gemsCollectedDiv.appendChild(gemsCollectedLabel);
     gemsCollectedDiv.appendChild(gem);
 
@@ -169,12 +167,12 @@ export default class EndGamePopup {
     const scoreIncreaser = document.createElement("img");
     scoreIncreaser.className = "scoreIncreaser";
     scoreIncreaser.id = "scoreIncreaser";
-    scoreIncreaser.src = "./textures/Ad Wheel.png";
+    scoreIncreaser.src = "/textures/AdWheel.png";
 
     const scoreIncreaserPin = document.createElement("img");
     scoreIncreaserPin.className = "scoreIncreaserPin";
     scoreIncreaserPin.id = "scoreIncreaserPin";
-    scoreIncreaserPin.src = "./textures/Ad Wheel Arrow.png";
+    scoreIncreaserPin.src = "/textures/AdWheelArrow.png";
 
     scoreIncreaserDiv.appendChild(scoreIncreaser);
     scoreIncreaserDiv.appendChild(scoreIncreaserPin);
@@ -190,12 +188,12 @@ export default class EndGamePopup {
     const background = document.createElement("img");
     background.className = "videoBackground";
     background.id = "videoBackground";
-    background.src = "./textures/Button Rectangle Large Green.png";
+    background.src = "/textures/ButtonRectangleLargeGreen.png";
 
     const video = document.createElement("img");
     video.className = "video";
     video.id = "video";
-    video.src = "./textures/Ad Green.png";
+    video.src = "/textures/AdGreen.png";
 
     const collected = document.createElement("span");
     collected.className = "collectedGems";
@@ -205,7 +203,7 @@ export default class EndGamePopup {
     const gem = document.createElement("img");
     gem.className = "gem";
     gem.id = "gem";
-    gem.src = "./textures/Gem Blue.png";
+    gem.src = "/textures/Gem Blue.png";
 
     doubleGemsDiv.appendChild(background);
     doubleGemsDiv.appendChild(video);
