@@ -151,10 +151,10 @@ export default class SceneWorld {
         2
       );
 
-      this.centerRamp = new CenterRamp(
-        this.centerRampMaterial,
-        new Vec3(2.5, -0.5, -8 * trackLength)
-      );
+      // this.centerRamp = new CenterRamp(
+      //   this.centerRampMaterial,
+      //   new Vec3(2.5, -0.5, -8 * trackLength)
+      // );
 
       this.rampGem1 = new GemsBlock(
         1,
@@ -288,12 +288,12 @@ export default class SceneWorld {
         new Vec3(0, 0.25, 0)
       );
 
-      this.ramp = new Ramps(
-        this.resources.items.Ramp1,
-        new Vector3(0.05, 0.05, 0.05),
-        -23 * trackLength,
-        this.rampMaterial
-      );
+      // this.ramp = new Ramps(
+      //   this.resources.items.Ramp1,
+      //   new Vector3(0.05, 0.05, 0.05),
+      //   -23 * trackLength,
+      //   this.rampMaterial
+      // );
 
       this.PlayerObj = new Player(
         this.playerMaterial,

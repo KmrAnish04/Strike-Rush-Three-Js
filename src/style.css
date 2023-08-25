@@ -38,7 +38,7 @@ body {
   height: 100%;
   width: 40%;
   display: flex;
-  background-image: url("./textures/Background Shadow Purple.png");
+  background-image: url("../static/textures/BackgroundShadowPurple.png");
   flex-direction: column;
   justify-content: center;
   align-items: center;

@@ -281,16 +281,6 @@ export const SOURCES = [
     path: "models/Obstacle/HammerOneSideAnimation.fbx",
   },
   {
-    name: "ObstacleLegLiverHammer",
-    type: "fbxModel",
-    path: "models/Obstacle/HammerBothSide.fbx",
-  },
-  {
-    name: "ObstacleLiverAxe",
-    type: "fbxModel",
-    path: "models/Obstacle/KnifeOneSideAnimation.fbx",
-  },
-  {
     name: "ObstacleBowlingPin",
     type: "fbxModel",
     path: "models/Obstacle/BowlingPin.FBX",
@@ -308,7 +298,7 @@ export const SOURCES = [
   {
     name: "CenterRampTexture",
     type: "texture",
-    path: "models/Ramps/rampa 1.png",
+    path: "models/Ramps/rampa_1.png",
   },
   {
     name: "GemBall",
@@ -324,11 +314,6 @@ export const SOURCES = [
     name: "groundTexture",
     type: "texture",
     path: "textures/ground.png",
-  },
-  {
-    name: "rampTexture",
-    type: "texture",
-    path: "models/Ramps/rampa 1.png",
   },
   {
     name: "SpinnerObstacle",
@@ -353,7 +338,7 @@ export const SOURCES = [
   {
     name: "BuildingsTexture",
     type: "texture",
-    path: "models/Enviornment/RGB Alpha.png",
+    path: "models/Enviornment/RGB_Alpha.png",
   },
   {
     name: "FinishLine",
@@ -363,22 +348,17 @@ export const SOURCES = [
   {
     name: "HudGem",
     type: "texture",
-    path: "textures/Gem Blue.png",
+    path: "textures/GemBlue.png",
   },
   {
     name: "ProgressBarBg",
     type: "texture",
-    path: "textures/Progress Bar Background.png",
+    path: "textures/ProgressBarBackground.png",
   },
   {
     name: "ProgressBarFg",
     type: "texture",
-    path: "textures/Level Bar Turquoise.png",
-  },
-  {
-    name: "ProgressBarLevel",
-    type: "texture",
-    path: "textures/Progress Bar Small Turquoise.png",
+    path: "textures/LevelBarTurquoise.png",
   },
   {
     name: "PlayerBall",
@@ -400,16 +380,16 @@ export const SOURCES = [
   {
     name: "GemCollect",
     type: "audio",
-    path: "sounds/GemsCollect.WAV",
+    path: "sounds/GemsCollect.mp3",
   },
   {
     name: "HealthCollect",
     type: "audio",
-    path: "sounds/HealthCollect.WAV",
+    path: "sounds/HealthCollect.mp3",
   },
   {
     name: "Score",
     type: "audio",
-    path: "sounds/Score.WAV",
+    path: "sounds/Score.mp3",
   },
 ];
