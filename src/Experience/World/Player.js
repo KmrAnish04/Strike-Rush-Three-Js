@@ -1,8 +1,8 @@
 import Experience from "../Experience.js";
 import EndGamePopup from "./EndGamePopUp.js";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper.js";
-import { ShapeType } from "three-to-cannon";
-
+import { ShapeType, } from "three-to-cannon";
+import { Vec3 } from "cannon-es";
 import { Mesh, MeshStandardMaterial, Group, Color } from "three";
 import { TextGeometry } from "three/examples/jsm/geometries/TextGeometry";
 import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
@@ -43,11 +43,12 @@ export default class Player {
     this.sphereRadius = 0.3;
     this.headBody = null;
     this.isReachedDestination = false; // weather player reached to endblock or not
-    // this.playerVelocity = 0;
+    this.playerVelocity = 0;
 
-    this.createPlayer(7);
+    this.createPlayer(1);
     this.headBody = this.RigidBodiesArr[0];
-    // this.playerVelocity = this.headBody.velocity.x;
+    this.playerVelocity = this.headBody.position.z;
+    this.headBody.velocity.z = -1;
     this.registerEvents();
     this.playerBallCnt = this.createPlayerCntText(
       this.RigidBodiesArr.length.toString()
@@ -97,7 +98,7 @@ export default class Player {
 
   createPlayer(noOfBalls) {
     let size = 0.4;
-    this.mass = 2; // Ball Mass
+    this.mass = 1; // Ball Mass
     let space = 1 * size;
 
     // Create Mesh for rigidbodies
@@ -408,7 +409,6 @@ export default class Player {
     sphereBody.angularDamping = 0;
     sphereBody.position.set(-4, 4, 0);
     sphereBody.fixedRotation = true;
-    sphereBody.angularDamping = 0;
     return sphereBody;
   }
 
@@ -450,32 +450,43 @@ export default class Player {
     // this.playerVelocity += -200 * this.time.delta;
     if (this.headBody && !this.isReachedDestination) {
       // this.headBody.velocity.z = Math.round(this.playerVelocity);
-      this.headBody.velocity.z = -15;
-      this.headBody.velocity.x = 0;
-      if (this.headBody.velocity.z > -10) {
-        // this.headBody.velocity.z = Math.round(this.playerVelocity);
-        this.headBody.velocity.z = -15;
-      }
+      // this.headBody.velocity.z = -15;
+      // this.headBody.velocity.x = 0;
+      console.log("this is : ", this.time.delta / 1000)
+      // const topPoint = new Vec3(0, 1, 0)
+      // const impulse = new Vec3(0, 0, -5 * this.time.delta / 1000)
+      // this.headBody.applyImpulse(impulse, topPoint);
+      // if (this.headBody.velocity.z > -10) {
+      // this.headBody.velocity.z = Math.round(this.playerVelocity);
+      // this.headBody.velocity.z = -15;
+      // }  
+
+      // this.headBody.velocity.x = 0;
+      // this.headBody.velocity.y = 0;
+      this.playerVelocity += -20 * this.time.delta / 1000;
+      console.log("velocity: ", Math.round(this.playerVelocity))
+      this.headBody.position.z = Math.round(this.playerVelocity);
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
 
-    for (
-      let body = 1;
-      body < this.RigidBodiesArr.length && !this.isReachedDestination;
-      body++
-    ) {
-      this.RigidBodiesArr[body].velocity.x = 0;
-      this.RigidBodiesArr[body].position.z =
-        this.RigidBodiesArr[body - 1].position.z + 2;
-
-      if (body > 0) {
-        gsap.to(this.RigidBodiesArr[body].position, {
-          duration: 0.1,
-          x: this.RigidBodiesArr[body - 1].position.x,
-        });
-      }
-    }
+    // for (
+    //   let body = 1;
+    //   body < this.RigidBodiesArr.length && !this.isReachedDestination;
+    //   body++
+    // ) {
+    //   // this.RigidBodiesArr[body].velocity.x = 0;
+    //   this.RigidBodiesArr[body].position.z =
+    //     this.RigidBodiesArr[body - 1].position.z + 2;
+    //   this.RigidBodiesArr[body].angularDamping = 0;
+    //   this.RigidBodiesArr[body].linearDamping = 0;
+    //   if (body > 0) {
+    //     gsap.to(this.RigidBodiesArr[body].position, {
+    //       duration: 0.1,
+    //       x: this.RigidBodiesArr[body - 1].position.x,
+    //     });
+    //   }
+    // }
 
     // Update Three.js sphere positions based on physics simulation
     for (let i = 0; i < this.RigidBodiesArr.length; i++) {

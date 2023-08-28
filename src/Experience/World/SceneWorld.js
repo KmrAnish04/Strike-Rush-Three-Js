@@ -151,10 +151,10 @@ export default class SceneWorld {
         2
       );
 
-      // this.centerRamp = new CenterRamp(
-      //   this.centerRampMaterial,
-      //   new Vec3(2.5, -0.5, -8 * trackLength)
-      // );
+      this.centerRamp = new CenterRamp(
+        this.centerRampMaterial,
+        new Vec3(0, -0.5, -8 * trackLength)
+      );
 
       this.rampGem1 = new GemsBlock(
         1,
@@ -227,13 +227,13 @@ export default class SceneWorld {
         new Vec3(6.5, 0.25, -10)
       );
 
-      this.ballPinObs3 = new BallPinsObstacle(
-        4,
-        new Vector3(-1.6, 0, -10 * trackLength),
-        new Vector3(0.009, 0.009, 0.009),
-        this.obstacleMaterial,
-        this.pathObstacleMaterial
-      );
+      // this.ballPinObs3 = new BallPinsObstacle(
+      //   4,
+      //   new Vector3(-1.6, 0, -10 * trackLength),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial,
+      //   this.pathObstacleMaterial
+      // );
       // this.ballPinObs4 = new BallPinsObstacle(
       //   4,
       //   new Vector3(-1.6, 0, -15 * trackLength),
@@ -288,12 +288,12 @@ export default class SceneWorld {
         new Vec3(0, 0.25, 0)
       );
 
-      // this.ramp = new Ramps(
-      //   this.resources.items.Ramp1,
-      //   new Vector3(0.05, 0.05, 0.05),
-      //   -23 * trackLength,
-      //   this.rampMaterial
-      // );
+      this.ramp = new Ramps(
+        this.resources.items.Ramp1,
+        new Vector3(0.05, 0.05, 0.05),
+        -23 * trackLength,
+        this.rampMaterial
+      );
 
       this.PlayerObj = new Player(
         this.playerMaterial,
@@ -344,7 +344,7 @@ export default class SceneWorld {
       this.objectsToUpdate.push(this.gemsBlock5);
       this.objectsToUpdate.push(this.ballPinObs1);
       this.objectsToUpdate.push(this.ballPinObs2);
-      this.objectsToUpdate.push(this.ballPinObs3);
+      // this.objectsToUpdate.push(this.ballPinObs3);
       this.objectsToUpdate.push(this.rampGem1);
       this.objectsToUpdate.push(this.rampGem2);
       this.objectsToUpdate.push(this.rampGem3);
