@@ -63,8 +63,9 @@ export default class Ramps {
       this.rampMaterial,
       0
     );
+    boxBody.collisionResponse = 0;
     boxBody.position.y = 1.4;
-    boxBody.position.z = positionZ - 5;
+    boxBody.position.z = positionZ + 2;
     this.physicsWorld.addBody(boxBody);
   }
 }

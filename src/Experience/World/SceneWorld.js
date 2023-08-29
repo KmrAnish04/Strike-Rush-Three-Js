@@ -151,10 +151,10 @@ export default class SceneWorld {
         2
       );
 
-      this.centerRamp = new CenterRamp(
-        this.centerRampMaterial,
-        new Vec3(0, -0.5, -8 * trackLength)
-      );
+      // this.centerRamp = new CenterRamp(
+      //   this.centerRampMaterial,
+      //   new Vec3(0, -0.5, -8 * trackLength)
+      // );
 
       this.rampGem1 = new GemsBlock(
         1,

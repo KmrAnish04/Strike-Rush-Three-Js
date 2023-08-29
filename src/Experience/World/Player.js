@@ -48,7 +48,7 @@ export default class Player {
     this.createPlayer(1);
     this.headBody = this.RigidBodiesArr[0];
     this.playerVelocity = this.headBody.position.z;
-    this.headBody.velocity.z = -1;
+    // this.headBody.velocity.z = -1;
     this.registerEvents();
     this.playerBallCnt = this.createPlayerCntText(
       this.RigidBodiesArr.length.toString()
@@ -250,9 +250,29 @@ export default class Player {
           break;
         }
         case COLLISION_BODIES.ENDRAMP: {
-          this.isReachedDestination = true;
-          this.scene.remove(this.playerBallCnt);
-          this.endCameraAnimation();
+          if (!this.isReachedDestination) {
+
+            console.log("Come to end!", this.headBody.position.z)
+            this.isReachedDestination = true;
+            this.scene.remove(this.playerBallCnt);
+            this.endCameraAnimation();
+            gsap.to(this.headBody.position, {
+              duration: 2,
+              x: 0,
+              y: this.headBody.position.y + 30,
+              // z: this.headBody.position.z - 50
+            })
+
+            gsap.to(this.headBody.position, {
+              duration: 2,
+              z: this.headBody.position.z - 75
+            }).then(() => {
+              // this.physicsWorld.gravity = new Vec3(0, 1, 0);
+              // this.headBody.mass = 100;
+            })
+          }
+
+
           for (let i = 0; i < this.RigidBodiesArr.length; i++) {
             gsap.to(this.camera.rotation, {
               duration: 1,
@@ -264,28 +284,29 @@ export default class Player {
               y: this.camera.position.y - 3,
               z: this.camera.position.z - 2,
             });
-            gsap
-              .to(this.RigidBodiesArr[i].velocity, {
-                duration: 0.6,
-                x: -1 + (0.4 * i) / 2,
-                y: 8.5,
-                z: -18 - i * 2,
-              })
-              .then(() => {
-                gsap
-                  .to(this.RigidBodiesArr[i].velocity, {
-                    duration: 2,
-                    x: 0,
-                    y: -0.5,
-                    z: 0,
-                  })
-                  .then(() => {
-                    this.RigidBodiesArr[i].angularDamping = 1;
-                    this.RigidBodiesArr[i].mass = 0.1;
-                  });
-              });
           }
-          1;
+          //   gsap
+          //     .to(this.RigidBodiesArr[i].velocity, {
+          //       duration: 0.6,
+          //       x: -1 + (0.4 * i) / 2,
+          //       y: 8.5,
+          //       z: -18 - i * 2,
+          //     })
+          //     .then(() => {
+          //       gsap
+          //         .to(this.RigidBodiesArr[i].velocity, {
+          //           duration: 2,
+          //           x: 0,
+          //           y: -0.5,
+          //           z: 0,
+          //         })
+          //         .then(() => {
+          //           this.RigidBodiesArr[i].angularDamping = 1;
+          //           this.RigidBodiesArr[i].mass = 0.1;
+          //         });
+          //     });
+          // }
+          // 1;
           break;
         }
         case COLLISION_BODIES.SCOREBOX: {
@@ -461,11 +482,12 @@ export default class Player {
       // this.headBody.velocity.z = -15;
       // }  
 
-      // this.headBody.velocity.x = 0;
+      this.headBody.velocity.x = 0;
       // this.headBody.velocity.y = 0;
-      this.playerVelocity += -20 * this.time.delta / 1000;
+      this.playerVelocity += -40 * this.time.delta / 1000;
       console.log("velocity: ", Math.round(this.playerVelocity))
       this.headBody.position.z = Math.round(this.playerVelocity);
+      // this.headBody.position.z = this.playerVelocity;
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
