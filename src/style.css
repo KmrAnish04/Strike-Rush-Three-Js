@@ -159,26 +159,23 @@ body {
 /* Speedo Meter CSS */
 .scoreIncreaserPin{
   position: relative;
-  /* background: yellow;  */
-  /* height: 190px; */
   height: 80%;
   width: 10%;
   bottom: 50px;
-  /* left: 140px; */
-  /* top: 3px; */
-  /* clip-path: polygon(90px 10px, 11px 10px, 20px 150px, 10px 190px, 0 150px); */
   transform-origin: 20px 145px;
+  transform-origin: bottom center;
   animation: animate-pointer 3s ease-in-out infinite;
 }
 .scoreIncreaser::before {
   content: '';
   position: absolute;
   width: 10%;
-  /* height: 10px; */
+  height: 100%; /* Adjust height to cover the whole length */
   background: gray;
-  /* top: 140px; */
-  /* left: 5px; */
   border-radius: 50%;
+  bottom: 0;
+  left: 0; /* Move it to the horizontal center */
+  transform: translateX(-50%); /* Adjust to center it properly */
 }
 @keyframes animate-pointer {
   0% {transform: rotate(-80deg);}
@@ -190,7 +187,6 @@ body {
 .section4 {
   margin-top: 20px;
   display: flex;
-  /* width: 100px;  */
   height: auto;
   flex-direction: column;
   align-items: center;

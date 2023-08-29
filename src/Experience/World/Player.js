@@ -227,7 +227,7 @@ export default class Player {
             z: collide.body.position.z,
           });
 
-          // this.openPopup()
+          this.openPopup()
 
           break;
         }
