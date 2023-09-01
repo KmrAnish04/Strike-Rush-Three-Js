@@ -45,7 +45,7 @@ export default class Player {
     this.isReachedDestination = false; // weather player reached to endblock or not
     this.playerVelocity = 0;
 
-    this.createPlayer(1);
+    this.createPlayer(5);
     this.headBody = this.RigidBodiesArr[0];
     this.playerVelocity = this.headBody.position.z;
     // this.headBody.velocity.z = -1;
@@ -98,7 +98,7 @@ export default class Player {
 
   createPlayer(noOfBalls) {
     let size = 0.4;
-    this.mass = 1; // Ball Mass
+    this.mass = 0.00000001; // Ball Mass
     let space = 1 * size;
 
     // Create Mesh for rigidbodies
@@ -227,25 +227,30 @@ export default class Player {
             z: collide.body.position.z,
           });
 
-          this.openPopup()
+          // this.openPopup()
 
           break;
         }
         case COLLISION_BODIES.OBSTACLE: {
-          collide.body.collisionFilterMask = 0;
-          if (this.RigidBodiesArr.length) {
-            // gsap.delayedCall(5, this.removePlayerBalls());
-            this.removePlayerBalls(); // Subtracting Player's Health by removing the balls
-            this.headBody = this.RigidBodiesArr[0];
-          } else {
-            // this.endGamePopup();
-            console.log("*********** Game Stopped ************");
-          }
+          if (!collide.target.isCollidedWithObstacle) {
+            console.log("this body: ", collide.target.isCollidedWithObstacle)
+            collide.target.isCollidedWithObstacle = true;
 
-          this.scene.remove(this.playerBallCnt);
-          this.playerBallCnt = this.createPlayerCntText(
-            this.RigidBodiesArr.length.toString()
-          );
+            collide.target.collisionFilterMask = 0;
+            if (this.RigidBodiesArr.length) {
+              // gsap.delayedCall(5, this.removePlayerBalls());
+              this.removePlayerBalls(); // Subtracting Player's Health by removing the balls
+              this.headBody = this.RigidBodiesArr[0];
+            } else {
+              // this.endGamePopup();
+              console.log("*********** Game Stopped ************");
+            }
+
+            this.scene.remove(this.playerBallCnt);
+            this.playerBallCnt = this.createPlayerCntText(
+              this.RigidBodiesArr.length.toString()
+            );
+          }
 
           break;
         }
@@ -430,6 +435,7 @@ export default class Player {
     sphereBody.angularDamping = 0;
     sphereBody.position.set(-4, 4, 0);
     sphereBody.fixedRotation = true;
+    sphereBody.isCollidedWithObstacle = false;
     return sphereBody;
   }
 
@@ -473,7 +479,7 @@ export default class Player {
       // this.headBody.velocity.z = Math.round(this.playerVelocity);
       // this.headBody.velocity.z = -15;
       // this.headBody.velocity.x = 0;
-      console.log("this is : ", this.time.delta / 1000)
+      // console.log("this is : ", this.time.delta / 1000)
       // const topPoint = new Vec3(0, 1, 0)
       // const impulse = new Vec3(0, 0, -5 * this.time.delta / 1000)
       // this.headBody.applyImpulse(impulse, topPoint);
@@ -485,30 +491,30 @@ export default class Player {
       this.headBody.velocity.x = 0;
       // this.headBody.velocity.y = 0;
       this.playerVelocity += -40 * this.time.delta / 1000;
-      console.log("velocity: ", Math.round(this.playerVelocity))
+      // console.log("velocity: ", Math.round(this.playerVelocity))
       this.headBody.position.z = Math.round(this.playerVelocity);
       // this.headBody.position.z = this.playerVelocity;
       this.playerBallCnt.position.x = this.headBody.position.x;
       this.playerBallCnt.position.z = this.headBody.position.z;
     }
 
-    // for (
-    //   let body = 1;
-    //   body < this.RigidBodiesArr.length && !this.isReachedDestination;
-    //   body++
-    // ) {
-    //   // this.RigidBodiesArr[body].velocity.x = 0;
-    //   this.RigidBodiesArr[body].position.z =
-    //     this.RigidBodiesArr[body - 1].position.z + 2;
-    //   this.RigidBodiesArr[body].angularDamping = 0;
-    //   this.RigidBodiesArr[body].linearDamping = 0;
-    //   if (body > 0) {
-    //     gsap.to(this.RigidBodiesArr[body].position, {
-    //       duration: 0.1,
-    //       x: this.RigidBodiesArr[body - 1].position.x,
-    //     });
-    //   }
-    // }
+    for (
+      let body = 1;
+      body < this.RigidBodiesArr.length && !this.isReachedDestination;
+      body++
+    ) {
+      // this.RigidBodiesArr[body].velocity.x = 0;
+      this.RigidBodiesArr[body].position.z =
+        this.RigidBodiesArr[body - 1].position.z + 2;
+      this.RigidBodiesArr[body].angularDamping = 0;
+      this.RigidBodiesArr[body].linearDamping = 0;
+      if (body > 0) {
+        gsap.to(this.RigidBodiesArr[body].position, {
+          duration: 0.1,
+          x: this.RigidBodiesArr[body - 1].position.x,
+        });
+      }
+    }
 
     // Update Three.js sphere positions based on physics simulation
     for (let i = 0; i < this.RigidBodiesArr.length; i++) {

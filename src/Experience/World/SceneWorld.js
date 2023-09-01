@@ -255,7 +255,7 @@ export default class SceneWorld {
 
       this.obstacle4 = new AnimatedObstacle(
         this.resources.items.ObstacleArmLiverHammer,
-        new Vector3(-5.1, 0.3, -14 * trackLength),
+        new Vector3(-5.1, 0.3, -19 * trackLength),
         new Vector3(0.001, 0.001, 0.001),
         this.obstacleMaterial
       );

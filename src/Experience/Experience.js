@@ -39,7 +39,6 @@ export default class Experience {
     this.renderer = new Renderer();
 
     this.physicsWorld = new World({ gravity: new Vec3(0, -9.8, 0) });
-
     this.physicsWorld.defaultContactMaterial.contactEquationStiffness = 1e9
     this.physicsWorld.defaultContactMaterial.contactEquationRelaxation = 4
     const solver = new GSSolver()
@@ -71,7 +70,7 @@ export default class Experience {
     this.physicsWorld.step(1 / 60, deltaTime, 3);
     // this.physicsWorld.fixedStep();
     this.world.update();
-    this.cannonDebugger.update();
+    // this.cannonDebugger.update();
     this.renderer.update();
   }
 
