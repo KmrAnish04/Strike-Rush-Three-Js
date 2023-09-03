@@ -1,5 +1,5 @@
 import Experience from "../Experience";
-import { WINBOX_PROPS } from "./Constants";
+import { WINBOX_PROPS } from "../Utils/Constants";
 import { getPhysicsBody } from "../Utils/PhycisBodyHelper";
 import { ShapeType } from "three-to-cannon";
 
@@ -18,12 +18,13 @@ import { Vec3, Material } from "cannon-es";
 export default class EndBlock {
   constructor(positionZ, wallMaterial, scoreBoxMaterial, spinnerMaterial) {
     this.experience = new Experience();
-    this.time = this.experience.time;
-    this.resources = this.experience.resources;
-    this.scene = this.experience.scene;
-    this.randomValue = Math.random();
+    const { time, resources, scene, physicsWorld } = this.experience;
+    this.time = time;
+    this.resources = resources;
+    this.scene = scene;
+    this.randomValue = 0.5;
     this.endBlockGroup = new Group();
-    this.physicsWorld = this.experience.physicsWorld;
+    this.physicsWorld = physicsWorld;
     this.scoreBoxMaterial = scoreBoxMaterial;
     this.winBoxArray = WINBOX_PROPS;
     this.spinnerMaterial = spinnerMaterial;
@@ -63,7 +64,7 @@ export default class EndBlock {
           0
         );
         child.rotation.x = -Math.PI / 2;
-        child.position.z = positionZ + 1;
+        child.position.z = positionZ ;
         child.position.x = positionX;
         child.position.y = 12;
         child.material.color = new Color(0xe70fff);
@@ -76,9 +77,10 @@ export default class EndBlock {
     });
     return spinner;
   }
+
   constructEndWall(positionY, positionZ) {
     const width = 22;
-    const height = 35;
+    const height = 45;
     const depth = 1;
     const endWall = new Mesh(
       new BoxGeometry(width, height, depth),
@@ -89,7 +91,7 @@ export default class EndBlock {
       ShapeType.BOX,
       this.wallMaterial
     );
-    physicsEndWallBody.position.y = positionY + 2.5;
+    physicsEndWallBody.position.y = positionY + 7;
     physicsEndWallBody.position.z = positionZ - 1;
 
     const physicsHiddenWallBody = getPhysicsBody(
@@ -97,7 +99,7 @@ export default class EndBlock {
       ShapeType.BOX,
       this.wallMaterial
     );
-    physicsHiddenWallBody.position.y = positionY + 10;
+    physicsHiddenWallBody.position.y = positionY + 15;
     physicsHiddenWallBody.position.z = positionZ - 1;
     this.physicsWorld.addBody(physicsHiddenWallBody);
     endWall.position.copy(physicsEndWallBody.position);
@@ -106,13 +108,13 @@ export default class EndBlock {
   }
 
   constructCircularHit(positionY, positionZ) {
-    const radiusTop = 1.4;
-    const radiusBottom = 2;
-    const height = 4;
+    const radiusTop = 1.5;
+    const radiusBottom = 2.5;
+    const height = 4.5;
     const numberOfSegments = 64;
     const circularHit = new Mesh(
       new CylinderGeometry(radiusTop, radiusBottom, height, numberOfSegments),
-      new MeshStandardMaterial({ color: 0xe201c9 })
+      new MeshStandardMaterial({ color: 0xe100c9 })
     );
     const physicsCircularHitBody = getPhysicsBody(
       circularHit,
@@ -124,7 +126,7 @@ export default class EndBlock {
       new Vec3(-1, 0, 0),
       Math.PI * 0.5
     );
-    physicsCircularHitBody.position.y = positionY - 1;
+    physicsCircularHitBody.position.y = positionY;
     physicsCircularHitBody.position.z = positionZ + 1.5;
     circularHit.position.copy(physicsCircularHitBody.position);
     circularHit.quaternion.copy(physicsCircularHitBody.quaternion);
@@ -134,13 +136,48 @@ export default class EndBlock {
 
   constructWalls(positionZ) {
     const wallsGroup = new Group();
-    const leftWall = this.createLeftWall(positionZ);
-    const rightWall = this.createRightWall(positionZ);
+    const leftWall = this.createSideWall(positionZ, -10.5);
+    const rightWall = this.createSideWall(positionZ, 10.5);
     const bottomWall = this.createBottomWall(positionZ);
-    const leftDiagonalWall1 = this.createLeftDiagonalWall1(positionZ);
-    const leftDiagonalWall2 = this.createLeftDiagonalWall2(positionZ);
-    const rightDiagonalWall1 = this.createRightDiagonalWall1(positionZ);
-    const rightDiagonalWall2 = this.createRightDiagonalWall2(positionZ);
+    const width = 9;
+    const height = 1;
+    const depth = 5.5;
+    const leftDiagonalWall1 = this.createDiagonalWall(
+      -8,
+      17.3,
+      positionZ,
+      Math.PI * 0.3,
+      width,
+      height,
+      depth
+    );
+    const leftDiagonalWall2 = this.createDiagonalWall(
+      -8,
+      24,
+      positionZ,
+      Math.PI * 0.7,
+      width,
+      height,
+      depth
+    );
+    const rightDiagonalWall1 = this.createDiagonalWall(
+      8,
+      24,
+      positionZ,
+      Math.PI * 0.3,
+      width,
+      height,
+      depth
+    );
+    const rightDiagonalWall2 = this.createDiagonalWall(
+      8,
+      17.3,
+      positionZ,
+      Math.PI * 0.7,
+      width,
+      height,
+      depth
+    );
     wallsGroup.add(
       leftWall,
       rightWall,
@@ -153,65 +190,27 @@ export default class EndBlock {
     return wallsGroup;
   }
 
-  createLeftWall(positionZ) {
+  createSideWall(positionZ, positionX) {
     const width = 1;
-    const height = 36;
+    const height = 46;
     const depth = 5.5;
-    const leftWall = new Mesh(
+    const wall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xeff0ef })
     );
     //Physics
-    const rigidBody = getPhysicsBody(
-      leftWall,
-      ShapeType.BOX,
-      this.wallMaterial
-    );
-    rigidBody.position.x = -10.5;
-    rigidBody.position.y = 17;
+    const rigidBody = getPhysicsBody(wall, ShapeType.BOX, this.wallMaterial);
+    rigidBody.position.x = positionX;
+    rigidBody.position.y = 22;
     rigidBody.position.z = 1.5 + positionZ;
-    const hiddenBody = getPhysicsBody(
-      leftWall,
-      ShapeType.BOX,
-      this.wallMaterial
-    );
-    hiddenBody.position.x = -10.5;
-    hiddenBody.position.y = 24.5;
+    const hiddenBody = getPhysicsBody(wall, ShapeType.BOX, this.wallMaterial);
+    hiddenBody.position.x = positionX;
+    hiddenBody.position.y = 29.5;
     hiddenBody.position.z = 1.5 + positionZ;
-    leftWall.position.copy(rigidBody.position);
+    wall.position.copy(rigidBody.position);
     this.physicsWorld.addBody(rigidBody);
     this.physicsWorld.addBody(hiddenBody);
-    return leftWall;
-  }
-
-  createRightWall(positionZ) {
-    const width = 1;
-    const height = 36;
-    const depth = 5.5;
-    const rightWall = new Mesh(
-      new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: 0xe8e8e7 })
-    );
-    const rigidBody = getPhysicsBody(
-      rightWall,
-      ShapeType.BOX,
-      this.wallMaterial
-    );
-    rigidBody.position.x = 10.5;
-    rigidBody.position.y = 17;
-    rigidBody.position.z = 1.5 + positionZ;
-    const hiddenBody = getPhysicsBody(
-      rightWall,
-      ShapeType.BOX,
-      this.wallMaterial
-    );
-    hiddenBody.position.x = 10.5;
-    hiddenBody.position.y = 24.5;
-    hiddenBody.position.z = 1.5 + positionZ;
-    rightWall.position.copy(rigidBody.position);
-    this.physicsWorld.addBody(rigidBody);
-    this.physicsWorld.addBody(hiddenBody);
-    return rightWall;
+    return wall;
   }
 
   createBottomWall(positionZ) {
@@ -220,7 +219,7 @@ export default class EndBlock {
     const depth = 5.5;
     const bottomWall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xeff0ef })
     );
     const rigidBody = getPhysicsBody(
       bottomWall,
@@ -234,96 +233,36 @@ export default class EndBlock {
     return bottomWall;
   }
 
-  createLeftDiagonalWall1(positionZ) {
-    const width = 6;
-    const height = 1;
-    const depth = 5.5;
-    const leftDiagonalWall1 = new Mesh(
+  createDiagonalWall(
+    positionX,
+    positionY,
+    positionZ,
+    angle,
+    width,
+    height,
+    depth
+  ) {
+    const diagonalWall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: 0xe8e8e7 })
+      new MeshStandardMaterial({ color: 0xeff0ef })
     );
     //Physics
     const rigidBody = getPhysicsBody(
-      leftDiagonalWall1,
+      diagonalWall,
       ShapeType.BOX,
       this.wallMaterial
     );
-    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.3);
-    rigidBody.position.set(-8.7, 17.3, 1.5 + positionZ);
-    leftDiagonalWall1.position.copy(rigidBody.position);
-    leftDiagonalWall1.quaternion.copy(rigidBody.quaternion);
+    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), angle);
+    rigidBody.position.set(positionX, positionY, 1.5 + positionZ);
+    diagonalWall.position.copy(rigidBody.position);
+    diagonalWall.quaternion.copy(rigidBody.quaternion);
     this.physicsWorld.addBody(rigidBody);
-    return leftDiagonalWall1;
-  }
-
-  createLeftDiagonalWall2(positionZ) {
-    const width = 6;
-    const height = 1;
-    const depth = 5.5;
-    const leftDiagonalWall2 = new Mesh(
-      new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: 0xe8e8e7 })
-    );
-    const rigidBody = getPhysicsBody(
-      leftDiagonalWall2,
-      ShapeType.BOX,
-      this.wallMaterial
-    );
-    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.7);
-    rigidBody.position.set(-8.7, 21.6, 1.5 + positionZ);
-    leftDiagonalWall2.position.copy(rigidBody.position);
-    leftDiagonalWall2.quaternion.copy(rigidBody.quaternion);
-    this.physicsWorld.addBody(rigidBody);
-    return leftDiagonalWall2;
-  }
-
-  createRightDiagonalWall1(positionZ) {
-    const width = 6;
-    const height = 1;
-    const depth = 5.5;
-    const rightDiagonalWall1 = new Mesh(
-      new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: 0xe8e8e7 })
-    );
-    //Physics
-    const rigidBody = getPhysicsBody(
-      rightDiagonalWall1,
-      ShapeType.BOX,
-      this.wallMaterial
-    );
-    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.3);
-    rigidBody.position.set(8.7, 21.6, 1.5 + positionZ);
-    rightDiagonalWall1.position.copy(rigidBody.position);
-    rightDiagonalWall1.quaternion.copy(rigidBody.quaternion);
-    this.physicsWorld.addBody(rigidBody);
-    return rightDiagonalWall1;
-  }
-
-  createRightDiagonalWall2(positionZ) {
-    const width = 6;
-    const height = 1;
-    const depth = 5.5;
-    const rightDiagonalWall2 = new Mesh(
-      new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: 0xe8e8e7 })
-    );
-    //Physics
-    const rigidBody = getPhysicsBody(
-      rightDiagonalWall2,
-      ShapeType.BOX,
-      this.wallMaterial
-    );
-    rigidBody.quaternion.setFromAxisAngle(new Vec3(0, 0, 1), Math.PI * 0.7);
-    rigidBody.position.set(8.7, 17.3, 1.5 + positionZ);
-    rightDiagonalWall2.position.copy(rigidBody.position);
-    rightDiagonalWall2.quaternion.copy(rigidBody.quaternion);
-    this.physicsWorld.addBody(rigidBody);
-    return rightDiagonalWall2;
+    return diagonalWall;
   }
 
   constructWinBoxes(positionZ) {
     for (let winBox of this.winBoxArray) {
-      this.constructWinBlocks(
+      this.constructWinBlock(
         winBox.isFrontWall,
         positionZ + winBox.positionZ - 0.7,
         winBox.positionY - 0.75,
@@ -335,26 +274,23 @@ export default class EndBlock {
       );
     }
   }
+
   constructWinBoxBoundry(positionZ) {
     let boxMesh = new Mesh(
       new BoxGeometry(20, 28, 1),
-      new MeshStandardMaterial({ color: "#e75480" })
+      new MeshStandardMaterial()
     );
     let boxRigidBody = getPhysicsBody(
       boxMesh,
       ShapeType.BOX,
       new Material("default")
     );
-    // boxRigidBody.collisionFilterMask = 0;
-    boxMesh.quaternion.copy(boxRigidBody.quaternion);
-    boxMesh.position.copy(boxRigidBody.position);
-
     boxRigidBody.position.z = positionZ + 4;
     boxRigidBody.position.y = 13;
     this.physicsWorld.addBody(boxRigidBody);
   }
 
-  constructWinBlocks(
+  constructWinBlock(
     isFrontWall,
     positionZ,
     positionY,
@@ -406,6 +342,7 @@ export default class EndBlock {
     }
     boxRigidBody.myData = { score: score };
   }
+
   update() {
     const deltaTime = this.time.delta;
     if (this.bodiesToUpdate[0]) {

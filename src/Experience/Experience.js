@@ -6,9 +6,11 @@ import Camera from "./Camera.js";
 import Renderer from "./Renderer.js";
 import SceneWorld from "./World/SceneWorld.js";
 import Resources from "./Utils/Resources.js";
-import sources from "./sources.js";
+import { SOURCES } from "./Utils/Constants.js";
+import AudioManager from "./World/AudioManager.js";
+
 import { Mesh, Scene } from "three";
-import { World, Vec3 } from "cannon-es";
+import { World, Vec3, SplitSolver, GSSolver } from "cannon-es";
 
 let instance = null;
 
@@ -31,10 +33,18 @@ export default class Experience {
     this.sizes = new Sizes();
     this.time = new Time();
     this.scene = new Scene();
-    this.resources = new Resources(sources);
     this.camera = new Camera();
+    this.resources = new Resources(SOURCES);
+    this.audioManager = new AudioManager();
     this.renderer = new Renderer();
+
     this.physicsWorld = new World({ gravity: new Vec3(0, -9.8, 0) });
+    this.physicsWorld.defaultContactMaterial.contactEquationStiffness = 1e9
+    this.physicsWorld.defaultContactMaterial.contactEquationRelaxation = 4
+    const solver = new GSSolver()
+    solver.iterations = 7
+    solver.tolerance = 0.1
+    this.physicsWorld.solver = new SplitSolver(solver)
     this.world = new SceneWorld();
     this.cannonDebugger = new CannonDebugger(this.scene, this.physicsWorld);
 
@@ -58,6 +68,7 @@ export default class Experience {
     const deltaTime = this.time.delta;
     this.camera.update();
     this.physicsWorld.step(1 / 60, deltaTime, 3);
+    // this.physicsWorld.fixedStep();
     this.world.update();
     // this.cannonDebugger.update();
     this.renderer.update();

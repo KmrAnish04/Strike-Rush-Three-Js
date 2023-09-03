@@ -12,7 +12,7 @@ import GemsBlock from "./GemsBlock.js";
 import HealthBallsBlock from "./HealthBallsBlock.js";
 import Player from "./Player.js";
 import CenterRamp from "./CenterRamp.js";
-import { COLLISION_BODIES } from "./Constants.js";
+import { COLLISION_BODIES } from "../Utils/Constants.js";
 import HUD from "./HUD.js";
 
 const COLLISION_GROUPS = {
@@ -23,9 +23,10 @@ const COLLISION_GROUPS = {
 export default class SceneWorld {
   constructor() {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.physicsWorld = this.experience.physicsWorld;
+    const { scene, resources, physicsWorld } = this.experience;
+    this.scene = scene;
+    this.resources = resources;
+    this.physicsWorld = physicsWorld;
     this.objectsToUpdate = [];
     // Wait for resources
     this.resources.on("ready", () => {
@@ -64,7 +65,7 @@ export default class SceneWorld {
         this.playerMaterial,
         this.spinnerMaterial,
         {
-          restitution: 0.2,
+          restitution: 1,
           friction: 0,
         }
       );
@@ -150,10 +151,10 @@ export default class SceneWorld {
         2
       );
 
-      this.centerRamp = new CenterRamp(
-        this.centerRampMaterial,
-        new Vec3(2.5, -0.5, -8 * trackLength)
-      );
+      // this.centerRamp = new CenterRamp(
+      //   this.centerRampMaterial,
+      //   new Vec3(0, -0.5, -8 * trackLength)
+      // );
 
       this.rampGem1 = new GemsBlock(
         1,
@@ -226,13 +227,20 @@ export default class SceneWorld {
         new Vec3(6.5, 0.25, -10)
       );
 
-      this.ballPinObs3 = new BallPinsObstacle(
-        4,
-        new Vector3(-1.6, 0, -10 * trackLength),
-        new Vector3(0.009, 0.009, 0.009),
-        this.obstacleMaterial,
-        this.pathObstacleMaterial
-      );
+      // this.ballPinObs3 = new BallPinsObstacle(
+      //   4,
+      //   new Vector3(-1.6, 0, -10 * trackLength),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial,
+      //   this.pathObstacleMaterial
+      // );
+      // this.ballPinObs4 = new BallPinsObstacle(
+      //   4,
+      //   new Vector3(-1.6, 0, -15 * trackLength),
+      //   new Vector3(0.009, 0.009, 0.009),
+      //   this.obstacleMaterial,
+      //   this.pathObstacleMaterial
+      // );
 
       this.gemsBlock2 = new GemsBlock(
         5,
@@ -247,7 +255,7 @@ export default class SceneWorld {
 
       this.obstacle4 = new AnimatedObstacle(
         this.resources.items.ObstacleArmLiverHammer,
-        new Vector3(-5.1, 0.3, -14 * trackLength),
+        new Vector3(-5.1, 0.3, -19 * trackLength),
         new Vector3(0.001, 0.001, 0.001),
         this.obstacleMaterial
       );
@@ -282,7 +290,6 @@ export default class SceneWorld {
 
       this.ramp = new Ramps(
         this.resources.items.Ramp1,
-        new Vector3(0, 0, -3),
         new Vector3(0.05, 0.05, 0.05),
         -23 * trackLength,
         this.rampMaterial
@@ -296,6 +303,26 @@ export default class SceneWorld {
         },
         -trackLength * 26 + 7
       );
+      // window.addEventListener("click", (event) => {
+      //   this.PlayerObj = new Player(
+      //     this.playerMaterial,
+      //     {
+      //       filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+      //       filterMask: COLLISION_GROUPS.GEMS_GROUP,
+      //     },
+      //     -trackLength * 26 + 7
+      //   );
+      // })
+      // setTimeout(() => {
+      //   this.PlayerObj = new Player(
+      //     this.playerMaterial,
+      //     {
+      //       filterGroup: COLLISION_GROUPS.PLAYER_GROUP,
+      //       filterMask: COLLISION_GROUPS.GEMS_GROUP,
+      //     },
+      //     -trackLength * 26 + 7
+      //   );
+      // }, 1000);
 
       this.endBlock = new EndBlock(
         -trackLength * 26 + 7,
@@ -317,7 +344,7 @@ export default class SceneWorld {
       this.objectsToUpdate.push(this.gemsBlock5);
       this.objectsToUpdate.push(this.ballPinObs1);
       this.objectsToUpdate.push(this.ballPinObs2);
-      this.objectsToUpdate.push(this.ballPinObs3);
+      // this.objectsToUpdate.push(this.ballPinObs3);
       this.objectsToUpdate.push(this.rampGem1);
       this.objectsToUpdate.push(this.rampGem2);
       this.objectsToUpdate.push(this.rampGem3);

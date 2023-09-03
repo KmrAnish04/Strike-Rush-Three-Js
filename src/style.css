@@ -29,6 +29,7 @@ body {
   align-items: center;
   overflow: hidden;
   transition: max-height 5s ease-in-out;
+  z-index: 3;
 }
 .EndGamePopup.active {
   max-height: 100%;
@@ -37,12 +38,14 @@ body {
   height: 100%;
   width: 40%;
   display: flex;
-  background-image: url("./textures/Background Shadow Purple.png");
+  background-image: url("../static/textures/BackgroundShadowPurple.png");
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
+
+/* Home Button and Gems Count */
 .section1 {
   display: flex;
   flex-direction: row;
@@ -52,48 +55,54 @@ body {
   margin-bottom: 10px;
 }
 
-.section1 .totalGemsCollectedDiv {
-  display: flex;
-  margin-left: 60px;
+/* Gems Count - Start*/
+.totalGemsCollectedDiv {
+  position: relative;
 }
 
-.section1 .totalGemsCollectedDiv .totalGemsLabel {
-  margin-left: -95px;
-  margin-top: 24px;
-  margin-right: 2px;
+.totalGemsCollected {
+  rotate: 30deg;
+}
+
+.totalGemsLabel {
+  position: absolute;
   font-family: LilitaOneRegular;
   color: #ffffff;
-  font-size: 30px;
+  font-size: 4vw;
+  top: 45%;
+  left: -80%;
+  transform: translate(-50%, -50%);
 }
-.section1 .totalGemsCollectedDiv .Background {
-  width: 40%;
-  height: 20%;
-  margin-top: 23px;
+.GemsCountBackground {
+  position: absolute;
+  right: 30%;
 }
+/* Gems Count - End */
 
-.section1 .homeButtonImage {
-  width: 50%;
+/* Home Button - Start */
+.homeButton{
+  position: relative;
 }
+/* .section1 .homeButtonImage {} */
 
-.section1 .homeImage {
-  width: 40%;
-  margin-left: -63px;
-  margin-bottom: 20px;
+.homeImage {
+  position: absolute;
+  margin: 0;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
+/* Home Button - End */
 
-.section1 .totalGemsCollected {
-  rotate: 30deg;
-  width: 40%;
-  height: 40%;
-  margin-top: 22px;
-}
+/* Home Buton and Gems Count Section - End */
+
 
 .section2 {
-  margin-top: 40px;
+  margin-top: 40 rem auto;
   margin-bottom: 10px;
 }
 
-.section2 .levelCompleted {
+.section2 .levelCompleted { 
   width: 80%;
 }
 
@@ -113,7 +122,7 @@ body {
 .section2 .gemsCollectedDiv .gemsCollectedLabel {
   font-family: LilitaOneRegular;
   color: #ffffff;
-  font-size: 40px;
+  font-size: 7em;
 }
 .section2 .levelCompletedDiv {
   display: flex;
@@ -143,35 +152,72 @@ body {
 }
 
 .section3 .scoreIncreaserDiv .scoreIncreaserPin {
-  margin-top: -70px;
-  width: 10%;
+  position: relative;
+  /* margin-top: -70px;
+  width: 10%; */
 }
+
+/* Speedo Meter CSS */
+.scoreIncreaserPin{
+  position: absolute;
+  height: 80%;
+  width: 10%;
+  bottom: 50px;
+  margin-top: -70px;
+  transform-origin: 20px 145px;
+  transform-origin: bottom center;
+  animation: animate-pointer 2s ease-in-out infinite;
+}
+.scoreIncreaser::before {
+  content: '';
+  position: absolute;
+  width: 10%;
+  height: 100%; /* Adjust height to cover the whole length */
+  background: gray;
+  border-radius: 50%;
+  bottom: 0;
+  left: 0; /* Move it to the horizontal center */
+  /* transform: translateX(-50%);  */
+}
+@keyframes animate-pointer {
+  0% {transform: rotate(-80deg);}
+  80% {transform: rotate(60deg);}
+  100% {transform: rotate(-80deg);}
+}
+/* Speedo Meter CSS */
 
 .section4 {
   margin-top: 20px;
   display: flex;
+  height: auto;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
 }
 
-.section4 .doubleGemsDiv {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  z-index: 1;
+.doubleGemsDiv {
+  position: relative;
+  width: 300px;
+  height: 130px;
+  overflow: hidden;
 }
 
-.section4 .doubleGemsDiv .videoBackground {
-  width: 33%;
+
+.videoBackground{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  z-index: 5;
 }
-.section4 .doubleGemsDiv .video {
+.video {
   width: 8%;
   margin-left: -115px;
+  /* z-index: 40; */
 }
-.section4 .doubleGemsDiv .collectedGems {
+.collectedGems {
   font-family: LilitaOneRegular;
   color: #ffffff;
   font-size: 30px;
@@ -179,7 +225,7 @@ body {
   margin-right: 10px;
 }
 
-.section4 .doubleGemsDiv .gem {
+.gem {
   width: 7%;
 }
 
@@ -194,32 +240,6 @@ body {
   color: #000000;
   font-size: 35px;
 }
-
-/* .HUD {
-  width: 100%;
-  height: 20%;
-}
-.HUD .gems-collection-HUD {
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 20%;
-  height: 30%;
-  margin-top: 2%;
-  margin-left: 80%;
-}
-.HUD .gems-collection {
-  width: 30%;
-  height: 80%;
-}
-.HUD .collected {
-  font-family: LilitaOneRegular;
-  font-size: 28px;
-  margin-left: -90px;
-  margin-bottom: 50px;
-  color: #ffffff;
-}
- */
 
 #hud-ui {
   position: relative;
@@ -321,3 +341,180 @@ body {
   width: 20%;
   rotate: 35deg;
 }
+
+@media screen and (max-width: 620px) {
+  #hud-ui {
+    scale: 0.8;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  #hud-ui {
+    scale: 0.9;
+  }
+}
+
+#hud-ui {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  align-items: center;
+  flex-direction: column;
+}
+
+#hud-ui .progressBarContainer {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBar {
+  margin-left: 5%;
+  margin-right: 5%;
+  width: 38%;
+  height: 80%;
+}
+
+#hud-ui .progressBarContainer .progressBarCurrentLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarCurrentLevel .currentLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+  margin-right: 28px;
+}
+#hud-ui
+  .progressBarContainer
+  .progressBarCurrentLevel
+  .progressBarCurrentLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBarNextLevel {
+  width: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .nextLevel {
+  color: #ffffff;
+  font-size: 24px;
+  font-family: LilitaOneRegular;
+  margin-left: -28px;
+}
+#hud-ui .progressBarContainer .progressBarNextLevel .progressBarNextLevelImg {
+  width: 100%;
+}
+
+#hud-ui .progressBarContainer .progressBar .progressBarImg {
+  width: 100%;
+}
+
+#hud-ui .gemsCollectContainer {
+  margin-left: 250px;
+  position: relative;
+  margin-top: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg {
+  width: 300px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollectedBg .gemsCollectedBGImg {
+  width: 45%;
+  opacity: 50%;
+}
+
+#hud-ui .gemsCollectContainer .gemsCollected {
+  color: #ffffff;
+  font-size: 28px;
+  font-family: LilitaOneRegular;
+  margin-left: -80px;
+  z-index: 2;
+}
+#hud-ui .gemsCollectContainer .gemsCollectImage {
+  width: 20%;
+  rotate: 35deg;
+}
+
+@media screen and (max-width: 620px) {
+  #hud-ui {
+    scale: 0.8;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  #hud-ui {
+    scale: 0.9;
+  }
+}
+
+
+ /* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .EndGamePopupBody{
+    width: 100%;
+  } 
+  .levelCompleted .section2{
+    width: 80%;
+  }
+  .section2 .gemsCollectedDiv .gem {
+    margin-left: 10px;
+    /* width: 10%; */
+  }
+
+  .scoreIncreaserDiv{
+    width: 100%;
+  }
+  
+  
+  /* .gemsCollectedLabel {
+    font-size: 0em;
+  } */
+  /* .gemsCollectedLabel{ font-size: 2000vw;} */
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .EndGamePopupBody{
+    width: 100%;
+  } 
+  .levelCompleted .section2{
+    width: 80%;
+  }
+  .section2 .gemsCollectedDiv .gem {
+    margin-left: 10px;
+    width: 10%;
+  }
+  
+  /* .gemsCollectedLabel {
+    font-size: 0em;
+  } */
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {}

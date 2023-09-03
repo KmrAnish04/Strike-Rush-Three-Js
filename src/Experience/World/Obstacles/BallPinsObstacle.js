@@ -7,68 +7,65 @@ import { Color } from "three";
 export default class BallPinsObstacle {
   constructor(
     size,
-    modelPostition,
+    modelPosition,
     modelScaling,
     obstacleMaterial,
     pathObstacleMaterial
   ) {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.time = this.experience.time;
-    this.debug = this.experience.debug;
-    this.physicsWorld = this.experience.physicsWorld;
+    const { scene, resources, time, debug, physicsWorld } = this.experience;
+    this.scene = scene;
+    this.resources = resources;
+    this.time = time;
+    this.debug = debug;
+    this.physicsWorld = physicsWorld;
     this.obstacleMaterial = obstacleMaterial;
-
-    this.positionX = modelPostition.x;
-    this.positionY = modelPostition.y + 1;
-    this.positionZ = modelPostition.z;
+    this.positionX = modelPosition.x;
+    this.positionY = modelPosition.y + 1;
+    this.positionZ = modelPosition.z;
     this.size = size;
     this.pathObstacleMaterial = pathObstacleMaterial;
-    this.resource = this.resources.items.ObstacleBowlingPin;
+    this.resource = resources.items.ObstacleBowlingPin;
     this.setUpBallPinsObstacle(modelScaling);
   }
 
   setUpBallPinsObstacle(modelScaling) {
     this.ballPinMeshes = this.createBallingPins(10, modelScaling);
-    this.ballPinRigids = this.addPhysicsOnBallPins(this.ballPinMeshes);
+    this.ballPinRigids = this.addPhysicsToBallPins(this.ballPinMeshes);
     this.makePyramidPattern(this.size);
   }
 
   createBallingPins(noOfBallPins, modelScaling) {
-    let ballPinsArr = [];
-    let ballPinModel = this.resource.children[0];
+    const ballPinsArr = [];
+    const ballPinModel = this.resource.children[0];
     for (let ballPinCnt = 0; ballPinCnt < noOfBallPins; ballPinCnt++) {
       ballPinsArr.push(ballPinModel.clone());
     }
-    ballPinsArr.forEach((model, index) => {
+    ballPinsArr.forEach((model) => {
+      model.castShadow = true;
       model.material.color = new Color(0xffff00);
-      model.scale.set(modelScaling.x, modelScaling.y, modelScaling.z);
-      model.rotation.set(Math.PI / -2, 0, 0);
+      model.scale.copy(modelScaling);
+      model.rotation.set(-Math.PI / 2, 0, 0);
     });
     return ballPinsArr;
   }
 
   makePyramidPattern(size) {
-    let rows = size;
+    const rows = size;
     let cols = size;
-    let gapX = 1;
-    let gapY = 0.5;
-
-    let StartX = this.positionX;
-    let StartY = this.positionZ;
-
+    const gapX = 1;
+    const gapY = 0.5;
+    let startX = this.positionX;
+    let startY = this.positionZ;
     let rowSideGap = 0;
     let idx = this.ballPinRigids.length - 1;
-
     for (let row = 0; row < rows; row++) {
-      let tempX = StartX;
-      tempX += rowSideGap;
-
+      let tempX = startX + rowSideGap;
       for (let col = 0; col < cols; col++) {
-        let pin = this.ballPinRigids[idx];
-        pin.position.set(tempX, this.positionY, StartY);
-        this.ballPinMeshes[idx].position.copy(pin.position);
+        const pin = this.ballPinRigids[idx];
+        const pinPosition = pin.position;
+        pinPosition.set(tempX, this.positionY, startY);
+        this.ballPinMeshes[idx].position.copy(pinPosition);
         this.ballPinMeshes[idx].quaternion.copy(pin.quaternion);
         this.scene.add(this.ballPinMeshes[idx]);
         this.physicsWorld.addBody(pin);
@@ -76,13 +73,13 @@ export default class BallPinsObstacle {
         idx--;
       }
       cols--;
-      StartY += gapY;
+      startY += gapY;
       rowSideGap += 0.5;
     }
   }
 
-  addPhysicsOnBallPins(ballPinArr) {
-    let ballPinRigids = [];
+  addPhysicsToBallPins(ballPinArr) {
+    const ballPinRigids = [];
     ballPinArr.forEach((ballPin) => {
       const rigidBody = getPhysicsBody(
         ballPin,
@@ -96,9 +93,10 @@ export default class BallPinsObstacle {
   }
 
   update() {
-    for (let i = 0; i < this.ballPinMeshes.length; i++) {
-      this.ballPinMeshes[i].position.copy(this.ballPinRigids[i].position);
-      this.ballPinMeshes[i].quaternion.copy(this.ballPinRigids[i].quaternion);
+    for (const [i, ballPinRigid] of this.ballPinRigids.entries()) {
+      const ballPinMesh = this.ballPinMeshes[i];
+      ballPinMesh.position.copy(ballPinRigid.position);
+      ballPinMesh.quaternion.copy(ballPinRigid.quaternion);
     }
   }
 }

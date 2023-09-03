@@ -14,9 +14,10 @@ import {
 export default class GameTrack {
   constructor(trackLength = 5, pathMaterial) {
     this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.resources = this.experience.resources;
-    this.physicsWorld = this.experience.physicsWorld;
+    const { scene, resources, physicsWorld } = this.experience;
+    this.scene = scene;
+    this.resources = resources;
+    this.physicsWorld = physicsWorld;
     this.pathMaterial = pathMaterial;
     this.setTextures();
     this.setMaterial();

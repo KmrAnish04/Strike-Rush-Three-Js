@@ -7,8 +7,9 @@ import { BoxGeometry, DoubleSide, Mesh, MeshStandardMaterial } from "three";
 export default class SideWalls {
   constructor(tracklength, wallMaterial) {
     this.experience = new Experience();
-    this.physicsWorld = this.experience.physicsWorld;
-    this.scene = this.experience.scene;
+    const { physicsWorld, scene } = this.experience;
+    this.physicsWorld = physicsWorld;
+    this.scene = scene;
     this.trackLength = tracklength;
     this.wallMaterial = wallMaterial;
     this.constructSideWalls();
@@ -51,7 +52,7 @@ export default class SideWalls {
   constructWallMesh(width, height, depth) {
     const wall = new Mesh(
       new BoxGeometry(width, height, depth),
-      new MeshStandardMaterial({ color: "#E459D2", side: DoubleSide })
+      new MeshStandardMaterial({ color: 0xe459d2, side: DoubleSide })
     );
     wall.receiveShadow = true;
     return wall;
